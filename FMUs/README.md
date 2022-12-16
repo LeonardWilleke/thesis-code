@@ -32,7 +32,7 @@ To build the FMUs you need [CMake](https://cmake.org/) and a supported [build to
 
 - open the [CMakeGUI](https://cmake.org/runningcmake/)
 
-- click `Browse Source...` and select the cloned or downloaded and extracted repository (that contains `CMakeLists.txt`)
+- click `Browse Source...` and select the `FMUs` folder of the repository (that contains `CMakeLists.txt`)
 
 - click `Browse Build...` and select the folder where you want build the FMUs
 
