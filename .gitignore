@@ -1,0 +1,10 @@
+# built models
+*.fmu
+FMUs/build/
+
+# simulation logs
+*.log
+*.json
+
+# config visualisation
+*config.pdf
