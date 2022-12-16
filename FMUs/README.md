@@ -2,7 +2,7 @@
 
 A set of hand-coded FMUs for development, testing and debugging of the coupling of preCICE with models written in the [Functional Mock-up Interface](https://fmi-standard.org/).
 
-- [FallingBall](FallingBall) - a falling ball model that responds to external input
+- [FallingBall](FallingBall) - a falling ball model for coupling with an aerodynamic solver
 
 ## Run the FMUs with preCICE
 
