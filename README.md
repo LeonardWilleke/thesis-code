@@ -1,2 +1,2 @@
 # fmi-adapter
-preCICE-Adapter for models written in the FMI standard
+preCICE-adapter for models written in the FMI standard
