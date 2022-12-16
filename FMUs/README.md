@@ -6,7 +6,7 @@ A set of hand-coded FMUs for development, testing and debugging of the coupling 
 
 ## Run the FMUs with preCICE
 
-After building the model successfully, copy the .fmu file to the respective case folder. For example, the compiled model `FallingBall.fmu` is needed in the case folder [falling-ball](../cases/falling-ball) to run the simulation. 
+After building the model successfully, copy the `.fmu` file to the respective case folder. For example, the compiled model `FallingBall.fmu` is needed in the case folder [falling-ball](../cases/falling-ball) to run the simulation. 
 
 ## Repository structure
 
