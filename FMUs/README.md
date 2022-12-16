@@ -38,7 +38,9 @@ To build the FMUs you need [CMake](https://cmake.org/) and a supported [build to
 
 - click `Configure` and select the generator for your IDE / build tool
 
-- select the `FMI_VERSION` you want to build and optionally the `FMI_TYPE` (only for FMI 1.0)
+- select the `FMI_VERSION` you want to build (in our case `FMI3`)
+
+- select the `FMI_TYPE`you want to build (in our case `CS`) 
 
 - click `Generate` to generate the project files
 
