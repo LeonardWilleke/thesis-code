@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fmiModelDescription
+  fmiVersion="3.0"
+  modelName="FallingBall"
+  description="This model calculates the velocity of a falling ball with air resistance."
+  generationTool="Reference FMUs (development build)"
+  instantiationToken="{1AE5E10D-9521-4DE3-80B9-D0EAAA7D5AF1}">
+
+  <ModelExchange
+    modelIdentifier="FallingBall"
+    canGetAndSetFMUState="true"
+    canSerializeFMUState="true"/>
+
+  <CoSimulation
+    modelIdentifier="FallingBall"
+    canGetAndSetFMUState="true"
+    canSerializeFMUState="true"
+    canHandleVariableCommunicationStepSize="true"
+    providesIntermediateUpdate="true"
+    canReturnEarlyAfterIntermediateUpdate="true"
+    fixedInternalStepSize="1e-3"
+    hasEventMode="true"/>
+
+  <UnitDefinitions>
+    <Unit name="m/s">
+      <BaseUnit m="1" s="-1"/>
+    </Unit>
+    <Unit name="m/s2">
+      <BaseUnit m="1" s="-2"/>
+    </Unit>
+  </UnitDefinitions>
+
+  <TypeDefinitions>
+    <Float64Type name="Velocity" quantity="Velocity" unit="m/s"/>
+    <Float64Type name="Acceleration" quantity="Acceleration" unit="m/s2"/>
+  </TypeDefinitions>
+
+  <LogCategories>
+    <Category name="logEvents" description="Log events"/>
+    <Category name="logStatusError" description="Log error messages"/>
+  </LogCategories>
+
+  <DefaultExperiment startTime="0" stopTime="3" stepSize="1e-2"/>
+
+  <ModelVariables>
+    <Float64 name="time" valueReference="0" causality="independent" variability="continuous" description="Simulation time"/>
+    <Float64 name="v" valueReference="1" causality="output" variability="continuous" initial="exact" declaredType="Velocity" start="0" reinit="true" description="Velocity of the object" intermediateUpdate="true"/>
+    <Float64 name="der(v)" valueReference="2" causality="local" variability="continuous" initial="calculated" declaredType="Acceleration" derivative="1" description="Derivative of v"/>
+    <Float64 name="a_tot" valueReference="3" causality="parameter" variability="fixed" initial="exact" declaredType="Acceleration" start="-9.81" derivative="1" description="Total acceleration"/>
+    <Float64 name="g" valueReference="4" causality="parameter" variability="fixed" initial="exact" declaredType="Acceleration" start="-9.81" description="Gravity"/>
+    <Float64 name="a_drag" valueReference="5" causality="parameter" variability="fixed" initial="exact" declaredType="Acceleration" start="0" description="Drag acceleration"/>
+  </ModelVariables>
+
+  <ModelStructure>
+    <Output valueReference="1"/>
+    <ContinuousStateDerivative valueReference="2"/>
+    <InitialUnknown valueReference="2" dependencies="3" dependenciesKind="constant"/>
+    <EventIndicator valueReference="1"/>
+  </ModelStructure>
+
+</fmiModelDescription>
