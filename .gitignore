@@ -6,5 +6,5 @@ FMUs/build/
 *.log
 *.json
 
-# config visualisation
-*config.pdf
+# visualisations
+*.pdf
