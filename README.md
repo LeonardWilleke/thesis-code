@@ -2,19 +2,19 @@
 
 preCICE-Runner for models written in the FMI standard
 
-# Install Dependencies
+## Install Dependencies
 
 * [preCICE](https://github.com/precice/precice)
 * [python bindings](https://github.com/precice/python-bindings)
 * [FMPy](https://github.com/CATIA-Systems/FMPy)
 
-# Run a simulation
+## Run a simulation
 
 * Build the [FMU model](FMUs) you want to couple 
 * Copy the compiled model over to the respective case directory
 * Run each solver in a seperate terminal 
 
-# Build the FMUs
+## Build the FMUs
 
 To build the FMUs you need [CMake](https://cmake.org/) and a supported [build tool](https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html) e.g. Visual Studio &GreaterEqual; 2013 , Xcode or make:
 
