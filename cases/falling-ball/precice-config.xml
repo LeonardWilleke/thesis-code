@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<precice-configuration>
+
+  <log>
+    <sink type="stream" output="stdout"  filter= "%Severity% > debug" format="preCICE:%ColorizedSeverity% %Message%" enabled="true" />	
+  </log>
+
+  <solver-interface dimensions="3" >
+   
+    <data:vector name="velocity"  />
+    <data:vector name="drag"  />
+
+    <mesh name="MeshFMU">
+      <use-data name="velocity" />
+      <use-data name="drag" />
+    </mesh>
+
+    <mesh name="MeshAero">
+      <use-data name="velocity" />
+      <use-data name="drag" />
+    </mesh>
+
+    <participant name="SolverFMU">
+      <use-mesh name="MeshFMU" provide="yes"/>
+      <write-data name="velocity" mesh="MeshFMU" />
+      <read-data  name="drag" mesh="MeshFMU" />
+      <watch-point mesh="MeshFMU" name="watch-FMU" coordinate="0; 0; 0"/>
+    </participant>
+
+    <participant name="SolverAero">
+      <use-mesh name="MeshFMU" from="SolverFMU"/>
+      <use-mesh name="MeshAero" provide="yes"/>
+      <mapping:nearest-neighbor   direction="write" from="MeshAero" to="MeshFMU" constraint="conservative"/>
+      <mapping:nearest-neighbor direction="read"  from="MeshFMU" to="MeshAero" constraint="consistent" />
+      <write-data name="drag" mesh="MeshAero" />
+      <read-data  name="velocity" mesh="MeshAero" />
+    </participant>
+
+    <m2n:sockets from="SolverFMU" to="SolverAero"/>
+
+    <coupling-scheme:serial-implicit> 
+      <participants first="SolverFMU" second="SolverAero" /> 
+      <time-window-size value="0.01" />
+      <max-time value="10" />
+      <max-iterations value="5" />
+      <relative-convergence-measure limit="1e-4" data="velocity" mesh="MeshFMU"/>
+      <exchange data="velocity" mesh="MeshFMU" from="SolverFMU" to="SolverAero" />
+      <exchange data="drag" mesh="MeshFMU" from="SolverAero" to="SolverFMU"/>
+      <acceleration:constant>
+        <relaxation value="0.5"/>
+      </acceleration:constant>
+    </coupling-scheme:serial-implicit>                           
+  </solver-interface>
+
+</precice-configuration>
