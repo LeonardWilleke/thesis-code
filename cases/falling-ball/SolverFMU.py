@@ -42,10 +42,10 @@ write_data_id = interface.get_data_id(write_data_name, mesh_id)
 ### FMU setup
 
 # define the model name
-fmu_filename = 'FallingBall.fmu'
+fmu_filepath = '../../FMUs/build/fmus/FallingBall.fmu'
 
 # read the model description
-model_description = read_model_description(fmu_filename)
+model_description = read_model_description(fmu_filepath)
 
 # collect the value references
 vrs = {}
@@ -59,7 +59,7 @@ vr_a_drag    = vrs['a_drag']
 
 
 # extract the FMU
-unzipdir = extract(fmu_filename)
+unzipdir = extract(fmu_filepath)
 
 # instantiate fmu object
 fmu = FMU3Slave(guid=model_description.guid,

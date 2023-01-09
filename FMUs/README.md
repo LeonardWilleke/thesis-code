@@ -4,9 +4,19 @@ A set of hand-coded FMUs for development, testing and debugging of the coupling 
 
 - [FallingBall](FallingBall) - a falling ball model for coupling with an aerodynamic solver
 
-## Run the FMUs with preCICE
+## Build the FMUs with CMake
 
-After building the model successfully, copy the `.fmu` file to the respective case folder. For example, the compiled model `FallingBall.fmu` is needed in the case folder [falling-ball](../cases/falling-ball) to run the simulation. 
+To build the FMUs you need [CMake](https://cmake.org/) &GreaterEqual; 3.16 and a supported [build tool](https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html) e.g. Visual Studio &GreaterEqual; 2013 , Xcode or make.
+
+Generate the build files with the following commands:
+
+```
+mkdir build
+cd build
+cmake -DFMI_TYPE=CS -DFMI_VERSION=3 ..
+
+```
+Then run `make` or your preferred build tool to create the FMUs. They will be in the `fmus` folder inside `build`. 
 
 ## Repository structure
 
