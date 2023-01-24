@@ -1,5 +1,5 @@
 # built models
-*.fmu
+#*.fmu
 FMUs/build/
 
 # simulation logs

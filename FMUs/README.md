@@ -16,7 +16,7 @@ cd build
 cmake -DFMI_TYPE=CS -DFMI_VERSION=3 ..
 
 ```
-Then run `make` or your preferred build tool to create the FMUs. They will be in the `fmus` folder inside `build`. 
+Then run `make` or your preferred build tool to create the FMUs. They will be in the `fmus` folder. 
 
 ## Repository structure
 
