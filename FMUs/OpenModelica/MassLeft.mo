@@ -5,7 +5,7 @@ model MassLeft
     Placement(visible = true, transformation(origin = {-10, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Mechanics.Translational.Components.Fixed fixed annotation(
     Placement(visible = true, transformation(origin = {-80, 0}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
-  Modelica.Mechanics.Translational.Components.Spring spring12(c = 0.5*16*3.1316*3.1416) annotation(
+  Modelica.Mechanics.Translational.Components.Spring spring12(c = 16*3.1316*3.1416) annotation(
     Placement(visible = true, transformation(origin = {28, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   connect(mass1.flange_a, spring1.flange_b) annotation(
