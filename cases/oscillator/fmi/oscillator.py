@@ -66,13 +66,9 @@ if participant_name == Participant.MASS_LEFT.value:
     vr_v = vrs['mass1.v']
     vr_a = vrs['mass1.a']
     vr_f_set = vrs['u']
-    #vr_f_set = vrs['spring12.flange_b.s']
-    vr_f_get = vrs['mass1.flange_b.f']
+    vr_f_get = vrs['y']
     
     k = k_1
-    
-    # Better idea: Include spring12 only in one FMU and cut the model at the interface of mass and spring. This suits my setup with FMU components much better.
-    # The current force exchange is written for the calculation with the python script. 
 
     # Calculate analytical solution for comparison
     mass = m_1
@@ -99,8 +95,7 @@ elif participant_name == Participant.MASS_RIGHT.value:
     vr_v = vrs['mass2.v']
     vr_a = vrs['mass2.a']
     vr_f_set = vrs['u']
-    #vr_f_set = vrs['spring12.flange_a.s']
-    vr_f_get = vrs['mass2.flange_a.f']
+    vr_f_get = vrs['y']
     
     k = k_2
     
@@ -119,7 +114,6 @@ else:
 
 num_vertices = 1  # Number of vertices
 
-# What do they do? Check in manual
 solver_process_index = 0 
 solver_process_size = 1
 
@@ -149,6 +143,7 @@ if interface.is_action_required(precice.action_write_initial_data()):
 interface.initialize_data()
 
 # FMU setup
+
 unzipdir = extract(fmu_file_name)
 fmu = FMU2Slave(guid=model_description.guid, unzipDirectory=unzipdir, modelIdentifier=model_description.coSimulation.modelIdentifier, instanceName='instance1')
 
@@ -157,7 +152,7 @@ fmu.setupExperiment()
 fmu.enterInitializationMode()
 fmu.exitInitializationMode()
 
-# Set parameters m, k, k12 - not now
+# Set parameters m, k, k12 in FMU
 #fmu.setReal([vr_m], [mass])
 #fmu.setReal([vr_k], [k])
 #fmu.setReal([vr_k_12], [k_12])
@@ -183,12 +178,16 @@ u_write = [u]
 v_write = [v]
 t_write = [t]
 
+state = fmu.getFMUstate()
+
 while interface.is_coupling_ongoing():
     if interface.is_action_required(precice.action_write_iteration_checkpoint()):
-        f_cp = fmu.getReal([vr_f_get])
-        u_cp = fmu.getReal([vr_u])
-        v_cp = fmu.getReal([vr_v])
+        state = fmu.getFMUstate() # According to ModelDescription.xml, this should not be possible, but it is
+        #f_cp = fmu.getReal([vr_f_set])
+        #u_cp = fmu.getReal([vr_u])
+        #v_cp = fmu.getReal([vr_v])
         a_cp = fmu.getReal([vr_a])
+        print("Get a_cp from FMU: ", a_cp[0])
         t_cp = t
         interface.mark_action_fulfilled(precice.action_write_iteration_checkpoint())
 
@@ -214,9 +213,9 @@ while interface.is_coupling_ongoing():
     a_new = fmu.getReal([vr_a])
     t_new = t + dt
     
-    print("New force calculated: ", f_new[0])
+    print("New force or position calculated: ", f_new[0])
+    print("New acceleration calculated: ", a_new[0])
 
-    # !!! Does this mean I have to take spring12 out of the models? --> read about and try different options with force exchange
     #write_data = k_12 * u_new[0]
     #write_data = u_new[0]
     write_data = f_new[0]
@@ -227,10 +226,12 @@ while interface.is_coupling_ongoing():
     precice_dt = interface.advance(dt)
 
     if interface.is_action_required(precice.action_read_iteration_checkpoint()):
-        f = f_cp
-        u = u_cp
-        v = v_cp
-        a = a_cp
+        #fmu.setReal([vr_f_set], f_cp)
+        #fmu.setReal([vr_u], u_cp)
+        #fmu.setReal([vr_v], v_cp)
+        #fmu.setReal([vr_a], a_cp)
+        fmu.setFMUstate(state) # According to ModelDescription.xml, this should not be possible, but it is
+        print("a_cp after restoring checkpoint value: ", fmu.getReal([vr_a])[0])
         t = t_cp
         interface.mark_action_fulfilled(precice.action_read_iteration_checkpoint())
 
