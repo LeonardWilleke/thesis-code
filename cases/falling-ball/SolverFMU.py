@@ -42,7 +42,7 @@ write_data_id = interface.get_data_id(write_data_name, mesh_id)
 ### FMU setup
 
 # define the model name
-fmu_filepath = '../../FMUs/fmus/FallingBall.fmu'
+fmu_filepath = '../../FMUs/FallingBall.fmu'
 
 # read the model description
 model_description = read_model_description(fmu_filepath)
