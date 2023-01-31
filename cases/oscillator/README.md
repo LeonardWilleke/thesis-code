@@ -19,10 +19,10 @@ Note that this case applies a Schwarz-type coupling method and not (like most ot
 
 ## Available solvers
 
-This tutorial is only available in Python. You need to have preCICE and the Python bindings installed on your system. Additionally, there is an experimental implementation with FMU models that also uses Python scripts.
+This tutorial is only available in Python. You need to have preCICE and the [Python bindings](https://www.precice.org/installation-bindings-python.html) installed on your system. Additionally, there is an experimental implementation with FMU models that also uses Python scripts.
 
-- *Python*: An example solver using the preCICE [Python bindings](https://www.precice.org/installation-bindings-python.html). This solver also depends on the Python libraries `numpy`, which you can get from your system package manager or with `pip3 install --user <package>`.
-- *FMU*: An experimental script using FMU models for the two partitions. This solver depends on the Python library `FMPy` which you can install with conda or pip, for example `pip install fmpy`. You also need the compiled FMU models `MassLeft.fmu` and `MassRight.fmu`. The [models](../../FMUs) are provided for Linux but need to be recompiled from the [Modelica files](../../FMUs/OpenModelica) for other systems.
+- *Python*: An example solver implemented in Python. This solver also depends on the Python library `numpy`, which you can get from your system package manager or with `pip3 install --user <package>`.
+- *FMU*: An experimental solver using FMU models for computation. This solver depends on the Python libraries `numpy` and `FMPy` which you can install with conda or pip, for example `pip install fmpy`. You also need the compiled FMU models `MassLeft.fmu` and `MassRight.fmu`. The [models](../../FMUs) are provided for Linux but need to be recompiled from the [Modelica files](../../FMUs/OpenModelica) for other systems.
 
 ## Running the Simulation
 
