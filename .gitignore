@@ -1,6 +1,5 @@
-# built models
-#*.fmu
-FMUs/build/
+# build files
+FMUs/cmake/build/
 
 # simulation logs
 *.log
