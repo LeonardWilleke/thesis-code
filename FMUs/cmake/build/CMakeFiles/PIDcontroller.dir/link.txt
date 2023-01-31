@@ -1,1 +1,0 @@
-/usr/bin/cc -fPIC  -static-libgcc -shared -Wl,-soname,PIDcontroller.so -o temp/PIDcontroller/binaries/x86_64-linux/PIDcontroller.so CMakeFiles/PIDcontroller.dir/PIDcontroller/model.c.o CMakeFiles/PIDcontroller.dir/src/fmi3Functions.c.o CMakeFiles/PIDcontroller.dir/src/cosimulation.c.o 
