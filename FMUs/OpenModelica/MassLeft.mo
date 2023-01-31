@@ -5,23 +5,25 @@ model MassLeft
     Placement(visible = true, transformation(origin = {-22, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Mechanics.Translational.Components.Fixed fixed annotation(
     Placement(visible = true, transformation(origin = {-80, 0}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
-  Modelica.Blocks.Interfaces.RealOutput y annotation(
-    Placement(visible = true, transformation(origin = {58, 10}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {72, 44}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Mechanics.Translational.Components.GeneralForceToPositionAdaptor forceToPositionAdaptor(use_pder = false, use_pder2 = false)  annotation(
-    Placement(visible = true, transformation(origin = {9, 7.10543e-15}, extent = {{-25, -12}, {25, 12}}, rotation = 0)));
-  Modelica.Blocks.Interfaces.RealInput u annotation(
-    Placement(visible = true, transformation(origin = {62, -10}, extent = {{16, -16}, {-16, 16}}, rotation = 0), iconTransformation(origin = {54, -8}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
+    Placement(visible = true, transformation(origin = {10, 1}, extent = {{-26, -11}, {26, 11}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealOutput displacement annotation(
+    Placement(visible = true, transformation(origin = {62, 10}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {62, 12}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Blocks.Interfaces.RealInput force annotation(
+    Placement(visible = true, transformation(origin = {62, -8}, extent = {{12, -12}, {-12, 12}}, rotation = 0), iconTransformation(origin = {56, -32}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
 equation
   connect(mass1.flange_a, spring1.flange_b) annotation(
     Line(points = {{-32, 0}, {-48, 0}}, color = {0, 127, 0}));
   connect(fixed.flange, spring1.flange_a) annotation(
     Line(points = {{-80, 0}, {-68, 0}}, color = {0, 127, 0}));
   connect(forceToPositionAdaptor.flange, mass1.flange_b) annotation(
-    Line(points = {{4, 0}, {-12, 0}}, color = {0, 127, 0}));
-  connect(forceToPositionAdaptor.p, y) annotation(
-    Line(points = {{16, 10}, {58, 10}}, color = {0, 0, 127}));
-  connect(u, forceToPositionAdaptor.f) annotation(
-    Line(points = {{62, -10}, {16, -10}}, color = {0, 0, 127}));
+    Line(points = {{5, 1}, {-3.5, 1}, {-3.5, 0}, {-12, 0}}, color = {0, 127, 0}));
+  connect(forceToPositionAdaptor.p, displacement) annotation(
+    Line(points = {{18, 10}, {62, 10}}, color = {0, 0, 127}));
+  connect(forceToPositionAdaptor.f, force) annotation(
+    Line(points = {{18, -8}, {62, -8}}, color = {0, 0, 127}));
   annotation(
-    uses(Modelica(version = "4.0.0")));
+    uses(Modelica(version = "4.0.0")),
+    experiment(StartTime = 0, StopTime = 1, Tolerance = 1e-6, Interval = 0.002),
+    __OpenModelica_simulationFlags(lv = "LOG_STATS", s = "trapezoid"));
 end MassLeft;

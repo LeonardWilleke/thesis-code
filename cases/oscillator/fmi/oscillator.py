@@ -50,8 +50,8 @@ c = np.linalg.solve(eigenvectors, [u0_1, u0_2])
 
 
 if participant_name == Participant.MASS_LEFT.value:
-    write_data_name = 'Force-Left'
-    read_data_name = 'Force-Right'
+    write_data_name = 'Displacement'
+    read_data_name = 'Force'
     mesh_name = 'Mass-Left-Mesh'
     fmu_file_name = '../../../FMUs/MassLeft.fmu'
     
@@ -59,19 +59,18 @@ if participant_name == Participant.MASS_LEFT.value:
     vrs = {}
     for variable in model_description.modelVariables:
         vrs[variable.name] = variable.valueReference 
-    #vr_m = 
-    #vr_k =
-    #vr_k_12 = 
-    vr_u = vrs['mass1.s']
-    vr_v = vrs['mass1.v']
-    vr_a = vrs['mass1.a']
-    vr_f_set = vrs['u']
-    vr_f_get = vrs['y']
+    vr_m 	 = vrs['mass1.m']
+    vr_k 	 = vrs['spring1.c']
+    vr_u	 = vrs['mass1.s']
+    vr_v 	 = vrs['mass1.v']
+    vr_a 	 = vrs['mass1.a']
+    vr_read 	 = vrs['force']
+    vr_write 	 = vrs['displacement']
     
     k = k_1
-
-    # Calculate analytical solution for comparison
     mass = m_1
+    
+    # Calculate analytical solution for comparison
     stiffness = k_1 + k_12
     u0, v0, f0, d_dt_f0 = u0_1, v0_1, k_12 * u0_2, k_12 * v0_2
     def u_analytical(t): return c[0] * A[0] * np.cos(omega[0] * t) + c[1] * A[1] * np.cos(omega[1] * t)
@@ -79,8 +78,8 @@ if participant_name == Participant.MASS_LEFT.value:
         c[1] * A[1] * omega[1] * np.sin(omega[1] * t)
 
 elif participant_name == Participant.MASS_RIGHT.value:
-    read_data_name = 'Force-Left'
-    write_data_name = 'Force-Right'
+    read_data_name = 'Displacement'
+    write_data_name = 'Force'
     mesh_name = 'Mass-Right-Mesh'
     fmu_file_name = '../../../FMUs/MassRight.fmu'
     
@@ -88,19 +87,19 @@ elif participant_name == Participant.MASS_RIGHT.value:
     vrs = {}
     for variable in model_description.modelVariables:
         vrs[variable.name] = variable.valueReference 
-    #vr_m = 
-    #vr_k =
-    #vr_k12 = 
-    vr_u = vrs['mass2.s']
-    vr_v = vrs['mass2.v']
-    vr_a = vrs['mass2.a']
-    vr_f_set = vrs['u']
-    vr_f_get = vrs['y']
+    vr_m 	 = vrs['mass2.m']
+    vr_k 	 = vrs['spring2.c']
+    vr_k_12 	 = vrs['spring12.c']
+    vr_u 	 = vrs['mass2.s']
+    vr_v 	 = vrs['mass2.v']
+    vr_a 	 = vrs['mass2.a']
+    vr_read 	 = vrs['displacement']
+    vr_write 	 = vrs['force']
     
     k = k_2
+    mass = m_2
     
     # Calculate analytical solution for comparison
-    mass = m_2
     stiffness = k_2 + k_12
     u0, v0, f0, d_dt_f0 = u0_2, v0_2, k_12 * u0_1, k_12 * v0_1
     def u_analytical(t): return c[0] * B[0] * np.cos(omega[0] * t) + c[1] * B[1] * np.cos(omega[1] * t)
@@ -110,14 +109,14 @@ elif participant_name == Participant.MASS_RIGHT.value:
 else:
     raise Exception(f"wrong participant name: {participant_name}")
 
-# preCICE setup
+### preCICE setup
 
 num_vertices = 1  # Number of vertices
 
 solver_process_index = 0 
 solver_process_size = 1
 
-configuration_file_name = "../precice-config.xml"
+configuration_file_name = "./precice-config.xml"
 
 interface = precice.Interface(participant_name, configuration_file_name, solver_process_index, solver_process_size)
 
@@ -142,7 +141,7 @@ if interface.is_action_required(precice.action_write_initial_data()):
 
 interface.initialize_data()
 
-# FMU setup
+### FMU setup
 
 unzipdir = extract(fmu_file_name)
 fmu = FMU2Slave(guid=model_description.guid, unzipDirectory=unzipdir, modelIdentifier=model_description.coSimulation.modelIdentifier, instanceName='instance1')
@@ -152,14 +151,15 @@ fmu.setupExperiment()
 fmu.enterInitializationMode()
 fmu.exitInitializationMode()
 
-# Set parameters m, k, k12 in FMU
-#fmu.setReal([vr_m], [mass])
-#fmu.setReal([vr_k], [k])
-#fmu.setReal([vr_k_12], [k_12])
 
-# Initial Conditions
+# Set parameters 
+fmu.setReal([vr_m], [mass])
+fmu.setReal([vr_k], [k])
+if participant_name == Participant.MASS_RIGHT.value:
+    fmu.setReal([vr_k_12], [k_12])
+
+# Set initial Conditions
 a0 = (f0 - stiffness * u0) / mass
-
 fmu.setReal([vr_u], [u0])
 fmu.setReal([vr_v], [v0])
 fmu.setReal([vr_a], [a0])
@@ -178,17 +178,16 @@ u_write = [u]
 v_write = [v]
 t_write = [t]
 
-state = fmu.getFMUstate()
+state_cp = fmu.getFMUstate()
 
 while interface.is_coupling_ongoing():
     if interface.is_action_required(precice.action_write_iteration_checkpoint()):
-        state = fmu.getFMUstate() # According to ModelDescription.xml, this should not be possible, but it is
-        #f_cp = fmu.getReal([vr_f_set])
-        #u_cp = fmu.getReal([vr_u])
-        #v_cp = fmu.getReal([vr_v])
-        a_cp = fmu.getReal([vr_a])
-        print("Get a_cp from FMU: ", a_cp[0])
-        t_cp = t
+        #state_cp 	= fmu.getFMUstate() # According to ModelDescription.xml, this should not be possible, but it is
+        data_cp 	= fmu.getReal([vr_read])
+        u_cp 		= fmu.getReal([vr_u])
+        v_cp 		= fmu.getReal([vr_v])
+        a_cp 		= fmu.getReal([vr_a])
+        t_cp 		= t
         interface.mark_action_fulfilled(precice.action_write_iteration_checkpoint())
 
         # store data for plotting and postprocessing
@@ -200,38 +199,29 @@ while interface.is_coupling_ongoing():
     dt = np.min([precice_dt, my_dt])
     
     read_data = interface.read_scalar_data(read_data_id, vertex_id)
-    f = read_data
-    print("Read data from other solver: ", read_data)
-    fmu.setReal([vr_f_set], [f])
-    print("Data in FMU: ", fmu.getReal([vr_f_set])[0])
+    data = read_data
+    fmu.setReal([vr_read], [data])
     
     fmu.doStep(t, dt)
     
-    f_new = fmu.getReal([vr_f_get])
+    result = fmu.getReal([vr_write])
     u_new = fmu.getReal([vr_u])
     v_new = fmu.getReal([vr_v])
     a_new = fmu.getReal([vr_a])
     t_new = t + dt
-    
-    print("New force or position calculated: ", f_new[0])
-    print("New acceleration calculated: ", a_new[0])
 
-    #write_data = k_12 * u_new[0]
-    #write_data = u_new[0]
-    write_data = f_new[0]
-    #print(write_data)
+    write_data = result[0]
 
     interface.write_scalar_data(write_data_id, vertex_id, write_data)
 
     precice_dt = interface.advance(dt)
 
     if interface.is_action_required(precice.action_read_iteration_checkpoint()):
-        #fmu.setReal([vr_f_set], f_cp)
-        #fmu.setReal([vr_u], u_cp)
-        #fmu.setReal([vr_v], v_cp)
-        #fmu.setReal([vr_a], a_cp)
-        fmu.setFMUstate(state) # According to ModelDescription.xml, this should not be possible, but it is
-        print("a_cp after restoring checkpoint value: ", fmu.getReal([vr_a])[0])
+        fmu.setReal([vr_read], data_cp)
+        fmu.setReal([vr_u], u_cp)
+        fmu.setReal([vr_v], v_cp)
+        fmu.setReal([vr_a], a_cp)
+        #fmu.setFMUstate(state_cp) # According to ModelDescription.xml, this should not be possible, but it is
         t = t_cp
         interface.mark_action_fulfilled(precice.action_read_iteration_checkpoint())
 
