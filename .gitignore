@@ -7,3 +7,6 @@ FMUs/cmake/build/
 
 # visualisations
 *.pdf
+
+# caches
+*__pycache__*

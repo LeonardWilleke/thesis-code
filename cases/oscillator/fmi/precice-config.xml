@@ -25,6 +25,7 @@
       <use-mesh name="Mass-Left-Mesh" provide="yes"/>
       <write-data name="Displacement" mesh="Mass-Left-Mesh" />
       <read-data  name="Force" mesh="Mass-Left-Mesh" />
+      <watch-point mesh="Mass-Left-Mesh" name="displacement" coordinate="0; 0" />
       <!-- Use this to activate first order interpolation
       <read-data  name="Force" mesh="Mass-Left-Mesh" waveform-order="1" />
       -->
