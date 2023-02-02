@@ -4,10 +4,11 @@ The script `runner.py` is a first approach towards a general preCICE-FMI Runner.
 
 - Only works for models using FMI2, not for FMI1 and FMI3
 - Can only read and write scalar data
+- No logging of internal FMU data
 
-### Set parameters
+### Preparing the simulation
 
-The settings and parameters for the FMU model are saved in `fmuSettings.py`. Equally, all variables needed to set up preCICE can be found in `preciceSettings.py`. For the simulation of the left mass, these files are provided in `MassLeft`. The files for the right mass are in `MassRight`, respectively.
+The settings and parameters stored in two files: `fmuSettings.py` and `preciceSettings.py`. The files can be found in the subfolders `MassLeft` and `MassRight` for the respective partitions.
 
 ### Running the simulation
 
@@ -23,3 +24,11 @@ python runner.py ./MassRight
 ```
 
 The `runner` script takes the path to the folder of the two setting files as input. 
+
+### Post-processing
+
+The displacement of `mass1` is being recorded during simulation. The results can be visualized with a provided plot script:
+
+```
+bash plot-displacement.sh .
+```
