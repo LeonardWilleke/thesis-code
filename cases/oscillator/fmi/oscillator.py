@@ -50,8 +50,8 @@ c = np.linalg.solve(eigenvectors, [u0_1, u0_2])
 
 
 if participant_name == Participant.MASS_LEFT.value:
-    write_data_name = 'Displacement'
-    read_data_name = 'Force'
+    write_data_name = 'Displacement-Left'
+    read_data_name = 'Displacement-Right'
     mesh_name = 'Mass-Left-Mesh'
     fmu_file_name = '../../../FMUs/MassLeft.fmu'
     
@@ -61,14 +61,16 @@ if participant_name == Participant.MASS_LEFT.value:
         vrs[variable.name] = variable.valueReference 
     vr_m 	 = vrs['mass1.m']
     vr_k 	 = vrs['spring1.c']
+    vr_k_12 	 = vrs['spring12.c']
     vr_u	 = vrs['mass1.s']
     vr_v 	 = vrs['mass1.v']
     vr_a 	 = vrs['mass1.a']
-    vr_read 	 = vrs['force']
-    vr_write 	 = vrs['displacement']
+    vr_read 	 = vrs['disp2']
+    vr_write 	 = vrs['disp1']
     
     k = k_1
     mass = m_1
+    disp0 = u0_2
     
     # Calculate analytical solution for comparison
     stiffness = k_1 + k_12
@@ -78,8 +80,8 @@ if participant_name == Participant.MASS_LEFT.value:
         c[1] * A[1] * omega[1] * np.sin(omega[1] * t)
 
 elif participant_name == Participant.MASS_RIGHT.value:
-    read_data_name = 'Displacement'
-    write_data_name = 'Force'
+    read_data_name = 'Displacement-Left'
+    write_data_name = 'Displacement-Right'
     mesh_name = 'Mass-Right-Mesh'
     fmu_file_name = '../../../FMUs/MassRight.fmu'
     
@@ -93,11 +95,12 @@ elif participant_name == Participant.MASS_RIGHT.value:
     vr_u 	 = vrs['mass2.s']
     vr_v 	 = vrs['mass2.v']
     vr_a 	 = vrs['mass2.a']
-    vr_read 	 = vrs['displacement']
-    vr_write 	 = vrs['force']
+    vr_read 	 = vrs['disp1']
+    vr_write 	 = vrs['disp2']
     
     k = k_2
     mass = m_2
+    disp0 = u0_1
     
     # Calculate analytical solution for comparison
     stiffness = k_2 + k_12
@@ -155,14 +158,14 @@ fmu.exitInitializationMode()
 # Set parameters 
 fmu.setReal([vr_m], [mass])
 fmu.setReal([vr_k], [k])
-if participant_name == Participant.MASS_RIGHT.value:
-    fmu.setReal([vr_k_12], [k_12])
+fmu.setReal([vr_k_12], [k_12])
 
 # Set initial Conditions
 a0 = (f0 - stiffness * u0) / mass
 fmu.setReal([vr_u], [u0])
 fmu.setReal([vr_v], [v0])
 fmu.setReal([vr_a], [a0])
+#fmu.setReal([vr_read], [disp0])
 
 u = u0
 v = v0
