@@ -52,8 +52,8 @@ v0_2 = 0
 c = np.linalg.solve(eigenvectors, [u0_1, u0_2])
 
 if participant_name == Participant.MASS_LEFT.value:
-    write_data_name = 'Force-Left'
-    read_data_name = 'Force-Right'
+    write_data_name = 'Displacement-Left'
+    read_data_name = 'Displacement-Right'
     mesh_name = 'Mass-Left-Mesh'
 
     mass = m_1
@@ -64,8 +64,8 @@ if participant_name == Participant.MASS_LEFT.value:
         c[1] * A[1] * omega[1] * np.sin(omega[1] * t)
 
 elif participant_name == Participant.MASS_RIGHT.value:
-    read_data_name = 'Force-Left'
-    write_data_name = 'Force-Right'
+    read_data_name = 'Displacement-Left'
+    write_data_name = 'Displacement-Right'
     mesh_name = 'Mass-Right-Mesh'
 
     mass = m_2
@@ -93,7 +93,7 @@ dimensions = interface.get_dimensions()
 
 vertex = np.zeros(dimensions)
 read_data = np.zeros(num_vertices)
-write_data = k_12 * u0 * np.ones(num_vertices)
+write_data = u0 * np.ones(num_vertices)
 
 vertex_id = interface.set_mesh_vertex(mesh_id, vertex)
 read_data_id = interface.get_data_id(read_data_name, mesh_id)
@@ -153,7 +153,9 @@ while interface.is_coupling_ongoing():
     # read_time = (1-alpha_f) * dt
     # read_data = interface.read_scalar_data(read_data_id, vertex_id, read_time)
     read_data = interface.read_scalar_data(read_data_id, vertex_id)
-    f = read_data
+    displacement = read_data
+    
+    f = k_12 * displacement
 
     # do generalized alpha step
     m[0] = (1 - alpha_m) / (beta * dt**2)
@@ -165,7 +167,7 @@ while interface.is_coupling_ongoing():
     v_new = v + dt * ((1 - gamma) * a + gamma * a_new)
     t_new = t + dt
 
-    write_data = k_12 * u_new
+    write_data = u_new
 
     interface.write_scalar_data(write_data_id, vertex_id, write_data)
 

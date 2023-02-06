@@ -128,7 +128,7 @@ dimensions = interface.get_dimensions()
 
 vertex = np.zeros(dimensions)
 read_data = np.zeros(num_vertices)
-write_data = k_12 * u0 * np.ones(num_vertices) # initial force?
+write_data = u0 * np.ones(num_vertices)
 
 vertex_id = interface.set_mesh_vertex(mesh_id, vertex)
 read_data_id = interface.get_data_id(read_data_name, mesh_id)
@@ -165,7 +165,6 @@ a0 = (f0 - stiffness * u0) / mass
 fmu.setReal([vr_u], [u0])
 fmu.setReal([vr_v], [v0])
 fmu.setReal([vr_a], [a0])
-#fmu.setReal([vr_read], [disp0])
 
 u = u0
 v = v0
@@ -181,11 +180,8 @@ u_write = [u]
 v_write = [v]
 t_write = [t]
 
-state_cp = fmu.getFMUstate()
-
 while interface.is_coupling_ongoing():
     if interface.is_action_required(precice.action_write_iteration_checkpoint()):
-        #state_cp 	= fmu.getFMUstate() # According to ModelDescription.xml, this should not be possible, but it is
         data_cp 	= fmu.getReal([vr_read])
         u_cp 		= fmu.getReal([vr_u])
         v_cp 		= fmu.getReal([vr_v])
@@ -224,7 +220,6 @@ while interface.is_coupling_ongoing():
         fmu.setReal([vr_u], u_cp)
         fmu.setReal([vr_v], v_cp)
         fmu.setReal([vr_a], a_cp)
-        #fmu.setFMUstate(state_cp) # According to ModelDescription.xml, this should not be possible, but it is
         t = t_cp
         interface.mark_action_fulfilled(precice.action_read_iteration_checkpoint())
 

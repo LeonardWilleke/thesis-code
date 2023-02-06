@@ -22,7 +22,7 @@ Note that this case applies a Schwarz-type coupling method and not (like most ot
 This tutorial is only available in Python. You need to have preCICE and the [Python bindings](https://www.precice.org/installation-bindings-python.html) installed on your system. Additionally, there is an experimental implementation with FMU models that also uses Python scripts.
 
 - *Python*: An example solver implemented in Python. This solver also depends on the Python library `numpy`, which you can get from your system package manager or with `pip3 install --user <package>`.
-- *FMU*: An experimental solver using FMU models for computation. This solver depends on the Python libraries `numpy` and `FMPy` which you can install with conda or pip, for example `pip install fmpy`. You also need the compiled FMU models `MassLeft.fmu` and `MassRight.fmu`. The [models](../../FMUs) are provided for Linux but need to be recompiled from the [Modelica files](../../FMUs/OpenModelica) for other systems.
+- *FMI*: An example solver using FMU models for computation. This solver depends on the Python libraries `numpy` and `FMPy` which you can install with conda or pip, for example `pip3 install fmpy`. You also need the compiled FMU models `MassLeft.fmu` and `MassRight.fmu`. The [models](fmi/models) are ready-to-use for Linux but need to be recompiled from the provided Modelica files for other systems.
 
 ## Running the Simulation
 
@@ -67,7 +67,7 @@ Each simulation run creates two files containing position and velocity of the tw
 python3 plot-trajectory.py python/output/trajectory-Mass-Left.csv TRAJECTORY
 ```
 
-This allows you to study the effect of different time stepping schemes on energy conservation. Newmark beta conserves energy:
+The Python solver allows you to study the effect of different time stepping schemes on energy conservation. Newmark beta conserves energy:
 
 ![Trajectory for Newmark beta scheme](images/tutorials-oscillator-trajectory-newmark-beta.png)
 
