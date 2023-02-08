@@ -84,7 +84,7 @@ num_vertices = 1  # Number of vertices
 solver_process_index = 0
 solver_process_size = 1
 
-configuration_file_name = "./precice-config.xml"
+configuration_file_name = "../precice-config.xml"
 
 interface = precice.Interface(participant_name, configuration_file_name, solver_process_index, solver_process_size)
 

@@ -119,7 +119,7 @@ num_vertices = 1  # Number of vertices
 solver_process_index = 0 
 solver_process_size = 1
 
-configuration_file_name = "./precice-config.xml"
+configuration_file_name = "../precice-config.xml"
 
 interface = precice.Interface(participant_name, configuration_file_name, solver_process_index, solver_process_size)
 
@@ -151,20 +151,21 @@ fmu = FMU2Slave(guid=model_description.guid, unzipDirectory=unzipdir, modelIdent
 
 fmu.instantiate()
 fmu.setupExperiment()
+
+# Set parameters and IC
 fmu.enterInitializationMode()
 fmu.exitInitializationMode()
 
-
-# Set parameters 
 fmu.setReal([vr_m], [mass])
 fmu.setReal([vr_k], [k])
 fmu.setReal([vr_k_12], [k_12])
 
-# Set initial Conditions
 a0 = (f0 - stiffness * u0) / mass
 fmu.setReal([vr_u], [u0])
 fmu.setReal([vr_v], [v0])
 fmu.setReal([vr_a], [a0])
+
+
 
 u = u0
 v = v0
@@ -179,6 +180,8 @@ times = []
 u_write = [u]
 v_write = [v]
 t_write = [t]
+
+n_iterations = 0
 
 while interface.is_coupling_ongoing():
     if interface.is_action_required(precice.action_write_iteration_checkpoint()):
@@ -197,11 +200,35 @@ while interface.is_coupling_ongoing():
     # compute time step size for this time step
     dt = np.min([precice_dt, my_dt])
     
+    print("Data before reading")
+    print("u: ", fmu.getReal([vr_u]))
+    print("v: ", fmu.getReal([vr_v]))
+    print("a: ", fmu.getReal([vr_a]))
+    print("read: ", fmu.getReal([vr_read]))
+    print("write: ", fmu.getReal([vr_write]))
+    
     read_data = interface.read_scalar_data(read_data_id, vertex_id)
     data = read_data
+    
+    fmu.enterEventMode()
     fmu.setReal([vr_read], [data])
+    fmu.exitEventMode()
+    
+    print("Data after reading")
+    print("u: ", fmu.getReal([vr_u]))
+    print("v: ", fmu.getReal([vr_v]))
+    print("a: ", fmu.getReal([vr_a]))
+    print("read: ", fmu.getReal([vr_read]))
+    print("write: ", fmu.getReal([vr_write]))
     
     fmu.doStep(t, dt)
+    
+    print("Data after step")
+    print("u: ", fmu.getReal([vr_u]))
+    print("v: ", fmu.getReal([vr_v]))
+    print("a: ", fmu.getReal([vr_a]))
+    print("read: ", fmu.getReal([vr_read]))
+    print("write: ", fmu.getReal([vr_write]))
     
     result = fmu.getReal([vr_write])
     u_new = fmu.getReal([vr_u])
@@ -216,17 +243,23 @@ while interface.is_coupling_ongoing():
     precice_dt = interface.advance(dt)
 
     if interface.is_action_required(precice.action_read_iteration_checkpoint()):
+        #fmu.enterEventMode()
         fmu.setReal([vr_read], data_cp)
         fmu.setReal([vr_u], u_cp)
         fmu.setReal([vr_v], v_cp)
         fmu.setReal([vr_a], a_cp)
-        t = t_cp
+        #t = t_cp
+        fmu.exitEventMode()
         interface.mark_action_fulfilled(precice.action_read_iteration_checkpoint())
 
         # empty buffers for next window
         u_write = []
         v_write = []
         t_write = []
+        
+        n_iterations += 1
+        #if n_iterations == 5:
+        #    raise Exception("Stop for testing")
 
     else:
         u = u_new
