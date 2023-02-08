@@ -8,7 +8,7 @@ from enum import Enum
 import csv
 import os
 from fmpy import read_model_description, extract
-from fmpy.fmi2 import FMU2Slave
+from fmpy.fmi3 import FMU3Slave
 import shutil
 
 
@@ -53,20 +53,20 @@ if participant_name == Participant.MASS_LEFT.value:
     write_data_name = 'Displacement-Left'
     read_data_name = 'Displacement-Right'
     mesh_name = 'Mass-Left-Mesh'
-    fmu_file_name = '../../../FMUs/MassLeft.fmu'
+    fmu_file_name = '../../../FMUs/Oscillator.fmu'
     
     model_description = read_model_description(fmu_file_name)  
     vrs = {}
     for variable in model_description.modelVariables:
         vrs[variable.name] = variable.valueReference 
-    vr_m 	 = vrs['mass1.m']
-    vr_k 	 = vrs['spring1.c']
-    vr_k_12 	 = vrs['spring12.c']
-    vr_u	 = vrs['mass1.s']
-    vr_v 	 = vrs['mass1.v']
-    vr_a 	 = vrs['mass1.a']
-    vr_read 	 = vrs['disp2']
-    vr_write 	 = vrs['disp1']
+    vr_m 	 = vrs['mass.m']
+    vr_k 	 = vrs['spring_fixed.c']
+    vr_k_12 	 = vrs['spring_middle.c']
+    vr_u	 = vrs['mass.u']
+    vr_v 	 = vrs['mass.v']
+    vr_a 	 = vrs['mass.a']
+    vr_read 	 = vrs['displacement']
+    vr_write 	 = vrs['mass.u']
     
     k = k_1
     mass = m_1
@@ -83,20 +83,20 @@ elif participant_name == Participant.MASS_RIGHT.value:
     read_data_name = 'Displacement-Left'
     write_data_name = 'Displacement-Right'
     mesh_name = 'Mass-Right-Mesh'
-    fmu_file_name = '../../../FMUs/MassRight.fmu'
+    fmu_file_name = '../../../FMUs/Oscillator.fmu'
     
     model_description = read_model_description(fmu_file_name)
     vrs = {}
     for variable in model_description.modelVariables:
         vrs[variable.name] = variable.valueReference 
-    vr_m 	 = vrs['mass2.m']
-    vr_k 	 = vrs['spring2.c']
-    vr_k_12 	 = vrs['spring12.c']
-    vr_u 	 = vrs['mass2.s']
-    vr_v 	 = vrs['mass2.v']
-    vr_a 	 = vrs['mass2.a']
-    vr_read 	 = vrs['disp1']
-    vr_write 	 = vrs['disp2']
+    vr_m 	 = vrs['mass.m']
+    vr_k 	 = vrs['spring_fixed.c']
+    vr_k_12 	 = vrs['spring_middle.c']
+    vr_u	 = vrs['mass.u']
+    vr_v 	 = vrs['mass.v']
+    vr_a 	 = vrs['mass.a']
+    vr_read 	 = vrs['displacement']
+    vr_write 	 = vrs['mass.u']
     
     k = k_2
     mass = m_2
@@ -147,25 +147,23 @@ interface.initialize_data()
 ### FMU setup
 
 unzipdir = extract(fmu_file_name)
-fmu = FMU2Slave(guid=model_description.guid, unzipDirectory=unzipdir, modelIdentifier=model_description.coSimulation.modelIdentifier, instanceName='instance1')
+fmu = FMU3Slave(guid=model_description.guid, unzipDirectory=unzipdir, modelIdentifier=model_description.coSimulation.modelIdentifier, instanceName='instance1')
 
 fmu.instantiate()
-fmu.setupExperiment()
 
 # Set parameters and IC
 fmu.enterInitializationMode()
-fmu.exitInitializationMode()
 
-fmu.setReal([vr_m], [mass])
-fmu.setReal([vr_k], [k])
-fmu.setReal([vr_k_12], [k_12])
+fmu.setFloat64([vr_m], [mass])
+fmu.setFloat64([vr_k], [k])
+fmu.setFloat64([vr_k_12], [k_12])
 
 a0 = (f0 - stiffness * u0) / mass
-fmu.setReal([vr_u], [u0])
-fmu.setReal([vr_v], [v0])
-fmu.setReal([vr_a], [a0])
+fmu.setFloat64([vr_u], [u0])
+fmu.setFloat64([vr_v], [v0])
+fmu.setFloat64([vr_a], [a0])
 
-
+fmu.exitInitializationMode()
 
 u = u0
 v = v0
@@ -183,12 +181,14 @@ t_write = [t]
 
 n_iterations = 0
 
+
 while interface.is_coupling_ongoing():
     if interface.is_action_required(precice.action_write_iteration_checkpoint()):
-        data_cp 	= fmu.getReal([vr_read])
-        u_cp 		= fmu.getReal([vr_u])
-        v_cp 		= fmu.getReal([vr_v])
-        a_cp 		= fmu.getReal([vr_a])
+        #data_cp 	= fmu.getReal([vr_read])
+        #u_cp 		= fmu.getReal([vr_u])
+        #v_cp 		= fmu.getReal([vr_v])
+        #a_cp 		= fmu.getReal([vr_a])
+        state_cp 	= fmu.getFMUState()
         t_cp 		= t
         interface.mark_action_fulfilled(precice.action_write_iteration_checkpoint())
 
@@ -201,39 +201,37 @@ while interface.is_coupling_ongoing():
     dt = np.min([precice_dt, my_dt])
     
     print("Data before reading")
-    print("u: ", fmu.getReal([vr_u]))
-    print("v: ", fmu.getReal([vr_v]))
-    print("a: ", fmu.getReal([vr_a]))
-    print("read: ", fmu.getReal([vr_read]))
-    print("write: ", fmu.getReal([vr_write]))
+    print("u: ", fmu.getFloat64([vr_u]))
+    print("v: ", fmu.getFloat64([vr_v]))
+    print("a: ", fmu.getFloat64([vr_a]))
+    print("read: ", fmu.getFloat64([vr_read]))
+    print("write: ", fmu.getFloat64([vr_write]))
     
     read_data = interface.read_scalar_data(read_data_id, vertex_id)
     data = read_data
     
-    fmu.enterEventMode()
-    fmu.setReal([vr_read], [data])
-    fmu.exitEventMode()
+    fmu.setFloat64([vr_read], [data])
     
     print("Data after reading")
-    print("u: ", fmu.getReal([vr_u]))
-    print("v: ", fmu.getReal([vr_v]))
-    print("a: ", fmu.getReal([vr_a]))
-    print("read: ", fmu.getReal([vr_read]))
-    print("write: ", fmu.getReal([vr_write]))
+    print("u: ", fmu.getFloat64([vr_u]))
+    print("v: ", fmu.getFloat64([vr_v]))
+    print("a: ", fmu.getFloat64([vr_a]))
+    print("read: ", fmu.getFloat64([vr_read]))
+    print("write: ", fmu.getFloat64([vr_write]))
     
     fmu.doStep(t, dt)
     
     print("Data after step")
-    print("u: ", fmu.getReal([vr_u]))
-    print("v: ", fmu.getReal([vr_v]))
-    print("a: ", fmu.getReal([vr_a]))
-    print("read: ", fmu.getReal([vr_read]))
-    print("write: ", fmu.getReal([vr_write]))
+    print("u: ", fmu.getFloat64([vr_u]))
+    print("v: ", fmu.getFloat64([vr_v]))
+    print("a: ", fmu.getFloat64([vr_a]))
+    print("read: ", fmu.getFloat64([vr_read]))
+    print("write: ", fmu.getFloat64([vr_write]))
     
-    result = fmu.getReal([vr_write])
-    u_new = fmu.getReal([vr_u])
-    v_new = fmu.getReal([vr_v])
-    a_new = fmu.getReal([vr_a])
+    result = fmu.getFloat64([vr_write])
+    u_new = fmu.getFloat64([vr_u])
+    v_new = fmu.getFloat64([vr_v])
+    a_new = fmu.getFloat64([vr_a])
     t_new = t + dt
 
     write_data = result[0]
@@ -243,13 +241,12 @@ while interface.is_coupling_ongoing():
     precice_dt = interface.advance(dt)
 
     if interface.is_action_required(precice.action_read_iteration_checkpoint()):
-        #fmu.enterEventMode()
-        fmu.setReal([vr_read], data_cp)
-        fmu.setReal([vr_u], u_cp)
-        fmu.setReal([vr_v], v_cp)
-        fmu.setReal([vr_a], a_cp)
-        #t = t_cp
-        fmu.exitEventMode()
+        #fmu.setReal([vr_read], data_cp)
+        #fmu.setReal([vr_u], u_cp)
+        #fmu.setReal([vr_v], v_cp)
+        #fmu.setReal([vr_a], a_cp)
+        fmu.setFMUState(state_cp)
+        t = t_cp
         interface.mark_action_fulfilled(precice.action_read_iteration_checkpoint())
 
         # empty buffers for next window
