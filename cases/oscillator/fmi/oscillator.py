@@ -9,6 +9,8 @@ import csv
 import os
 from fmpy import read_model_description, extract
 from fmpy.fmi3 import FMU3Slave
+from fmpy.simulation import Input, Recorder
+from fmpy.util import write_csv
 import shutil
 
 
@@ -50,8 +52,8 @@ c = np.linalg.solve(eigenvectors, [u0_1, u0_2])
 
 
 if participant_name == Participant.MASS_LEFT.value:
-    write_data_name = 'Displacement-Left'
-    read_data_name = 'Displacement-Right'
+    write_data_name = 'Force-Left'
+    read_data_name = 'Force-Right'
     mesh_name = 'Mass-Left-Mesh'
     fmu_file_name = '../../../FMUs/Oscillator.fmu'
     
@@ -65,8 +67,10 @@ if participant_name == Participant.MASS_LEFT.value:
     vr_u	 = vrs['mass.u']
     vr_v 	 = vrs['mass.v']
     vr_a 	 = vrs['mass.a']
-    vr_read 	 = vrs['displacement']
-    vr_write 	 = vrs['mass.u']
+    vr_read 	 = vrs['force_in']
+    vr_write 	 = vrs['force_out']
+    
+    output = ['mass.u', 'mass.v']
     
     k = k_1
     mass = m_1
@@ -80,8 +84,8 @@ if participant_name == Participant.MASS_LEFT.value:
         c[1] * A[1] * omega[1] * np.sin(omega[1] * t)
 
 elif participant_name == Participant.MASS_RIGHT.value:
-    read_data_name = 'Displacement-Left'
-    write_data_name = 'Displacement-Right'
+    read_data_name = 'Force-Left'
+    write_data_name = 'Force-Right'
     mesh_name = 'Mass-Right-Mesh'
     fmu_file_name = '../../../FMUs/Oscillator.fmu'
     
@@ -95,8 +99,10 @@ elif participant_name == Participant.MASS_RIGHT.value:
     vr_u	 = vrs['mass.u']
     vr_v 	 = vrs['mass.v']
     vr_a 	 = vrs['mass.a']
-    vr_read 	 = vrs['displacement']
-    vr_write 	 = vrs['mass.u']
+    vr_read 	 = vrs['force_in']
+    vr_write 	 = vrs['force_out']
+    
+    output = ['mass.u', 'mass.v']
     
     k = k_2
     mass = m_2
@@ -165,138 +171,65 @@ fmu.setFloat64([vr_a], [a0])
 
 fmu.exitInitializationMode()
 
-u = u0
-v = v0
-a = a0
 t = 0
 
-
-positions = []
-velocities = []
-times = []
-
-u_write = [u]
-v_write = [v]
-t_write = [t]
-
-n_iterations = 0
-
+recorder = Recorder(fmu=fmu, modelDescription=model_description, variableNames=output)
+recorder.sample(t, force=False)
 
 while interface.is_coupling_ongoing():
     if interface.is_action_required(precice.action_write_iteration_checkpoint()):
-        #data_cp 	= fmu.getReal([vr_read])
-        #u_cp 		= fmu.getReal([vr_u])
-        #v_cp 		= fmu.getReal([vr_v])
-        #a_cp 		= fmu.getReal([vr_a])
         state_cp 	= fmu.getFMUState()
         t_cp 		= t
         interface.mark_action_fulfilled(precice.action_write_iteration_checkpoint())
-
-        # store data for plotting and postprocessing
-        positions += u_write
-        velocities += v_write
-        times += t_write
-
+    
     # compute time step size for this time step
     dt = np.min([precice_dt, my_dt])
-    
-    print("Data before reading")
-    print("u: ", fmu.getFloat64([vr_u]))
-    print("v: ", fmu.getFloat64([vr_v]))
-    print("a: ", fmu.getFloat64([vr_a]))
-    print("read: ", fmu.getFloat64([vr_read]))
-    print("write: ", fmu.getFloat64([vr_write]))
     
     read_data = interface.read_scalar_data(read_data_id, vertex_id)
     data = read_data
     
     fmu.setFloat64([vr_read], [data])
     
-    print("Data after reading")
-    print("u: ", fmu.getFloat64([vr_u]))
-    print("v: ", fmu.getFloat64([vr_v]))
-    print("a: ", fmu.getFloat64([vr_a]))
-    print("read: ", fmu.getFloat64([vr_read]))
-    print("write: ", fmu.getFloat64([vr_write]))
-    
     fmu.doStep(t, dt)
     
-    print("Data after step")
-    print("u: ", fmu.getFloat64([vr_u]))
-    print("v: ", fmu.getFloat64([vr_v]))
-    print("a: ", fmu.getFloat64([vr_a]))
-    print("read: ", fmu.getFloat64([vr_read]))
-    print("write: ", fmu.getFloat64([vr_write]))
-    
     result = fmu.getFloat64([vr_write])
-    u_new = fmu.getFloat64([vr_u])
-    v_new = fmu.getFloat64([vr_v])
-    a_new = fmu.getFloat64([vr_a])
-    t_new = t + dt
 
     write_data = result[0]
 
     interface.write_scalar_data(write_data_id, vertex_id, write_data)
 
     precice_dt = interface.advance(dt)
+    
+    t = t + dt
 
     if interface.is_action_required(precice.action_read_iteration_checkpoint()):
-        #fmu.setReal([vr_read], data_cp)
-        #fmu.setReal([vr_u], u_cp)
-        #fmu.setReal([vr_v], v_cp)
-        #fmu.setReal([vr_a], a_cp)
         fmu.setFMUState(state_cp)
         t = t_cp
         interface.mark_action_fulfilled(precice.action_read_iteration_checkpoint())
-
-        # empty buffers for next window
-        u_write = []
-        v_write = []
-        t_write = []
-        
-        n_iterations += 1
-        #if n_iterations == 5:
-        #    raise Exception("Stop for testing")
-
-    else:
-        u = u_new
-        v = v_new
-        a = a_new
-        t = t_new
-
-        # write data to buffers
-        u_write.append(u[0])
-        v_write.append(v[0])
-        t_write.append(t)
-
-# store final result
-u = u_new
-v = v_new
-a = a_new
-u_write.append(u[0])
-v_write.append(v[0])
-t_write.append(t)
-positions += u_write
-velocities += v_write
-times += t_write
+    else:    
+        recorder.sample(t, force=False)
 
 interface.finalize()
+
+if not os.path.exists("output"):
+    os.makedirs("./output")
+    
+# store final result
+recorder.sample(t, force=False)
+results = recorder.result()
+if participant_name == Participant.MASS_LEFT.value:
+    filename = 'output/trajectory-Mass-Left.csv'
+elif participant_name == Participant.MASS_RIGHT.value:
+    filename = 'output/trajectory-Mass-Right.csv'
+write_csv(filename, results) 
+
 fmu.terminate()
 fmu.freeInstance()              
 # clean up FMU
 shutil.rmtree(unzipdir, ignore_errors=True)
 
 # print errors
-error = np.max(abs(u_analytical(np.array(times)) - np.array(positions)))
-print("Error w.r.t analytical solution:")
-print(f"{my_dt},{error}")
+#error = np.max(abs(u_analytical(np.array(times)) - np.array(positions)))
+#print("Error w.r.t analytical solution:")
+#print(f"{my_dt},{error}")
 
-# output trajectory
-if not os.path.exists("output"):
-    os.makedirs("output")
-
-with open(f'output/trajectory-{participant_name}.csv', 'w') as file:
-    csv_write = csv.writer(file, delimiter=';')
-    csv_write.writerow(['time', 'position', 'velocity'])
-    for t, u, v in zip(times, positions, velocities):
-        csv_write.writerow([t, u, v])

@@ -13,11 +13,11 @@ void setStartValues(ModelInstance *comp) {
     M(mass_v)         	= 0;
     M(spring_fixed_c)	= 4*3.1416;
     M(spring_middle_c)	= 16*3.1416;
-    M(displacement)    = 0;
+    M(force_in)        = 0;
+    M(force_out) 	= 0;
     M(alpha_f)         = 0;
     M(alpha_m)         = 0;
-    M(dt)        	= 1e-2;
-    M(mass_a)		= ( M(displacement) * M(spring_middle_c) - ( M(spring_fixed_c) + M(spring_middle_c) ) * M(mass_u) ) / M(mass_m);
+    M(mass_a)		= ( M(force_in) - ( M(spring_fixed_c) + M(spring_middle_c) ) * M(mass_u) ) / M(mass_m);
 }
 
 Status calculateValues(ModelInstance *comp) {
@@ -50,17 +50,17 @@ Status getFloat64(ModelInstance* comp, ValueReference vr, double *value, size_t 
         case vr_spring_middle_c:
             value[(*index)++] = M(spring_middle_c);
             return OK;
-        case vr_displacement:
-            value[(*index)++] = M(displacement);
+        case vr_force_in:
+            value[(*index)++] = M(force_in);
+            return OK;
+        case vr_force_out:
+            value[(*index)++] = M(force_out);
             return OK;
         case vr_alpha_f:
             value[(*index)++] = M(alpha_f);
             return OK;
         case vr_alpha_m:
             value[(*index)++] = M(alpha_m);
-            return OK;
-        case vr_dt:
-            value[(*index)++] = M(dt);
             return OK;
         default:
             logError(comp, "Get Float64 is not allowed for value reference %u.", vr);
@@ -89,17 +89,17 @@ Status setFloat64(ModelInstance* comp, ValueReference vr, const double *value, s
         case vr_spring_middle_c:
             M(spring_middle_c) = value[(*index)++];
             return OK;
-        case vr_displacement:
-            M(displacement) = value[(*index)++];
+        case vr_force_in:
+            M(force_in) = value[(*index)++];
+            return OK;
+        case vr_force_out:
+            M(force_out) = value[(*index)++];
             return OK;
         case vr_alpha_f:
             M(alpha_f) = value[(*index)++];
             return OK;
         case vr_alpha_m:
             M(alpha_m) = value[(*index)++];
-            return OK;
-        case vr_dt:
-            M(dt) = value[(*index)++];
             return OK;
         default:
             logError(comp, "Unexpected value reference: %u.", vr);

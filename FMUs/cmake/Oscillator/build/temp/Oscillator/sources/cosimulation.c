@@ -529,13 +529,13 @@ void doFixedStep(ModelInstance *comp, bool* stateEvent, bool* timeEvent) {
 void doAlphaStep(ModelInstance *comp, bool* stateEvent, bool* timeEvent) {
 
     // get current time step size
-    M(dt) = comp->solverStepSize;
+    double dt = comp->solverStepSize;
 
     // create local variables
     double t		= comp->time;
-    double dt 		= M(dt);
     double m[3] 	= { 0 };
-    double force	= 0;
+    double force_in	= M(force_in);
+    double force_out   = 0;
     double gamma 	= 0.5 - M(alpha_m) + M(alpha_f);
     double beta 	= 0.25 * (gamma + 0.5);
     double u_new 	= 0;
@@ -544,23 +544,24 @@ void doAlphaStep(ModelInstance *comp, bool* stateEvent, bool* timeEvent) {
     double k_bar	= 0;
     double stiffness	= M(spring_fixed_c) + M(spring_middle_c);
     
-    // compute force
-    force = M(spring_middle_c) * M(displacement);
-    
     // do generalized alpha step
     m[0] = (1 - M(alpha_m)) / (beta * dt * dt);
     m[1] = (1 - M(alpha_m)) / (beta * dt);
     m[2] = (1 - M(alpha_m) - 2 * beta) / (2 * beta);
     
     k_bar = stiffness * (1 - M(alpha_f)) + m[0] * M(mass_m);
-    u_new = (force - M(alpha_f) * stiffness * M(mass_u) + M(mass_m) * (m[0] * M(mass_u) + m[1] * M(mass_v) + m[2] * M(mass_a))) / k_bar;
+    u_new = (force_in - M(alpha_f) * stiffness * M(mass_u) + M(mass_m) * (m[0] * M(mass_u) + m[1] * M(mass_v) + m[2] * M(mass_a))) / k_bar;
     a_new = 1.0 / (beta * dt * dt) * (u_new - M(mass_u) - dt * M(mass_v)) - (1 - 2 * beta) / (2 * beta) * M(mass_a);
     v_new = M(mass_v) + dt * ((1 - gamma) * M(mass_a) + gamma * a_new);
     
+    // compute force
+    force_out = M(spring_middle_c) * u_new;
+    
     // store new values
-    M(mass_u) = u_new;
-    M(mass_v) = v_new;
-    M(mass_a) = a_new;
+    M(mass_u) 		= u_new;
+    M(mass_v) 		= v_new;
+    M(mass_a) 		= a_new;
+    M(force_out) 	= force_out;
     
     // advance time
     comp->nSteps++;

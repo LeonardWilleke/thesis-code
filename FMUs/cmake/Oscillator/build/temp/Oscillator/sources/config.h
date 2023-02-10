@@ -20,7 +20,7 @@
 #define DEFAULT_STOP_TIME 3
 
 typedef enum {
-    vr_time, vr_mass_m, vr_mass_u, vr_mass_v, vr_mass_a, vr_spring_fixed_c, vr_spring_middle_c, vr_displacement, vr_alpha_f, vr_alpha_m, vr_dt
+    vr_time, vr_mass_m, vr_mass_u, vr_mass_v, vr_mass_a, vr_spring_fixed_c, vr_spring_middle_c, vr_force_in, vr_force_out, vr_alpha_f, vr_alpha_m
 } ValueReference;
 
 typedef struct {
@@ -31,10 +31,10 @@ typedef struct {
     double mass_a;
     double spring_fixed_c;
     double spring_middle_c;
-    double displacement;
+    double force_in;
+    double force_out;
     double alpha_f;
     double alpha_m;
-    double dt;
 
 } ModelData;
 
