@@ -33,7 +33,7 @@ if 'python' in filename:
         plt.title(PlotType.TRAJECTORY.value)
         plt.legend()
         
-if 'fmi' in filename:
+if 'fmi' or 'runner' in filename:
     df = pd.read_csv(filename, delimiter=',')
     if args.plotType == PlotType.U_OVER_T.name:
         plt.plot(df['time'], df['mass.u'])

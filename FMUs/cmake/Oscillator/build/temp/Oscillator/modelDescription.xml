@@ -9,7 +9,7 @@
   <ModelExchange
     modelIdentifier="Oscillator"
     canGetAndSetFMUState="true"
-    canSerializeFMUState="true"/>
+    canSerializeFMUState="false"/>
 
   <CoSimulation
     modelIdentifier="Oscillator"
