@@ -35,9 +35,9 @@ precice_data = json.load(read_file)
 
 ### FMU setup
 
-fmu_file_name 		= precice_data["simulation_params"]["fmu_file_name"]
-fmu_instance 		= precice_data["simulation_params"]["fmu_instance_name"]
-model_description 	= read_model_description(fmu_file_name)
+fmu_file_name 				= precice_data["simulation_params"]["fmu_file_name"]
+fmu_instance 				= precice_data["simulation_params"]["fmu_instance_name"]
+model_description 			= read_model_description(fmu_file_name)
 
 vrs = {}
 for variable in model_description.modelVariables:
@@ -89,19 +89,19 @@ interface = precice.Interface(
 	precice_data["coupling_params"]["solver_process_size"]
 	)
 
-mesh_id = interface.get_mesh_id(precice_data["coupling_params"]["mesh_name"])
-dimensions = interface.get_dimensions()
+mesh_id 	= interface.get_mesh_id(precice_data["coupling_params"]["mesh_name"])
+dimensions 	= interface.get_dimensions()
 
-vertex = np.zeros(dimensions)
-read_data = np.zeros(precice_data["coupling_params"]["num_vertices"])
+vertex 		= np.zeros(dimensions)
+read_data 	= np.zeros(precice_data["coupling_params"]["num_vertices"])
 
 # initial value for write data
 write_data = fmu_write_data_init * np.ones(precice_data["coupling_params"]["num_vertices"])
 
 
-vertex_id = interface.set_mesh_vertex(mesh_id, vertex)
-read_data_id = interface.get_data_id(precice_data["coupling_params"]["read_data_name"], mesh_id)
-write_data_id = interface.get_data_id(precice_data["coupling_params"]["write_data_name"], mesh_id)
+vertex_id 		= interface.set_mesh_vertex(mesh_id, vertex)
+read_data_id 	= interface.get_data_id(precice_data["coupling_params"]["read_data_name"], mesh_id)
+write_data_id 	= interface.get_data_id(precice_data["coupling_params"]["write_data_name"], mesh_id)
 
 precice_dt = interface.initialize()
 my_dt = precice_dt  # use my_dt < precice_dt for subcycling
@@ -125,7 +125,7 @@ while interface.is_coupling_ongoing():
         if True: # can_get_and_set_fmu_state is currently read wrong by FMPy
             state_cp 	= fmu.getFMUState()
         elif len(checkpoint_names) != 0:
-            checkpoint = fmu.getFloat64(checkpoint_vr)
+            checkpoint 	= fmu.getFloat64(checkpoint_vr)
         else:
             raise Exception('Please provide variables for the checkpoint during implicit coupling. The FMU model doesnt allow to \
             get and set the FMU state with the built-in functions.')
@@ -136,8 +136,8 @@ while interface.is_coupling_ongoing():
     # compute time step size for this time step
     dt = np.min([precice_dt, my_dt])
     
-    read_data = interface.read_scalar_data(read_data_id, vertex_id)
-    data = read_data
+    read_data 	= interface.read_scalar_data(read_data_id, vertex_id)
+    data 		= read_data
     
     fmu.setFloat64(vr_read, [data])
     
@@ -177,6 +177,7 @@ if not os.path.exists("output"):
 recorder.sample(t, force=False)
 results = recorder.result()
 write_csv(precice_data["simulation_params"]["output_file_name"], results)
+
 # terminate FMU
 fmu.terminate()
 fmu.freeInstance()              
