@@ -6,14 +6,14 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_C
   "/home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/Oscillator/model.c" "/home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/build/CMakeFiles/Oscillator.dir/Oscillator/model.c.o"
   "/home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/cosimulation.c" "/home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/build/CMakeFiles/Oscillator.dir/src/cosimulation.c.o"
-  "/home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/fmi3Functions.c" "/home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/build/CMakeFiles/Oscillator.dir/src/fmi3Functions.c.o"
+  "/home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/fmi2Functions.c" "/home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/build/CMakeFiles/Oscillator.dir/src/fmi2Functions.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
 # Preprocessor definitions for this target.
 set(CMAKE_TARGET_DEFINITIONS_C
   "DISABLE_PREFIX"
-  "FMI_VERSION=3"
+  "FMI_VERSION=2"
   "Oscillator_EXPORTS"
   )
 

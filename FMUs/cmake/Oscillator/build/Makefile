@@ -223,32 +223,32 @@ src/cosimulation.c.s:
 	$(MAKE) -f CMakeFiles/Oscillator.dir/build.make CMakeFiles/Oscillator.dir/src/cosimulation.c.s
 .PHONY : src/cosimulation.c.s
 
-src/fmi3Functions.o: src/fmi3Functions.c.o
+src/fmi2Functions.o: src/fmi2Functions.c.o
 
-.PHONY : src/fmi3Functions.o
+.PHONY : src/fmi2Functions.o
 
 # target to build an object file
-src/fmi3Functions.c.o:
-	$(MAKE) -f CMakeFiles/Oscillator.dir/build.make CMakeFiles/Oscillator.dir/src/fmi3Functions.c.o
-.PHONY : src/fmi3Functions.c.o
+src/fmi2Functions.c.o:
+	$(MAKE) -f CMakeFiles/Oscillator.dir/build.make CMakeFiles/Oscillator.dir/src/fmi2Functions.c.o
+.PHONY : src/fmi2Functions.c.o
 
-src/fmi3Functions.i: src/fmi3Functions.c.i
+src/fmi2Functions.i: src/fmi2Functions.c.i
 
-.PHONY : src/fmi3Functions.i
+.PHONY : src/fmi2Functions.i
 
 # target to preprocess a source file
-src/fmi3Functions.c.i:
-	$(MAKE) -f CMakeFiles/Oscillator.dir/build.make CMakeFiles/Oscillator.dir/src/fmi3Functions.c.i
-.PHONY : src/fmi3Functions.c.i
+src/fmi2Functions.c.i:
+	$(MAKE) -f CMakeFiles/Oscillator.dir/build.make CMakeFiles/Oscillator.dir/src/fmi2Functions.c.i
+.PHONY : src/fmi2Functions.c.i
 
-src/fmi3Functions.s: src/fmi3Functions.c.s
+src/fmi2Functions.s: src/fmi2Functions.c.s
 
-.PHONY : src/fmi3Functions.s
+.PHONY : src/fmi2Functions.s
 
 # target to generate assembly for a file
-src/fmi3Functions.c.s:
-	$(MAKE) -f CMakeFiles/Oscillator.dir/build.make CMakeFiles/Oscillator.dir/src/fmi3Functions.c.s
-.PHONY : src/fmi3Functions.c.s
+src/fmi2Functions.c.s:
+	$(MAKE) -f CMakeFiles/Oscillator.dir/build.make CMakeFiles/Oscillator.dir/src/fmi2Functions.c.s
+.PHONY : src/fmi2Functions.c.s
 
 # Help Target
 help:
@@ -269,9 +269,9 @@ help:
 	@echo "... src/cosimulation.o"
 	@echo "... src/cosimulation.i"
 	@echo "... src/cosimulation.s"
-	@echo "... src/fmi3Functions.o"
-	@echo "... src/fmi3Functions.i"
-	@echo "... src/fmi3Functions.s"
+	@echo "... src/fmi2Functions.o"
+	@echo "... src/fmi2Functions.i"
+	@echo "... src/fmi2Functions.s"
 .PHONY : help
 
 

@@ -70,18 +70,18 @@ CMakeFiles/Oscillator.dir/Oscillator/model.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Oscillator.dir/Oscillator/model.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/Oscillator/model.c -o CMakeFiles/Oscillator.dir/Oscillator/model.c.s
 
-CMakeFiles/Oscillator.dir/src/fmi3Functions.c.o: CMakeFiles/Oscillator.dir/flags.make
-CMakeFiles/Oscillator.dir/src/fmi3Functions.c.o: ../src/fmi3Functions.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/Oscillator.dir/src/fmi3Functions.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Oscillator.dir/src/fmi3Functions.c.o   -c /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/fmi3Functions.c
+CMakeFiles/Oscillator.dir/src/fmi2Functions.c.o: CMakeFiles/Oscillator.dir/flags.make
+CMakeFiles/Oscillator.dir/src/fmi2Functions.c.o: ../src/fmi2Functions.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/Oscillator.dir/src/fmi2Functions.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/Oscillator.dir/src/fmi2Functions.c.o   -c /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/fmi2Functions.c
 
-CMakeFiles/Oscillator.dir/src/fmi3Functions.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/Oscillator.dir/src/fmi3Functions.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/fmi3Functions.c > CMakeFiles/Oscillator.dir/src/fmi3Functions.c.i
+CMakeFiles/Oscillator.dir/src/fmi2Functions.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/Oscillator.dir/src/fmi2Functions.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/fmi2Functions.c > CMakeFiles/Oscillator.dir/src/fmi2Functions.c.i
 
-CMakeFiles/Oscillator.dir/src/fmi3Functions.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Oscillator.dir/src/fmi3Functions.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/fmi3Functions.c -o CMakeFiles/Oscillator.dir/src/fmi3Functions.c.s
+CMakeFiles/Oscillator.dir/src/fmi2Functions.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/Oscillator.dir/src/fmi2Functions.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/fmi2Functions.c -o CMakeFiles/Oscillator.dir/src/fmi2Functions.c.s
 
 CMakeFiles/Oscillator.dir/src/cosimulation.c.o: CMakeFiles/Oscillator.dir/flags.make
 CMakeFiles/Oscillator.dir/src/cosimulation.c.o: ../src/cosimulation.c
@@ -99,20 +99,20 @@ CMakeFiles/Oscillator.dir/src/cosimulation.c.s: cmake_force
 # Object files for target Oscillator
 Oscillator_OBJECTS = \
 "CMakeFiles/Oscillator.dir/Oscillator/model.c.o" \
-"CMakeFiles/Oscillator.dir/src/fmi3Functions.c.o" \
+"CMakeFiles/Oscillator.dir/src/fmi2Functions.c.o" \
 "CMakeFiles/Oscillator.dir/src/cosimulation.c.o"
 
 # External object files for target Oscillator
 Oscillator_EXTERNAL_OBJECTS =
 
-temp/Oscillator/binaries/x86_64-linux/Oscillator.so: CMakeFiles/Oscillator.dir/Oscillator/model.c.o
-temp/Oscillator/binaries/x86_64-linux/Oscillator.so: CMakeFiles/Oscillator.dir/src/fmi3Functions.c.o
-temp/Oscillator/binaries/x86_64-linux/Oscillator.so: CMakeFiles/Oscillator.dir/src/cosimulation.c.o
-temp/Oscillator/binaries/x86_64-linux/Oscillator.so: CMakeFiles/Oscillator.dir/build.make
-temp/Oscillator/binaries/x86_64-linux/Oscillator.so: CMakeFiles/Oscillator.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C shared library temp/Oscillator/binaries/x86_64-linux/Oscillator.so"
+temp/Oscillator/binaries/linux64/Oscillator.so: CMakeFiles/Oscillator.dir/Oscillator/model.c.o
+temp/Oscillator/binaries/linux64/Oscillator.so: CMakeFiles/Oscillator.dir/src/fmi2Functions.c.o
+temp/Oscillator/binaries/linux64/Oscillator.so: CMakeFiles/Oscillator.dir/src/cosimulation.c.o
+temp/Oscillator/binaries/linux64/Oscillator.so: CMakeFiles/Oscillator.dir/build.make
+temp/Oscillator/binaries/linux64/Oscillator.so: CMakeFiles/Oscillator.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C shared library temp/Oscillator/binaries/linux64/Oscillator.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Oscillator.dir/link.txt --verbose=$(VERBOSE)
-	/usr/bin/cmake -E copy /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/Oscillator/FMI3.xml temp/Oscillator/modelDescription.xml
+	/usr/bin/cmake -E copy /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/Oscillator/FMI2.xml temp/Oscillator/modelDescription.xml
 	/usr/bin/python3.8 /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/set_tool_version.py temp/Oscillator/modelDescription.xml /usr/bin/git
 	/usr/bin/cmake -E copy /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/Oscillator/config.h temp/Oscillator/sources/config.h
 	/usr/bin/cmake -E copy /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/Oscillator/model.c temp/Oscillator/sources/model.c
@@ -120,14 +120,14 @@ temp/Oscillator/binaries/x86_64-linux/Oscillator.so: CMakeFiles/Oscillator.dir/l
 	/usr/bin/cmake -E copy /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/../LICENSE.txt temp/Oscillator/documentation/LICENSE.txt
 	/usr/bin/cmake -E copy /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/include/model.h temp/Oscillator/sources/model.h
 	/usr/bin/cmake -E copy /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/include/cosimulation.h temp/Oscillator/sources/cosimulation.h
-	/usr/bin/cmake -E copy /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/fmi3Functions.c temp/Oscillator/sources/fmi3Functions.c
+	/usr/bin/cmake -E copy /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/fmi2Functions.c temp/Oscillator/sources/fmi2Functions.c
 	/usr/bin/cmake -E copy /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/cosimulation.c temp/Oscillator/sources/cosimulation.c
-	/usr/bin/cmake -E copy /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/Oscillator/buildDescription.xml temp/Oscillator/sources/buildDescription.xml
+	/usr/bin/cmake -E copy /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/build/all.c temp/Oscillator/sources/all.c
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Creating ZIP archive"
 	cd /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/build/temp/Oscillator && /usr/bin/cmake -E tar cfv /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/build/../../../Oscillator.fmu --format=zip modelDescription.xml binaries documentation sources
 
 # Rule to build all files generated by this target.
-CMakeFiles/Oscillator.dir/build: temp/Oscillator/binaries/x86_64-linux/Oscillator.so
+CMakeFiles/Oscillator.dir/build: temp/Oscillator/binaries/linux64/Oscillator.so
 
 .PHONY : CMakeFiles/Oscillator.dir/build
 

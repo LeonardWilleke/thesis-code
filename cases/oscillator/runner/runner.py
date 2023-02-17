@@ -21,7 +21,7 @@ parser.add_argument("precice_setting_file", help="Path to the precice setting fi
 args = parser.parse_args()
 
 fmi_setting_file 		= args.fmi_setting_file
-precice_setting_file 	= args.precice_setting_file
+precice_setting_file 		= args.precice_setting_file
 
 folder = os.path.dirname(os.path.join(os.getcwd(), os.path.dirname(sys.argv[0]), fmi_setting_file))
 path = os.path.join(folder, os.path.basename(fmi_setting_file))
@@ -35,17 +35,17 @@ precice_data = json.load(read_file)
 
 ### FMU setup
 
-fmu_file_name 				= precice_data["simulation_params"]["fmu_file_name"]
-fmu_instance 				= precice_data["simulation_params"]["fmu_instance_name"]
-model_description 			= read_model_description(fmu_file_name)
+fmu_file_name 			= precice_data["simulation_params"]["fmu_file_name"]
+fmu_instance 			= precice_data["simulation_params"]["fmu_instance_name"]
+model_description 		= read_model_description(fmu_file_name)
 
 vrs = {}
 for variable in model_description.modelVariables:
     vrs[variable.name] = variable.valueReference 
 
-parameter_names				= list(fmi_data["model_params"].keys())
-parameter_values			= list(fmi_data["model_params"].values())
-parameter_vr 				= [vrs.get(key) for key in parameter_names]
+parameter_names		= list(fmi_data["model_params"].keys())
+parameter_values		= list(fmi_data["model_params"].values())
+parameter_vr 			= [vrs.get(key) for key in parameter_names]
 
 
 initial_conditions_names	= list(fmi_data["initial_conditions"].keys())
@@ -55,12 +55,12 @@ initial_conditions_vr		= [vrs.get(key) for key in initial_conditions_names]
 
 can_get_and_set_fmu_state	= model_description.coSimulation.canGetAndSetFMUstate
 
-output_names		 		= precice_data["simulation_params"]["output"]
+output_names		 	= precice_data["simulation_params"]["output"]
 
-fmu_read_data_name			= precice_data["simulation_params"]["fmu_read_data_name"]
+fmu_read_data_name		= precice_data["simulation_params"]["fmu_read_data_name"]
 fmu_write_data_name 		= precice_data["simulation_params"]["fmu_write_data_name"]
-vr_read  	 				= [vrs[fmu_read_data_name]]
-vr_write 	 				= [vrs[fmu_write_data_name]]
+vr_read  	 		= [vrs[fmu_read_data_name]]
+vr_write 	 		= [vrs[fmu_write_data_name]]
 
 unzipdir = extract(fmu_file_name)
 fmu = FMU3Slave(guid=model_description.guid, unzipDirectory=unzipdir, modelIdentifier=model_description.coSimulation.modelIdentifier, instanceName=fmu_instance)
@@ -92,14 +92,14 @@ interface = precice.Interface(
 mesh_id 	= interface.get_mesh_id(precice_data["coupling_params"]["mesh_name"])
 dimensions 	= interface.get_dimensions()
 
-vertex 		= np.zeros(dimensions)
+vertex 	= np.zeros(dimensions)
 read_data 	= np.zeros(precice_data["coupling_params"]["num_vertices"])
 
 # initial value for write data
 write_data = fmu_write_data_init * np.ones(precice_data["coupling_params"]["num_vertices"])
 
 
-vertex_id 		= interface.set_mesh_vertex(mesh_id, vertex)
+vertex_id 	= interface.set_mesh_vertex(mesh_id, vertex)
 read_data_id 	= interface.get_data_id(precice_data["coupling_params"]["read_data_name"], mesh_id)
 write_data_id 	= interface.get_data_id(precice_data["coupling_params"]["write_data_name"], mesh_id)
 
