@@ -26,7 +26,7 @@ This tutorial is only available in Python. You need to have preCICE and the Pyth
 
 ## Running the Simulation
 
-You can either run both participants with one of the two solvers or use a separate solver for each participants.
+You can either run both participants with one of the two solvers or use a separate solver for each participant.
 
 ### Python
 
