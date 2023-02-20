@@ -52,8 +52,8 @@ initial_conditions_names	= list(fmi_data["initial_conditions"].keys())
 initial_conditions_values	= list(fmi_data["initial_conditions"].values())
 initial_conditions_vr		= [vrs.get(key) for key in initial_conditions_names]
 
-
-can_get_and_set_fmu_state	= model_description.coSimulation.canGetAndSetFMUstate
+# currently only working for FMI2
+#can_get_and_set_fmu_state	= model_description.coSimulation.canGetAndSetFMUstate 
 
 output_names		 	= precice_data["simulation_params"]["output"]
 
@@ -122,13 +122,7 @@ recorder.sample(t, force=False)
 while interface.is_coupling_ongoing():
     if interface.is_action_required(precice.action_write_iteration_checkpoint()):
         
-        if True: # can_get_and_set_fmu_state is currently read wrong by FMPy
-            state_cp 	= fmu.getFMUState()
-        elif len(checkpoint_names) != 0:
-            checkpoint 	= fmu.getFloat64(checkpoint_vr)
-        else:
-            raise Exception('Please provide variables for the checkpoint during implicit coupling. The FMU model doesnt allow to \
-            get and set the FMU state with the built-in functions.')
+        state_cp 	= fmu.getFMUState()
         t_cp = t
         
         interface.mark_action_fulfilled(precice.action_write_iteration_checkpoint())
@@ -137,9 +131,8 @@ while interface.is_coupling_ongoing():
     dt = np.min([precice_dt, my_dt])
     
     read_data 	= interface.read_scalar_data(read_data_id, vertex_id)
-    data 		= read_data
     
-    fmu.setFloat64(vr_read, [data])
+    fmu.setFloat64(vr_read, [read_data])
     
     fmu.doStep(t, dt)
 
@@ -155,12 +148,9 @@ while interface.is_coupling_ongoing():
 
     if interface.is_action_required(precice.action_read_iteration_checkpoint()):
         
-        if True: # can_get_and_set_fmu_state is currently read wrong by FMPy
-            fmu.setFMUState(state_cp)
-        else:
-            fmu.setFloat64(checkpoint_vr, checkpoint)
-        
+        fmu.setFMUState(state_cp)
         t = t_cp
+        
         interface.mark_action_fulfilled(precice.action_read_iteration_checkpoint())
         
     else:

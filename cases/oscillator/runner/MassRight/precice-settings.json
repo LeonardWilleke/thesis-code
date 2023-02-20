@@ -10,7 +10,7 @@
             "solver_process_size": 1
     },
     "simulation_params": {
-		"fmu_file_name": "./Oscillator.fmu",
+		"fmu_file_name": "../../../FMUs/Oscillator.fmu",
     		"output_file_name": "./output/trajectory-Mass-Right.csv",
     		"output": ["mass.u", "mass.v"],
     		"fmu_read_data_name": "force_in",
