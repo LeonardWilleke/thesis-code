@@ -72,7 +72,6 @@ elif participant_name == Participant.MASS_RIGHT.value:
     stiffness = k_2 + k_12
     u0, v0, f0, d_dt_f0 = u0_2, v0_2, k_12 * u0_1, k_12 * v0_1
     def u_analytical(t): return c[0] * B[0] * np.cos(omega[0] * t) + c[1] * B[1] * np.cos(omega[1] * t)
-
     def v_analytical(t): return -c[0] * B[0] * omega[0] * np.sin(omega[0] * t) - \
         c[1] * B[1] * omega[1] * np.sin(omega[1] * t)
 
@@ -84,7 +83,7 @@ num_vertices = 1  # Number of vertices
 solver_process_index = 0
 solver_process_size = 1
 
-configuration_file_name = "./precice-config.xml"
+configuration_file_name = "../precice-config.xml"
 
 interface = precice.Interface(participant_name, configuration_file_name, solver_process_index, solver_process_size)
 
@@ -93,7 +92,7 @@ dimensions = interface.get_dimensions()
 
 vertex = np.zeros(dimensions)
 read_data = np.zeros(num_vertices)
-write_data = k_12 * u0 * np.ones(num_vertices)
+write_data = u0 * np.ones(num_vertices)
 
 vertex_id = interface.set_mesh_vertex(mesh_id, vertex)
 read_data_id = interface.get_data_id(read_data_name, mesh_id)
@@ -153,6 +152,7 @@ while interface.is_coupling_ongoing():
     # read_time = (1-alpha_f) * dt
     # read_data = interface.read_scalar_data(read_data_id, vertex_id, read_time)
     read_data = interface.read_scalar_data(read_data_id, vertex_id)
+    
     f = read_data
 
     # do generalized alpha step

@@ -3,7 +3,7 @@ FMUs/cmake/build/
 
 # simulation logs
 *.log
-*.json
+*event*.json
 
 # visualisations
 *.pdf

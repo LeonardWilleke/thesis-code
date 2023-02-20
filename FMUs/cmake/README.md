@@ -3,6 +3,8 @@
 A set of hand-coded FMUs with models written in the [Functional Mock-up Interface](https://fmi-standard.org/).
 
 - [FallingBall](FallingBall) - a falling ball model for coupling with an aerodynamic solver
+- [Oscillator](Oscillator) - Partition of a 1D-Oscillator system, which can be used as left and right side during partitioned simulation
+- [PIDcontroller](PIDcontroller) - Simple PID controller
 
 ### Build instruction
 
