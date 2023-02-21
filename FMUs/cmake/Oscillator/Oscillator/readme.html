@@ -1,7 +1,7 @@
 
 <html>
 <head>
-<title>PIDcontroller</title>
+<title>Oscillator</title>
 <style>
 body {
     font-family: Helvetica, Arial, Sans-Serif;
@@ -42,93 +42,9 @@ th, td {
 </head>
 <body>
 <div class="container">
-<h1>PIDcontroller</h1>
+<h1>Oscillator</h1>
 
-<p>The PID Controller implements the following equation:</p>
-
-<pre><code>e = r - y
-u = kp*e + ki*e*dt + kd*(e-e_ls)*(1/dt)
-</code></pre>
-
-<p>with the variables</p>
-
-<table>
-<thead>
-<tr>
-  <th align="left">Variable</th>
-  <th align="right">Start</th>
-  <th>Causality</th>
-  <th>Variability</th>
-  <th align="left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td align="left">u</td>
-  <td align="right">0</td>
-  <td>output</td>
-  <td>continuous</td>
-  <td align="left">Control output</td>
-</tr>
-<tr>
-  <td align="left">y</td>
-  <td align="right">0</td>
-  <td>parameter</td>
-  <td>tunable</td>
-  <td align="left">Control input</td>
-</tr>
-<tr>
-  <td align="left">r</td>
-  <td align="right">0</td>
-  <td>parameter</td>
-  <td>tunable</td>
-  <td align="left">Reference value</td>
-</tr>
-<tr>
-  <td align="left">e</td>
-  <td align="right"></td>
-  <td>local</td>
-  <td>continuous</td>
-  <td align="left">Error between reference and input</td>
-</tr>
-<tr>
-  <td align="left">e_ls</td>
-  <td align="right"></td>
-  <td>local</td>
-  <td>continuous</td>
-  <td align="left">Error between reference and input from last time step</td>
-</tr>
-<tr>
-  <td align="left">kp</td>
-  <td align="right">0</td>
-  <td>parameter</td>
-  <td>tunable</td>
-  <td align="left">Proportional gain</td>
-</tr>
-<tr>
-  <td align="left">ki</td>
-  <td align="right">0</td>
-  <td>parameter</td>
-  <td>tunable</td>
-  <td align="left">Integral gain</td>
-</tr>
-<tr>
-  <td align="left">kd</td>
-  <td align="right">0</td>
-  <td>parameter</td>
-  <td>tunable</td>
-  <td align="left">Derivative gain</td>
-</tr>
-<tr>
-  <td align="left">dt</td>
-  <td align="right">0.01</td>
-  <td>parameter</td>
-  <td>tunable</td>
-  <td align="left">Solver step size</td>
-</tr>
-</tbody>
-</table>
-
+<p>This model is used for the partitioned simulation of an oscillator with three springs and two masses. The oscillator is cut in the middle spring for partitioning. Here, two springs with one mass between them are calculated. This model can be used to simulate the left partition as well as the right partition, as they are symmetric.</p>
 
 </div>
 </body>

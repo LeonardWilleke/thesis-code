@@ -6,6 +6,7 @@ import precice
 import csv
 import os
 from fmpy import read_model_description, extract
+from fmpy.fmi1 import FMU1Slave
 from fmpy.fmi2 import FMU2Slave
 from fmpy.fmi3 import FMU3Slave
 from fmpy.simulation import Input, Recorder
@@ -44,32 +45,43 @@ vrs = {}
 for variable in model_description.modelVariables:
     vrs[variable.name] = variable.valueReference 
 
-parameter_names		= list(fmi_data["model_params"].keys())
-parameter_values		= list(fmi_data["model_params"].values())
-parameter_vr 			= [vrs.get(key) for key in parameter_names]
+parameter_names				= list(fmi_data["model_params"].keys())
+parameter_values			= list(fmi_data["model_params"].values())
+parameter_vr 				= [vrs.get(key) for key in parameter_names]
 
 
 initial_conditions_names	= list(fmi_data["initial_conditions"].keys())
 initial_conditions_values	= list(fmi_data["initial_conditions"].values())
 initial_conditions_vr		= [vrs.get(key) for key in initial_conditions_names]
 
-# currently only working for FMI2
-#can_get_and_set_fmu_state	= model_description.coSimulation.canGetAndSetFMUstate 
+output_names		 		= precice_data["simulation_params"]["output"]
 
-output_names		 	= precice_data["simulation_params"]["output"]
-
-fmu_read_data_name		= precice_data["simulation_params"]["fmu_read_data_name"]
+fmu_read_data_name			= precice_data["simulation_params"]["fmu_read_data_name"]
 fmu_write_data_name 		= precice_data["simulation_params"]["fmu_write_data_name"]
-vr_read  	 		= [vrs[fmu_read_data_name]]
-vr_write 	 		= [vrs[fmu_write_data_name]]
+vr_read  	 				= [vrs[fmu_read_data_name]]
+vr_write 	 				= [vrs[fmu_write_data_name]]
 
-is_fmi_2 = (model_description.fmiVersion == '2.0')
-is_fmi_3 = (model_description.fmiVersion == '3.0')
+can_get_and_set_fmu_state	= model_description.coSimulation.canGetAndSetFMUstate 
+
+is_fmi1 					= (model_description.fmiVersion == '1.0')
+is_fmi2 					= (model_description.fmiVersion == '2.0')
+is_fmi3 					= (model_description.fmiVersion == '3.0')
 
 unzipdir = extract(fmu_file_name)
 
 # Initialize FMU and set parameters
-if is_fmi_2:
+
+if is_fmi1:
+	fmu = FMU1Slave(guid=model_description.guid, unzipDirectory=unzipdir, modelIdentifier=model_description.coSimulation.modelIdentifier, instanceName=fmu_instance)
+	
+	fmu.instantiate()
+	fmu.setReal(parameter_vr, parameter_values)
+	fmu.setReal(initial_conditions_vr, initial_conditions_values)
+	# Get initial write data
+	fmu_write_data_init = fmu.getReal(vr_write)
+	# All the functions are in place, but were not tested yet. First I need to create a suitable FMI1 FMU for testing.
+	raise Exception("The runner is currently only implemented for FMI versions 2 and 3. Please update your model.")
+elif is_fmi2:
 	fmu = FMU2Slave(guid=model_description.guid, unzipDirectory=unzipdir, modelIdentifier=model_description.coSimulation.modelIdentifier, instanceName=fmu_instance)
 	
 	fmu.instantiate()
@@ -80,7 +92,7 @@ if is_fmi_2:
 	# Get initial write data
 	fmu_write_data_init = fmu.getReal(vr_write)
 	
-elif is_fmi_3:
+elif is_fmi3:
 	fmu = FMU3Slave(guid=model_description.guid, unzipDirectory=unzipdir, modelIdentifier=model_description.coSimulation.modelIdentifier, instanceName=fmu_instance)
 	
 	fmu.instantiate()
@@ -133,22 +145,32 @@ recorder.sample(t, force=False)
 while interface.is_coupling_ongoing():
     if interface.is_action_required(precice.action_write_iteration_checkpoint()):
         
+        # Check if model has the appropiate functionalities
+        if is_fmi1:
+        	raise Exception("Implicit coupling not possible because FMU model can't reset state." \
+        					"Please update model to FMI2 or FMI3. "\
+        					"Alternatively, choose an explicit coupling scheme.")
+        if not can_get_and_set_fmu_state:
+        	raise Exception("Implicit coupling not possible because FMU model can't reset state." \
+        					"Please implement getFMUstate() and setFMUstate() in FMU and set the according flag in ModelDescription.xml. "\
+        					"Alternatively, choose an explicit coupling scheme.")
+        
         state_cp 	= fmu.getFMUState()
-        t_cp = t
+        t_cp 		= t
         
         interface.mark_action_fulfilled(precice.action_write_iteration_checkpoint())
 
     # compute current time step size
     dt = np.min([precice_dt, my_dt])
     
-    read_data 	= interface.read_scalar_data(read_data_id, vertex_id)
+    read_data = interface.read_scalar_data(read_data_id, vertex_id)
     
     # Compute next time step
-    if is_fmi_2: 
+    if is_fmi2 or is_fmi1: 
     	fmu.setReal(vr_read, [read_data])
     	fmu.doStep(t, dt)
     	result = fmu.getReal(vr_write)
-    if is_fmi_3:
+    if is_fmi3:
     	fmu.setFloat64(vr_read, [read_data])
     	fmu.doStep(t, dt)
     	result = fmu.getFloat64(vr_write)
