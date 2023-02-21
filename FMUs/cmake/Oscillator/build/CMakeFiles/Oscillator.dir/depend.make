@@ -13,11 +13,11 @@ CMakeFiles/Oscillator.dir/src/cosimulation.c.o: ../include/fmi3PlatformTypes.h
 CMakeFiles/Oscillator.dir/src/cosimulation.c.o: ../include/model.h
 CMakeFiles/Oscillator.dir/src/cosimulation.c.o: ../src/cosimulation.c
 
-CMakeFiles/Oscillator.dir/src/fmi2Functions.c.o: ../Oscillator/config.h
-CMakeFiles/Oscillator.dir/src/fmi2Functions.c.o: ../include/cosimulation.h
-CMakeFiles/Oscillator.dir/src/fmi2Functions.c.o: ../include/fmi2FunctionTypes.h
-CMakeFiles/Oscillator.dir/src/fmi2Functions.c.o: ../include/fmi2Functions.h
-CMakeFiles/Oscillator.dir/src/fmi2Functions.c.o: ../include/fmi2TypesPlatform.h
-CMakeFiles/Oscillator.dir/src/fmi2Functions.c.o: ../include/model.h
-CMakeFiles/Oscillator.dir/src/fmi2Functions.c.o: ../src/fmi2Functions.c
+CMakeFiles/Oscillator.dir/src/fmi3Functions.c.o: ../Oscillator/config.h
+CMakeFiles/Oscillator.dir/src/fmi3Functions.c.o: ../include/cosimulation.h
+CMakeFiles/Oscillator.dir/src/fmi3Functions.c.o: ../include/fmi3FunctionTypes.h
+CMakeFiles/Oscillator.dir/src/fmi3Functions.c.o: ../include/fmi3Functions.h
+CMakeFiles/Oscillator.dir/src/fmi3Functions.c.o: ../include/fmi3PlatformTypes.h
+CMakeFiles/Oscillator.dir/src/fmi3Functions.c.o: ../include/model.h
+CMakeFiles/Oscillator.dir/src/fmi3Functions.c.o: ../src/fmi3Functions.c
 

@@ -12,24 +12,6 @@
 model.h
 ../include/model.h
 
-../include/fmi2FunctionTypes.h
-fmi2TypesPlatform.h
-../include/fmi2TypesPlatform.h
-stddef.h
--
-
-../include/fmi2Functions.h
-fmi2Functions.h
-../include/fmi2Functions.h
-fmi2TypesPlatform.h
-../include/fmi2TypesPlatform.h
-fmi2FunctionTypes.h
-../include/fmi2FunctionTypes.h
-stdlib.h
--
-
-../include/fmi2TypesPlatform.h
-
 ../include/fmi3FunctionTypes.h
 fmi3PlatformTypes.h
 ../include/fmi3PlatformTypes.h
@@ -94,7 +76,7 @@ cosimulation.h
 fmi3Functions.h
 /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/fmi3Functions.h
 
-/home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/fmi2Functions.c
+/home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/fmi3Functions.c
 stdio.h
 -
 string.h
@@ -109,6 +91,6 @@ model.h
 /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/model.h
 cosimulation.h
 /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/cosimulation.h
-fmi2Functions.h
-/home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/fmi2Functions.h
+fmi3Functions.h
+/home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/fmi3Functions.h
 

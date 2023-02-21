@@ -13,11 +13,11 @@ CMakeFiles/Oscillator.dir/src/cosimulation.c.o
  ../include/fmi3PlatformTypes.h
  ../include/model.h
  /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/cosimulation.c
-CMakeFiles/Oscillator.dir/src/fmi2Functions.c.o
+CMakeFiles/Oscillator.dir/src/fmi3Functions.c.o
  ../Oscillator/config.h
  ../include/cosimulation.h
- ../include/fmi2FunctionTypes.h
- ../include/fmi2Functions.h
- ../include/fmi2TypesPlatform.h
+ ../include/fmi3FunctionTypes.h
+ ../include/fmi3Functions.h
+ ../include/fmi3PlatformTypes.h
  ../include/model.h
- /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/fmi2Functions.c
+ /home/leonard/Thesis/fmi-runner/FMUs/cmake/Oscillator/src/fmi3Functions.c

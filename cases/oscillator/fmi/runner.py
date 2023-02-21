@@ -6,6 +6,7 @@ import precice
 import csv
 import os
 from fmpy import read_model_description, extract
+from fmpy.fmi2 import FMU2Slave
 from fmpy.fmi3 import FMU3Slave
 from fmpy.simulation import Input, Recorder
 from fmpy.util import write_csv
@@ -62,23 +63,33 @@ fmu_write_data_name 		= precice_data["simulation_params"]["fmu_write_data_name"]
 vr_read  	 		= [vrs[fmu_read_data_name]]
 vr_write 	 		= [vrs[fmu_write_data_name]]
 
+is_fmi_2 = (model_description.fmiVersion == '2.0')
+is_fmi_3 = (model_description.fmiVersion == '3.0')
+
 unzipdir = extract(fmu_file_name)
-fmu = FMU3Slave(guid=model_description.guid, unzipDirectory=unzipdir, modelIdentifier=model_description.coSimulation.modelIdentifier, instanceName=fmu_instance)
 
-fmu.instantiate()
-
-fmu.enterInitializationMode()
-
-# Set parameters 
-fmu.setFloat64(parameter_vr, parameter_values)
-# Set initial conditions
-fmu.setFloat64(initial_conditions_vr, initial_conditions_values)
-
-fmu.exitInitializationMode()
-
-# Get initial write data. Check this if using more than one read / write data point
-fmu_write_data_init = fmu.getFloat64(vr_write)
-
+# Initialize FMU and set parameters
+if is_fmi_2:
+	fmu = FMU2Slave(guid=model_description.guid, unzipDirectory=unzipdir, modelIdentifier=model_description.coSimulation.modelIdentifier, instanceName=fmu_instance)
+	
+	fmu.instantiate()
+	fmu.enterInitializationMode()
+	fmu.setReal(parameter_vr, parameter_values)
+	fmu.setReal(initial_conditions_vr, initial_conditions_values)
+	fmu.exitInitializationMode()
+	# Get initial write data
+	fmu_write_data_init = fmu.getReal(vr_write)
+	
+elif is_fmi_3:
+	fmu = FMU3Slave(guid=model_description.guid, unzipDirectory=unzipdir, modelIdentifier=model_description.coSimulation.modelIdentifier, instanceName=fmu_instance)
+	
+	fmu.instantiate()
+	fmu.enterInitializationMode()
+	fmu.setFloat64(parameter_vr, parameter_values)
+	fmu.setFloat64(initial_conditions_vr, initial_conditions_values)
+	fmu.exitInitializationMode()
+	# Get initial write data
+	fmu_write_data_init = fmu.getFloat64(vr_write)
 
 ### preCICE setup
 
@@ -92,14 +103,14 @@ interface = precice.Interface(
 mesh_id 	= interface.get_mesh_id(precice_data["coupling_params"]["mesh_name"])
 dimensions 	= interface.get_dimensions()
 
-vertex 	= np.zeros(dimensions)
+vertex 		= np.zeros(dimensions)
 read_data 	= np.zeros(precice_data["coupling_params"]["num_vertices"])
 
 # initial value for write data
-write_data = fmu_write_data_init * np.ones(precice_data["coupling_params"]["num_vertices"])
+write_data 	= fmu_write_data_init * np.ones(precice_data["coupling_params"]["num_vertices"])
 
 
-vertex_id 	= interface.set_mesh_vertex(mesh_id, vertex)
+vertex_id 		= interface.set_mesh_vertex(mesh_id, vertex)
 read_data_id 	= interface.get_data_id(precice_data["coupling_params"]["read_data_name"], mesh_id)
 write_data_id 	= interface.get_data_id(precice_data["coupling_params"]["write_data_name"], mesh_id)
 
@@ -127,16 +138,20 @@ while interface.is_coupling_ongoing():
         
         interface.mark_action_fulfilled(precice.action_write_iteration_checkpoint())
 
-    # compute time step size for this time step
+    # compute current time step size
     dt = np.min([precice_dt, my_dt])
     
     read_data 	= interface.read_scalar_data(read_data_id, vertex_id)
     
-    fmu.setFloat64(vr_read, [read_data])
-    
-    fmu.doStep(t, dt)
-
-    result = fmu.getFloat64(vr_write)
+    # Compute next time step
+    if is_fmi_2: 
+    	fmu.setReal(vr_read, [read_data])
+    	fmu.doStep(t, dt)
+    	result = fmu.getReal(vr_write)
+    if is_fmi_3:
+    	fmu.setFloat64(vr_read, [read_data])
+    	fmu.doStep(t, dt)
+    	result = fmu.getFloat64(vr_write)
 
     write_data = result[0]
 
@@ -155,7 +170,6 @@ while interface.is_coupling_ongoing():
         
     else:
         recorder.sample(t, force=False)
-
 
 
 interface.finalize()
