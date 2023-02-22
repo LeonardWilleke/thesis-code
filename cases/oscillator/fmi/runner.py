@@ -79,8 +79,6 @@ if is_fmi1:
 	fmu.setReal(initial_conditions_vr, initial_conditions_values)
 	# Get initial write data
 	fmu_write_data_init = fmu.getReal(vr_write)
-	# All the functions are in place, but were not tested yet. First I need to create a suitable FMI1 FMU for testing.
-	raise Exception("The runner is currently only implemented for FMI versions 2 and 3. Please update your model.")
 elif is_fmi2:
 	fmu = FMU2Slave(guid=model_description.guid, unzipDirectory=unzipdir, modelIdentifier=model_description.coSimulation.modelIdentifier, instanceName=fmu_instance)
 	
@@ -147,12 +145,13 @@ while interface.is_coupling_ongoing():
         
         # Check if model has the appropiate functionalities
         if is_fmi1:
-        	raise Exception("Implicit coupling not possible because FMU model can't reset state." \
+        	raise Exception("Implicit coupling not possible because FMU model with FMI1 can't reset state. "\
         					"Please update model to FMI2 or FMI3. "\
         					"Alternatively, choose an explicit coupling scheme.")
         if not can_get_and_set_fmu_state:
-        	raise Exception("Implicit coupling not possible because FMU model can't reset state." \
-        					"Please implement getFMUstate() and setFMUstate() in FMU and set the according flag in ModelDescription.xml. "\
+        	raise Exception("Implicit coupling not possible because FMU model can't reset state. "\
+        					"Please implement getFMUstate() and setFMUstate() in FMU "\ 
+        					"and set the according flag in ModelDescription.xml. "\
         					"Alternatively, choose an explicit coupling scheme.")
         
         state_cp 	= fmu.getFMUState()
