@@ -6,10 +6,7 @@ import precice
 import csv
 import os
 from fmpy import read_model_description, extract
-from fmpy.fmi1 import FMU1Slave
-from fmpy.fmi2 import FMU2Slave
-from fmpy.fmi3 import FMU3Slave
-from fmpy.simulation import Input, Recorder
+from fmpy.simulation import Recorder, instantiate_fmu, apply_start_values
 from fmpy.util import write_csv
 import shutil
 import sys
@@ -23,7 +20,7 @@ parser.add_argument("precice_setting_file", help="Path to the precice setting fi
 args = parser.parse_args()
 
 fmi_setting_file 		= args.fmi_setting_file
-precice_setting_file 		= args.precice_setting_file
+precice_setting_file 	= args.precice_setting_file
 
 folder = os.path.dirname(os.path.join(os.getcwd(), os.path.dirname(sys.argv[0]), fmi_setting_file))
 path = os.path.join(folder, os.path.basename(fmi_setting_file))
@@ -45,15 +42,6 @@ vrs = {}
 for variable in model_description.modelVariables:
     vrs[variable.name] = variable.valueReference 
 
-parameter_names				= list(fmi_data["model_params"].keys())
-parameter_values			= list(fmi_data["model_params"].values())
-parameter_vr 				= [vrs.get(key) for key in parameter_names]
-
-
-initial_conditions_names	= list(fmi_data["initial_conditions"].keys())
-initial_conditions_values	= list(fmi_data["initial_conditions"].values())
-initial_conditions_vr		= [vrs.get(key) for key in initial_conditions_names]
-
 output_names		 		= precice_data["simulation_params"]["output"]
 
 fmu_read_data_name			= precice_data["simulation_params"]["fmu_read_data_name"]
@@ -69,37 +57,28 @@ is_fmi3 					= (model_description.fmiVersion == '3.0')
 
 unzipdir = extract(fmu_file_name)
 
-# Initialize FMU and set parameters
+# Instantiate FMU
 
-if is_fmi1:
-	fmu = FMU1Slave(guid=model_description.guid, unzipDirectory=unzipdir, modelIdentifier=model_description.coSimulation.modelIdentifier, instanceName=fmu_instance)
-	
-	fmu.instantiate()
-	fmu.setReal(parameter_vr, parameter_values)
-	fmu.setReal(initial_conditions_vr, initial_conditions_values)
-	# Get initial write data
-	fmu_write_data_init = fmu.getReal(vr_write)
-elif is_fmi2:
-	fmu = FMU2Slave(guid=model_description.guid, unzipDirectory=unzipdir, modelIdentifier=model_description.coSimulation.modelIdentifier, instanceName=fmu_instance)
-	
-	fmu.instantiate()
+fmu = instantiate_fmu(unzipdir=unzipdir, model_description=model_description, fmi_type="CoSimulation")
+
+# Set initial parameters
+
+if is_fmi2 or is_fmi3:
 	fmu.enterInitializationMode()
-	fmu.setReal(parameter_vr, parameter_values)
-	fmu.setReal(initial_conditions_vr, initial_conditions_values)
+
+apply_start_values(fmu, model_description, fmi_data["initial_conditions"])
+apply_start_values(fmu, model_description, fmi_data["model_params"])
+
+if is_fmi2 or is_fmi3:
 	fmu.exitInitializationMode()
-	# Get initial write data
+
+# Get initial write data
+
+if is_fmi1 or is_fmi2:
 	fmu_write_data_init = fmu.getReal(vr_write)
-	
 elif is_fmi3:
-	fmu = FMU3Slave(guid=model_description.guid, unzipDirectory=unzipdir, modelIdentifier=model_description.coSimulation.modelIdentifier, instanceName=fmu_instance)
-	
-	fmu.instantiate()
-	fmu.enterInitializationMode()
-	fmu.setFloat64(parameter_vr, parameter_values)
-	fmu.setFloat64(initial_conditions_vr, initial_conditions_values)
-	fmu.exitInitializationMode()
-	# Get initial write data
 	fmu_write_data_init = fmu.getFloat64(vr_write)
+
 
 ### preCICE setup
 
