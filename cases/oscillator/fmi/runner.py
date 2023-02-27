@@ -150,7 +150,7 @@ while interface.is_coupling_ongoing():
         					"Alternatively, choose an explicit coupling scheme.")
         if not can_get_and_set_fmu_state:
         	raise Exception("Implicit coupling not possible because FMU model can't reset state. "\
-        					"Please implement getFMUstate() and setFMUstate() in FMU "\ 
+        					"Please implement getFMUstate() and setFMUstate() in FMU "\
         					"and set the according flag in ModelDescription.xml. "\
         					"Alternatively, choose an explicit coupling scheme.")
         
@@ -190,14 +190,17 @@ while interface.is_coupling_ongoing():
         interface.mark_action_fulfilled(precice.action_read_iteration_checkpoint())
         
     else:
+        # Save output data for completed timestep
         recorder.sample(t, force=False)
 
 
 interface.finalize()
 
-if not os.path.exists("output"):
-    os.makedirs("./output")
-    
+# create output directory
+output_dir = os.path.dirname(precice_data["simulation_params"]["output_file_name"])
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
 # store final result
 recorder.sample(t, force=False)
 results = recorder.result()
