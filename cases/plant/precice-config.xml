@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<precice-configuration>
+  <log enabled="1">
+    <sink filter="%Severity% > debug" />
+  </log>
+
+  <solver-interface dimensions="2" >
+  <!-- Use this to activate waveforms
+  <solver-interface dimensions="2" experimental="true">
+  -->
+    <data:scalar name="Output-Controller"  />
+    <data:scalar name="Output-Plant"  />
+
+    <mesh name="Controller-Mesh">
+      <use-data name="Output-Controller" />
+      <use-data name="Output-Plant" />
+    </mesh>
+
+    <mesh name="Plant-Mesh">
+      <use-data name="Output-Controller" />
+      <use-data name="Output-Plant" />
+    </mesh>
+
+    <participant name="Controller">
+      <use-mesh name="Controller-Mesh" provide="yes"/>
+      <write-data name="Output-Controller" mesh="Controller-Mesh" />
+      <read-data  name="Output-Plant" mesh="Controller-Mesh" />
+      <!-- Use this to activate first order interpolation
+      <read-data  name="Force-Right" mesh="Mass-Left-Mesh" waveform-order="1" />
+      -->
+    </participant>
+
+    <participant name="Plant">
+      <use-mesh name="Controller-Mesh" from="Controller"/>
+      <use-mesh name="Plant-Mesh" provide="yes"/>
+      <write-data name="Output-Plant" mesh="Plant-Mesh" />
+      <read-data  name="Output-Controller" mesh="Plant-Mesh" />
+      <!-- Use this to activate first order interpolation
+      <read-data  name="Force-Left" mesh="Mass-Right-Mesh" waveform-order="1" />
+      -->
+      <mapping:nearest-neighbor direction="write" from="Plant-Mesh" to="Controller-Mesh" constraint="consistent" />
+      <mapping:nearest-neighbor direction="read"  from="Controller-Mesh" to="Plant-Mesh" constraint="consistent" />
+    </participant>
+
+    <m2n:sockets from="Controller" to="Plant" exchange-directory=".." />
+
+    <coupling-scheme:serial-explicit>
+      <participants first="Controller" second="Plant" />
+      <max-time value="1" />
+      <time-window-size value="0.01" />
+      <exchange data="Output-Controller" mesh="Controller-Mesh" from="Controller" to="Plant" />
+      <!-- Use this for higher accuracy with waveforms and preCICE v3
+      <exchange data="Force-Left" mesh="Mass-Left-Mesh" from="Mass-Left" to="Mass-Right" initialize="true" />
+      -->
+      <exchange data="Output-Plant" mesh="Controller-Mesh" from="Plant" to="Controller" initialize="true"/>
+    </coupling-scheme:serial-explicit>
+  </solver-interface>
+
+</precice-configuration>
