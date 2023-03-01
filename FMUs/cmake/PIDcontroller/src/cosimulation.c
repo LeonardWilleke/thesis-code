@@ -518,69 +518,26 @@ void setFMUState(ModelInstance* comp, void* FMUState) {
 
 void doFixedStep(ModelInstance *comp, bool* stateEvent, bool* timeEvent) {
 
-#if NX > 0
-    double  x[NX] = { 0 };
-    double dx[NX] = { 0 };
-
-    getContinuousStates(comp, x, NX);
-    getDerivatives(comp, dx, NX);
-
-    // forward Euler step
-    for (int i = 0; i < NX; i++) {
-        x[i] += FIXED_SOLVER_STEP * dx[i];
-    }
-
-    setContinuousStates(comp, x, NX);
-#endif
-
-    comp->nSteps++;
-
-    comp->time = comp->startTime + comp->nSteps * FIXED_SOLVER_STEP;
-
-    // state event
-    *stateEvent = false;
-
-#if NZ > 0
-    double z[NZ] = { 0.0 };
-
-    getEventIndicators(comp, z, NZ);
-
-    // check for zero-crossings
-    for (int i = 0; i < NZ; i++) {
-        *stateEvent |= (comp->z[i] <= 0 && z[i] > 0) || (comp->z[i] > 0 && z[i] <= 0);
-    }
-
-    // remember the current event indicators
-    memcpy(comp->z, z, sizeof(double) * NZ);
-#endif
-
-    // time event
-    *timeEvent = comp->nextEventTimeDefined && comp->time >= comp->nextEventTime;
-
-    bool earlyReturnRequested;
-    double earlyReturnTime;
-
-    // intermediate update
-    if (comp->intermediateUpdate) {
-        comp->intermediateUpdate(
-            comp->componentEnvironment, // instanceEnvironment
-            comp->time,                 // intermediateUpdateTime
-            false,                      // intermediateVariableSetRequested
-            true,                       // intermediateVariableGetAllowed
-            true,                       // intermediateStepFinished
-            false,                      // canReturnEarly
-            &earlyReturnRequested,      // earlyReturnRequested
-            &earlyReturnTime);          // earlyReturnTime
-    }
+	// not implemented
+	UNUSED(comp);
+	UNUSED(stateEvent);
+	UNUSED(timeEvent);
+	
 }
 
 void doAdaptiveStep(ModelInstance *comp, bool* stateEvent, bool* timeEvent) {
 
-    M(dt) = comp->solverStepSize;
+    // get current time step size
+    double dt 	= comp->solverStepSize;
+    
+    // compute error
+    M(e) = M(r) - M(y);
 
     // compute control output u
-    M(u) = M(kp)*M(e) + M(ki)*M(e)*M(dt) + M(kd)*(M(e)-M(e_ls))/M(dt);
+    M(u) = M(kp)*M(e) + M(ki)*M(e)*dt + M(kd)*(M(e)-M(e_ls))/dt;
     
+    // save error for next timestep
+    M(e_ls) = M(e);
 
     comp->nSteps++;
 

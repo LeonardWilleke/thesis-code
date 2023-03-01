@@ -637,16 +637,22 @@ fmi2Status fmi2DoStep(fmi2Component c, fmi2Real currentCommunicationPoint,
     }
 
     const fmi2Real nextCommunicationPoint = currentCommunicationPoint + communicationStepSize + EPSILON;
+    
+    fmi2Boolean nextCommunicationPointReached;
+    
+    S->solverStepSize = communicationStepSize;
 
     while (true) {
+    
+    	nextCommunicationPointReached = S->time + S->solverStepSize > nextCommunicationPoint;
 
-        if (S->time + FIXED_SOLVER_STEP > nextCommunicationPoint) {
+        if (nextCommunicationPointReached) {
             break;  // next communcation point reached
         }
 
         bool stateEvent, timeEvent;
 
-        doFixedStep(S, &stateEvent, &timeEvent);
+        doAdaptiveStep(S, &stateEvent, &timeEvent);
 
 #ifdef EVENT_UPDATE
         if (stateEvent || timeEvent) {

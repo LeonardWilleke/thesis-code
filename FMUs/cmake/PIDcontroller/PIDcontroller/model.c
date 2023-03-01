@@ -14,13 +14,11 @@ void setStartValues(ModelInstance *comp) {
     M(kp)        =  0;
     M(ki)        =  0;
     M(kd)        =  0;
-    M(dt)        = 1e-2;
 }
 
 Status calculateValues(ModelInstance *comp) {
     
-    M(e_ls) = M(e);
-    M(e) = M(r) - M(y);
+    UNUSED(comp);
     return OK;
     
 }
@@ -54,9 +52,6 @@ Status getFloat64(ModelInstance* comp, ValueReference vr, double *value, size_t 
         case vr_kd:
             value[(*index)++] = M(kd);
             return OK;
-        case vr_dt:
-            value[(*index)++] = M(dt);
-            return OK;
         default:
             logError(comp, "Get Float64 is not allowed for value reference %u.", vr);
             return Error;
@@ -83,9 +78,6 @@ Status setFloat64(ModelInstance* comp, ValueReference vr, const double *value, s
             return OK;
         case vr_kd:
             M(kd) = value[(*index)++];
-            return OK;
-        case vr_dt:
-            M(dt) = value[(*index)++];
             return OK;
         default:
             logError(comp, "Unexpected value reference: %u.", vr);

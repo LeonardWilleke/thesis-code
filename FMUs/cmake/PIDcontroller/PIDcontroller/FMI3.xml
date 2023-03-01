@@ -9,17 +9,17 @@
   <ModelExchange
     modelIdentifier="PIDcontroller"
     canGetAndSetFMUState="true"
-    canSerializeFMUState="true"/>
+    canSerializeFMUState="false"/>
 
   <CoSimulation
     modelIdentifier="PIDcontroller"
     canGetAndSetFMUState="true"
-    canSerializeFMUState="true"
+    canSerializeFMUState="false"
     canHandleVariableCommunicationStepSize="true"
-    providesIntermediateUpdate="true"
-    canReturnEarlyAfterIntermediateUpdate="true"
+    providesIntermediateUpdate="false"
+    canReturnEarlyAfterIntermediateUpdate="false"
     fixedInternalStepSize="1e-3"
-    hasEventMode="true"/>
+    hasEventMode="false"/>
 
   <UnitDefinitions>
     <Unit name="m">
@@ -41,15 +41,14 @@
 
   <ModelVariables>
     <Float64 name="time" valueReference="0" causality="independent" variability="continuous" description="Simulation time"/>
-    <Float64 name="u" valueReference="1" causality="output" variability="continuous" initial="exact" declaredType="ControlVariable" start="0" reinit="true" description="Control output value" intermediateUpdate="true"/>
-    <Float64 name="y" valueReference="2" causality="parameter" variability="tunable" initial="exact" declaredType="ControlVariable" start="0" description="Control input value"/>
+    <Float64 name="u" valueReference="1" causality="output" variability="continuous" initial="exact" declaredType="ControlVariable" start="0" reinit="true" description="Control output value" intermediateUpdate="false"/>
+    <Float64 name="y" valueReference="2" causality="input" variability="continuous" declaredType="ControlVariable" start="0" description="Control input value from plant"/>
     <Float64 name="r" valueReference="3" causality="parameter" variability="tunable" initial="exact" declaredType="ControlVariable" start="0" description="Control reference value"/>
     <Float64 name="e" valueReference="4" causality="local" variability="continuous" initial="calculated" declaredType="ControlVariable" description="Error between input and reference value"/>
     <Float64 name="e_ls" valueReference="5" causality="local" variability="continuous" initial="calculated" declaredType="ControlVariable" description="Error between input and reference value from last time step"/>
     <Float64 name="kp" valueReference="6" causality="parameter" variability="tunable" initial="exact" declaredType="ControlParameter" start="0" description="Proportional gain"/>
     <Float64 name="ki" valueReference="7" causality="parameter" variability="tunable" initial="exact" declaredType="ControlParameter" start="0" description="Integral gain"/>
     <Float64 name="kd" valueReference="8" causality="parameter" variability="tunable" initial="exact" declaredType="ControlParameter" start="0" description="Derivative gain"/>
-    <Float64 name="dt" valueReference="9" causality="parameter" variability="tunable" initial="exact" declaredType="ControlParameter" start="1e-2" description="Step size of the solver"/>
   </ModelVariables>
 
   <ModelStructure>
@@ -57,7 +56,6 @@
     <InitialUnknown valueReference="4" dependencies="1" dependenciesKind="constant"/>
     <InitialUnknown valueReference="4" dependencies="2" dependenciesKind="constant"/>
     <InitialUnknown valueReference="5" dependencies="4" dependenciesKind="constant"/>
-    <EventIndicator valueReference="1"/>
   </ModelStructure>
 
 </fmiModelDescription>
