@@ -15,7 +15,7 @@ class Scheme(Enum):
 
 
 class Participant(Enum):
-    MASS_LEFT = "Mass-Left"
+    MASS_LEFT = "Plant"
     MASS_RIGHT = "Mass-Right"
 
 
@@ -52,9 +52,9 @@ v0_2 = 0
 c = np.linalg.solve(eigenvectors, [u0_1, u0_2])
 
 if participant_name == Participant.MASS_LEFT.value:
-    write_data_name = 'Force-Left'
-    read_data_name = 'Force-Right'
-    mesh_name = 'Mass-Left-Mesh'
+    write_data_name = 'Output-Plant'
+    read_data_name = 'Output-Controller'
+    mesh_name = 'Plant-Mesh'
 
     mass = m_1
     stiffness = k_1 + k_12
@@ -153,7 +153,7 @@ while interface.is_coupling_ongoing():
     # read_data = interface.read_scalar_data(read_data_id, vertex_id, read_time)
     read_data = interface.read_scalar_data(read_data_id, vertex_id)
     
-    f = read_data
+    f = read_data * k_12
 
     # do generalized alpha step
     m[0] = (1 - alpha_m) / (beta * dt**2)
@@ -165,7 +165,7 @@ while interface.is_coupling_ongoing():
     v_new = v + dt * ((1 - gamma) * a + gamma * a_new)
     t_new = t + dt
 
-    write_data = k_12 * u_new
+    write_data = u_new
 
     interface.write_scalar_data(write_data_id, vertex_id, write_data)
 

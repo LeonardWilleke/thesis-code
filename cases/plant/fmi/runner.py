@@ -44,6 +44,9 @@ for variable in model_description.modelVariables:
 
 output_names		 		= precice_data["simulation_params"]["output"]
 
+signal_names				= fmi_data["input_signals"]["names"]
+signal_data					= fmi_data["input_signals"]["data"]
+
 fmu_read_data_name			= precice_data["simulation_params"]["fmu_read_data_name"]
 fmu_write_data_name 		= precice_data["simulation_params"]["fmu_write_data_name"]
 vr_read  	 				= [vrs[fmu_read_data_name]]
@@ -85,6 +88,15 @@ elif is_fmi3:
 	# Get initial write data
 	fmu_write_data_init = fmu.getFloat64(vr_write)
 
+# Create input signals
+
+dtype = []
+for i in range(len(signal_names)):
+	tpl = tuple([signal_names[i], type(signal_data[0][i])]) # not sure if the type() might cause problems
+	dtype.append(tpl)
+
+signals = np.array([tuple(i) for i in signal_data],dtype=dtype) # this should work fine
+input 	= Input(fmu, model_description, signals)
 
 ### preCICE setup
 
@@ -139,15 +151,20 @@ while interface.is_coupling_ongoing():
         					"and set the according flag in ModelDescription.xml. "\
         					"Alternatively, choose an explicit coupling scheme.")
         
+        # Save checkpoint
         state_cp 	= fmu.getFMUState()
         t_cp 		= t
         
         interface.mark_action_fulfilled(precice.action_write_iteration_checkpoint())
 	
-    # compute current time step size
+    # Compute current time step size
     dt = np.min([precice_dt, my_dt])
     
+    # Read data from other participant
     read_data = interface.read_scalar_data(read_data_id, vertex_id)
+    
+    # Set input signals to FMU
+    input.apply(t)
     
     # Compute next time step
     if is_fmi1 or is_fmi2: 

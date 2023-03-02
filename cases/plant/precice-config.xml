@@ -46,7 +46,7 @@
 
     <coupling-scheme:serial-explicit>
       <participants first="Controller" second="Plant" />
-      <max-time value="1" />
+      <max-time value="5" />
       <time-window-size value="0.01" />
       <exchange data="Output-Controller" mesh="Controller-Mesh" from="Controller" to="Plant" />
       <!-- Use this for higher accuracy with waveforms and preCICE v3
