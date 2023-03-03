@@ -15,7 +15,7 @@ class Scheme(Enum):
 
 
 class Participant(Enum):
-    MASS_LEFT = "Plant"
+    MASS_LEFT = "Mass"
     MASS_RIGHT = "Mass-Right"
 
 
@@ -52,9 +52,9 @@ v0_2 = 0
 c = np.linalg.solve(eigenvectors, [u0_1, u0_2])
 
 if participant_name == Participant.MASS_LEFT.value:
-    write_data_name = 'Output-Plant'
-    read_data_name = 'Output-Controller'
-    mesh_name = 'Plant-Mesh'
+    write_data_name = 'Displacement-Mass'
+    read_data_name = 'Displacement-Wall'
+    mesh_name = 'Mass-Mesh'
 
     mass = m_1
     stiffness = k_1 + k_12

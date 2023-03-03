@@ -37,17 +37,11 @@ if solver == 'python':
 elif solver == 'fmi':
     df = pd.read_csv(filename, delimiter=',')
     if args.plotType == PlotType.U_OVER_T.name:
-        plt.plot(df['time'], df['mass.u'])
+        plt.plot(df['time'], df['u'])
         plt.title(PlotType.U_OVER_T.value)
     elif args.plotType == PlotType.V_OVER_T.name:
-        plt.plot(df['time'], df['mass.v'])
-        plt.title(PlotType.V_OVER_T.value)
+        print("Warning: Controller can only plot the position of the wall over time. Please use U_OVER_T as input argument.")
     elif args.plotType == PlotType.TRAJECTORY.name:
-        plt.plot(df[('mass.u')], df['mass.v'])
-        plt.scatter([df['mass.u'][0]], [df['mass.v'][0]], label=f"(u,v) at t={df['time'][0]}")
-        plt.scatter([df['mass.u'].iloc[-1]], [df['mass.v'].iloc[-1]],
-                    label=f"(u,v) at t={df['time'].iloc[-1]}", marker="*")
-        plt.title(PlotType.TRAJECTORY.value)
-        plt.legend()
+        print("Warning: Controller can only plot the position of the wall over time. Please use U_OVER_T as input argument.")
 
 plt.show()
