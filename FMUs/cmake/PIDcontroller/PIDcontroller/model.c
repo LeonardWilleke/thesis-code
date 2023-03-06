@@ -11,6 +11,8 @@ void setStartValues(ModelInstance *comp) {
     M(u)         =  0;
     M(y)         =  0;
     M(r)         =  0;
+    M(e_ls)		 =  0;
+    M(I_ls) 	 =  0;
     M(kp)        =  0;
     M(ki)        =  0;
     M(kd)        =  0;

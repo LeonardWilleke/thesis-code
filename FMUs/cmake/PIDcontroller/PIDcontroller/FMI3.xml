@@ -8,13 +8,13 @@
 
   <ModelExchange
     modelIdentifier="PIDcontroller"
-    canGetAndSetFMUState="true"
-    canSerializeFMUState="false"/>
+    canGetAndSetFMUstate="true"
+    canSerializeFMUstate="false"/>
 
   <CoSimulation
     modelIdentifier="PIDcontroller"
-    canGetAndSetFMUState="true"
-    canSerializeFMUState="false"
+    canGetAndSetFMUstate="true"
+    canSerializeFMUstate="false"
     canHandleVariableCommunicationStepSize="true"
     providesIntermediateUpdate="false"
     canReturnEarlyAfterIntermediateUpdate="false"
@@ -45,17 +45,17 @@
     <Float64 name="y" valueReference="2" causality="input" variability="continuous" declaredType="ControlVariable" start="0" description="Control input value from plant"/>
     <Float64 name="r" valueReference="3" causality="parameter" variability="tunable" initial="exact" declaredType="ControlVariable" start="0" description="Control reference value"/>
     <Float64 name="e" valueReference="4" causality="local" variability="continuous" initial="calculated" declaredType="ControlVariable" description="Error between input and reference value"/>
-    <Float64 name="e_ls" valueReference="5" causality="local" variability="continuous" initial="calculated" declaredType="ControlVariable" description="Error between input and reference value from last time step"/>
-    <Float64 name="kp" valueReference="6" causality="parameter" variability="tunable" initial="exact" declaredType="ControlParameter" start="0" description="Proportional gain"/>
-    <Float64 name="ki" valueReference="7" causality="parameter" variability="tunable" initial="exact" declaredType="ControlParameter" start="0" description="Integral gain"/>
-    <Float64 name="kd" valueReference="8" causality="parameter" variability="tunable" initial="exact" declaredType="ControlParameter" start="0" description="Derivative gain"/>
+    <Float64 name="e_ls" valueReference="5" causality="local" variability="continuous" initial="exact" declaredType="ControlVariable" start="0" description="Error between input and reference value from last time step"/>
+    <Float64 name="I_ls" valueReference="6" causality="local" variability="continuous" initial="exact" declaredType="ControlVariable" start="0" description="Integral term from last time step"/>
+    <Float64 name="kp" valueReference="7" causality="parameter" variability="tunable" initial="exact" declaredType="ControlParameter" start="0" description="Proportional gain"/>
+    <Float64 name="ki" valueReference="8" causality="parameter" variability="tunable" initial="exact" declaredType="ControlParameter" start="0" description="Integral gain"/>
+    <Float64 name="kd" valueReference="9" causality="parameter" variability="tunable" initial="exact" declaredType="ControlParameter" start="0" description="Derivative gain"/>
   </ModelVariables>
 
   <ModelStructure>
     <Output valueReference="1"/>
     <InitialUnknown valueReference="4" dependencies="1" dependenciesKind="constant"/>
     <InitialUnknown valueReference="4" dependencies="2" dependenciesKind="constant"/>
-    <InitialUnknown valueReference="5" dependencies="4" dependenciesKind="constant"/>
   </ModelStructure>
 
 </fmiModelDescription>

@@ -527,21 +527,34 @@ void doFixedStep(ModelInstance *comp, bool* stateEvent, bool* timeEvent) {
 
 void doAdaptiveStep(ModelInstance *comp, bool* stateEvent, bool* timeEvent) {
 
-    // get current time step size
+    // create local variables
+    double t 	= comp->time;
     double dt 	= comp->solverStepSize;
+    double P;
+    double I;
+    double D;
     
     // compute error
     M(e) = M(r) - M(y);
 
-    // compute control output u
-    M(u) = M(kp)*M(e) + M(ki)*M(e)*dt + M(kd)*(M(e)-M(e_ls))/dt;
+    // compute different parts
+    P = M(kp)*M(e);
+    I = M(I_ls) + M(ki)*M(e)*dt;
+    D = M(kd)*(M(e)-M(e_ls))/dt;
     
-    // save error for next timestep
+    M(u) = P + I + D;
+    
+    // compute control output u
+    //M(u) = M(kp)*M(e) + M(ki)*M(e)*dt + M(kd)*(M(e)-M(e_ls))/dt;
+    
+    
+    // save results for next timestep
     M(e_ls) = M(e);
+    M(I_ls) = I;
 
     comp->nSteps++;
 
-    comp->time = comp->startTime + comp->nSteps * comp->solverStepSize;
+    comp->time = t + dt;
 
     // state event
     *stateEvent = false;

@@ -37,7 +37,7 @@ if solver == 'python':
 elif solver == 'fmi':
     df = pd.read_csv(filename, delimiter=',')
     if args.plotType == PlotType.U_OVER_T.name:
-        plt.plot(df['time'], df['u'])
+        plt.plot(df['time'], df['e'])
         plt.title(PlotType.U_OVER_T.value)
     elif args.plotType == PlotType.V_OVER_T.name:
         print("Warning: Controller can only plot the position of the wall over time. Please use U_OVER_T as input argument.")
