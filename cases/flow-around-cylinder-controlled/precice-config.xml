@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<precice-configuration>
+
+  <log>
+    <sink type="stream" output="stdout"  filter= "%Severity% > debug" format="preCICE:%ColorizedSeverity% %Message%" enabled="true" />	
+  </log>
+
+  <solver-interface dimensions="2" >
+   
+    <data:vector name="Velocity"  />
+
+    <mesh name="Mesh-Dummy">
+      <use-data name="Velocity" />
+    </mesh>
+
+    <mesh name="Mesh-Fluid">
+      <use-data name="Velocity" />
+    </mesh>
+
+    <participant name="Dummy">
+      <use-mesh name="Mesh-Dummy" provide="yes"/>
+      <write-data name="Velocity" mesh="Mesh-Dummy" />
+    </participant>
+
+    <participant name="Fluid">
+      <use-mesh name="Mesh-Dummy" from="Dummy"/>
+      <use-mesh name="Mesh-Fluid" provide="yes"/>
+      <mapping:nearest-neighbor direction="read"  from="Mesh-Dummy" to="Mesh-Fluid" constraint="consistent" />
+      <read-data  name="Velocity" mesh="Mesh-Fluid" />
+    </participant>
+
+    <m2n:sockets from="Dummy" to="Fluid"/>
+
+    <coupling-scheme:serial-explicit> 
+      <participants first="Dummy" second="Fluid" /> 
+      <max-time-windows value="2" />
+      <time-window-size value="0.1" />
+      <exchange data="Velocity" mesh="Mesh-Dummy" from="Dummy" to="Fluid"/>
+    </coupling-scheme:serial-explicit>                        
+  </solver-interface>
+
+</precice-configuration>
