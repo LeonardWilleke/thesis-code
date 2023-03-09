@@ -3,7 +3,7 @@
             "participant_name": "Controller",
             "config_file_name": "../precice-config.xml",
             "mesh_name": "Controller-Mesh",
-            "write_data_name": "Displacement-Wall",
+            "write_data_name": "Force-Controller",
             "read_data_name": "Displacement-Mass",
             "num_vertices": 1,
             "solver_process_index": 0,
@@ -11,7 +11,7 @@
     },
     "simulation_params": {
 		"fmu_file_name": "../../../FMUs/PIDcontroller.fmu",
-    	"output_file_name": "./output/trajectory-Wall.csv",
+    	"output_file_name": "./output/controller-output.csv",
     	"output": ["u", "e"],
     	"fmu_read_data_name": "y",
     	"fmu_write_data_name": "u",

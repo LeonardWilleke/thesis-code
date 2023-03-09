@@ -40,27 +40,6 @@
 		decorate
 		] (3.2,1.5) -- ++(2,0)
 		node[midway,below=0.25cm,black]{$k_{12}$};
-		% Mass 2
-		\node[draw,
-		minimum width=1cm,
-		minimum height=0.75cm,
-		anchor=mid] at (5.7,1.5) {$m_2$};
-		% spring 2
-		\draw
-		[
-		decoration={
-			coil,
-			aspect=0.3,
-			segment length=1.5mm,
-			amplitude=2mm,
-			pre length=3mm,
-			post length=3mm},
-		decorate
-		] (6.2,1.5) -- ++(2,0)
-		node[midway,below=0.25cm,black]{$k_{2}$};
-		% right wall
-		\fill [pattern = north west lines] (8.2,0) rectangle ++(.2,3);
-		\draw[thick] (8.2,0) -- ++(0,3);
 
 		% u1 arrow
 		\draw [very thick,
@@ -69,11 +48,11 @@
 		] (2.7,1.85) -- ++(0,.5) ++(0,-0.25) -- ++ (1,0)
 		node[midway,above]{\small $u_1$};
 
-		% u2 arrow
+		% force arrow
 		\draw [very thick,
-		color2,
+		red,
 		-latex
-		] (5.7,1.85) -- ++(0,.5) ++(0,-0.25) -- ++ (1,0)
-		node[midway,above]{\small $u_2$};
+		] (5.25,1.25) -- ++(0,.5) ++(0,-0.25) -- ++ (1,0)
+		node[right,below=1.0]{\small $F_{control}$};
 \end{tikzpicture}
 \end{document}

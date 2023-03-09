@@ -8,6 +8,8 @@ class PlotType(Enum):
     U_OVER_T = "position over time"
     V_OVER_T = "velocity over time"
     TRAJECTORY = "velocity over position (trajectory)"
+    E_OVER_T = "error over time"
+    
 
 
 parser = argparse.ArgumentParser()
@@ -33,15 +35,20 @@ if solver == 'python':
         plt.scatter([df['position'].iloc[-1]], [df['velocity'].iloc[-1]],
                     label=f"(u,v) at t={df['time'].iloc[-1]}", marker="*")
         plt.title(PlotType.TRAJECTORY.value)
-        plt.legend()   
+        plt.legend() 
+    elif args.plotType == PlotType.E_OVER_T.name:
+        print("Warning: Oscillator can not plot error over time.")  
 elif solver == 'fmi':
     df = pd.read_csv(filename, delimiter=',')
     if args.plotType == PlotType.U_OVER_T.name:
+        plt.plot(df['time'], df['u'])
+        plt.title(PlotType.U_OVER_T.value)
+    if args.plotType == PlotType.E_OVER_T.name:
         plt.plot(df['time'], df['e'])
         plt.title(PlotType.U_OVER_T.value)
     elif args.plotType == PlotType.V_OVER_T.name:
-        print("Warning: Controller can only plot the position of the wall over time. Please use U_OVER_T as input argument.")
+        print("Warning: Controller can not plot velocity over time. Please use U_OVER_T or E_OVER_T as input argument.")
     elif args.plotType == PlotType.TRAJECTORY.name:
-        print("Warning: Controller can only plot the position of the wall over time. Please use U_OVER_T as input argument.")
+        print("Warning: Controller can not plot the trajectory. Please use U_OVER_T or E_OVER_T as input argument.")
 
 plt.show()
