@@ -13,7 +13,7 @@ THis is an adaption of the [original oscillator tutorial](https://github.com/pre
 
 This tutorial solves a simple mass-spring oscillator with one mass and two springs. The system is coupled to a PID controller, which controls the force acting on the loose spring:
 
-![Schematic drawing of oscillator example](images/tutorials-oscillator-schematic-drawing.pdf)
+![Schematic drawing of oscillator example](images/tutorials-oscillator-schematic-drawing.png)
 
 The controller allows to choose a setpoint `r` for the position of the mass. Also, you can set input signals to allow changing inputs over the simulation time.
 
@@ -61,6 +61,20 @@ However, with the gains `k_p=800`, `k_i=25` and `k_d=20` the system diverges:
 
 
 For details about the original setup and the integration scheme, refer to [1].
+
+## Open problems
+
+In some scenarios, the current setup has very different results for explicit and implicit coupling. For example, take the case with `k_p=-120.0`, `k_i=0` and `k_d=0`. The setpoint is set to `r=0`.
+
+Results of the explicit coupling look promising:
+
+![Mass position for serial-explicit coupling](images/tutorials-oscillator-trajectory-control-explicit.png)
+
+Results of the implicit coupling look very different:
+
+![Mass position for serial-implicit coupling](images/tutorials-oscillator-trajectory-control-implicit.png)
+
+The problem is clearly related to the checkpointing of the PID. It vanishes when not using checkpoints for the PID in implicit coupling.
 
 ## References
 

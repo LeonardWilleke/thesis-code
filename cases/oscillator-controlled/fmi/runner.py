@@ -22,13 +22,6 @@ args = parser.parse_args()
 fmi_setting_file 		= args.fmi_setting_file
 precice_setting_file 	= args.precice_setting_file
 
-
-# check if this is an improvement or not necessary due to the way I load the files
-#if not os.path.isabs(fmi_setting_file):
-#        fmi_setting_file = os.getcwd() + "/" + fmi_setting_file
-#if not os.path.isabs(precice_setting_file):
-#        precice_setting_file = os.getcwd() + "/" + precice_setting_file
-
 folder = os.path.dirname(os.path.join(os.getcwd(), os.path.dirname(sys.argv[0]), fmi_setting_file))
 path = os.path.join(folder, os.path.basename(fmi_setting_file))
 read_file = open(path, "r")
