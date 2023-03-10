@@ -6,7 +6,7 @@ summary: We couple an oscillator with one mass and two springs to a PID controll
 ---
 
 {% note %}
-THis is an adaption of the [original oscillator tutorial](https://github.com/precice/tutorials/tree/master/oscillator). Read how to get the case files in the [tutorials introduction](https://www.precice.org/tutorials.html).
+This is an adaption of the [original oscillator tutorial](https://github.com/precice/tutorials/tree/master/oscillator). Read how to get the case files in the [tutorials introduction](https://www.precice.org/tutorials.html).
 {% endnote %}
 
 ## Setup
@@ -58,7 +58,7 @@ Let's check if these gains also work for a setpoint of `r=0.5`. The results show
 
 ![Mass position for stable gains](images/tutorials-oscillator-trajectory-control-stable-2.png)
 
-However, with the gains `k_p=0`, `k_i=19` and `k_d=-0.3` the system clearly diverges:
+However, with the gains `k_p=0`, `k_i=10` and `k_d=-0.3` the system clearly diverges:
 
 ![Mass position for unstable gains](images/tutorials-oscillator-trajectory-control-unstable.png)
 
