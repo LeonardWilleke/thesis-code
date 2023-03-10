@@ -48,14 +48,17 @@ Each simulation run creates two files. The file of the oscillator, called `traje
 python3 plot-trajectory.py python/output/trajectory-Mass.csv U_OVER_T
 ```
 
-The solvers allow you to study the effect of different control gains. The controller is activated at `t=2` with a setpoint of `r=0`.
+The solvers allow you to study the effect of different control gains. The controller is activated at `t=2`.
 
-With the gains `k_p=800`, `k_i=25` and `k_d=20` the system reaches stability:
+With a setpoint of `r=0.0` and the gains `k_p=800`, `k_i=25` and `k_d=20`, the system reaches stability:
 
-![Mass position for stable gains](images/tutorials-oscillator-trajectory-control-stable.png)
+![Mass position for stable gains](images/tutorials-oscillator-trajectory-control-stable-1.png)
 
+Let's check if these gains also work for a setpoint of `r=0.5`. The results show stability with an offset, indicating that the gains have not been chosen optimally:
 
-However, with the gains `k_p=800`, `k_i=25` and `k_d=20` the system diverges:
+![Mass position for stable gains](images/tutorials-oscillator-trajectory-control-stable-2.png)
+
+However, with the gains `k_p=0`, `k_i=19` and `k_d=-0.3` the system clearly diverges:
 
 ![Mass position for unstable gains](images/tutorials-oscillator-trajectory-control-unstable.png)
 
@@ -74,7 +77,7 @@ Results of the implicit coupling look very different:
 
 ![Mass position for serial-implicit coupling](images/tutorials-oscillator-trajectory-control-implicit.png)
 
-The problem is clearly related to the checkpointing of the PID. It vanishes when not using checkpoints for the PID in implicit coupling.
+The problem is clearly related to the checkpointing of the PID, especially the kp gain. It vanishes when not using checkpoints for the PID in implicit coupling.
 
 ## References
 
