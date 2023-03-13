@@ -535,7 +535,10 @@ void doAdaptiveStep(ModelInstance *comp, bool* stateEvent, bool* timeEvent) {
     M(e) = M(r) - M(y);
     
     // compute control output u
-    M(u) = M(kp)*M(e) + M(ki)*M(e)*dt + M(kd)*(M(e)-M(e_ls))/dt;
+    M(P) = M(kp)*M(e);
+    M(I) = M(I) + M(ki)*M(e)*dt;
+    M(D) = M(kd)*(M(e)-M(e_ls))/dt;
+    M(u) = M(P) + M(I) + M(D);
     
     // save error for next timestep
     M(e_ls) = M(e);

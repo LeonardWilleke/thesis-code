@@ -52,13 +52,17 @@ The solvers allow you to study the effect of different control gains. The contro
 
 With a setpoint of `r=0.0` and the gains `k_p=800`, `k_i=25` and `k_d=20`, the system reaches stability:
 
-![Mass position for stable gains](images/tutorials-oscillator-trajectory-control-stable-1.png)
+![Mass position for stable gains for setpoint 1](images/tutorials-oscillator-trajectory-control-stable-1.png)
 
 Let's check if these gains also work for a setpoint of `r=0.5`. The results show stability with an offset, indicating that the gains have not been chosen optimally:
 
-![Mass position for stable gains](images/tutorials-oscillator-trajectory-control-stable-2.png)
+![Mass position for stable gains with offset for setpoint 2](images/tutorials-oscillator-trajectory-control-stable-2.png)
 
-However, with the gains `k_p=0`, `k_i=10` and `k_d=-0.3` the system clearly diverges:
+A better result is optained when dramatically increasing the integral gain to `k_i=1500`. This erases the offset, but will cause problems for longer run times due to integrator wind up:
+
+![Mass position for stable gains without offset for setpoint 2](images/tutorials-oscillator-trajectory-control-stable-3.png)
+
+However, suboptimal gains such as `k_p=0`, `k_i=10` and `k_d=-0.3` cause the system to diverge:
 
 ![Mass position for unstable gains](images/tutorials-oscillator-trajectory-control-unstable.png)
 

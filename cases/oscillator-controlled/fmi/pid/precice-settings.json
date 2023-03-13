@@ -12,7 +12,7 @@
     "simulation_params": {
 		"fmu_file_name": "../../../FMUs/PIDcontroller.fmu",
     	"output_file_name": "./output/controller-output.csv",
-    	"output": ["u", "e"],
+    	"output": ["u", "e", "P", "I", "D"],
     	"fmu_read_data_name": "y",
     	"fmu_write_data_name": "u",
     	"fmu_instance_name": "pid_controller"

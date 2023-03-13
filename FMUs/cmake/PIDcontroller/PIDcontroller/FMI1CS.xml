@@ -30,6 +30,12 @@
       <Real start="0"/></ScalarVariable>
     <ScalarVariable name="kd" valueReference="8" causality="input" variability="discrete" description="Derivative gain">
       <Real start="0"/></ScalarVariable>
+    <ScalarVariable name="P" valueReference="9" causality="internal" variability="parameter" description="Proportional term">
+    <Real start="0"/></ScalarVariable>
+    <ScalarVariable name="I" valueReference="10" causality="internal" variability="parameter" description="Integral term">
+    <Real start="0"/></ScalarVariable>
+    <ScalarVariable name="D" valueReference="11" causality="internal" variability="parameter" description="Derivative term">
+    <Real start="0"/></ScalarVariable>
 </ModelVariables>
 
   <Implementation>

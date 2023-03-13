@@ -49,6 +49,9 @@
     <Float64 name="kp" valueReference="6" causality="parameter" variability="tunable" initial="exact" declaredType="ControlParameter" start="0" description="Proportional gain"/>
     <Float64 name="ki" valueReference="7" causality="parameter" variability="tunable" initial="exact" declaredType="ControlParameter" start="0" description="Integral gain"/>
     <Float64 name="kd" valueReference="8" causality="parameter" variability="tunable" initial="exact" declaredType="ControlParameter" start="0" description="Derivative gain"/>
+    <Float64 name="P" valueReference="9" causality="local" variability="continuous" initial="exact" declaredType="ControlVariable" start="0" description="Proportional term"/>
+    <Float64 name="I" valueReference="10" causality="local" variability="continuous" initial="exact" declaredType="ControlVariable" start="0" description="Integral term"/>
+    <Float64 name="D" valueReference="11" causality="local" variability="continuous" initial="exact" declaredType="ControlVariable" start="0" description="Derivative term"/>
   </ModelVariables>
 
   <ModelStructure>

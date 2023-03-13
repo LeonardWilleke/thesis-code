@@ -9,6 +9,9 @@ class PlotType(Enum):
     V_OVER_T = "velocity over time"
     TRAJECTORY = "velocity over position (trajectory)"
     E_OVER_T = "error over time"
+    P_OVER_T = "proportional term over time"
+    I_OVER_T = "integral term over time"
+    D_OVER_T = "derivative term over time"
     
 
 
@@ -36,16 +39,25 @@ if solver == 'python':
                     label=f"(u,v) at t={df['time'].iloc[-1]}", marker="*")
         plt.title(PlotType.TRAJECTORY.value)
         plt.legend() 
-    elif args.plotType == PlotType.E_OVER_T.name:
-        print("Warning: Oscillator can not plot error over time.")  
+    else:
+        print("Warning: Oscillator can not plot controller values over time.")  
 elif solver == 'fmi':
     df = pd.read_csv(filename, delimiter=',')
     if args.plotType == PlotType.U_OVER_T.name:
         plt.plot(df['time'], df['u'])
         plt.title(PlotType.U_OVER_T.value)
-    if args.plotType == PlotType.E_OVER_T.name:
+    elif args.plotType == PlotType.E_OVER_T.name:
         plt.plot(df['time'], df['e'])
-        plt.title(PlotType.U_OVER_T.value)
+        plt.title(PlotType.E_OVER_T.value)
+    elif args.plotType == PlotType.P_OVER_T.name:
+        plt.plot(df['time'], df['P'])
+        plt.title(PlotType.P_OVER_T.value)
+    elif args.plotType == PlotType.I_OVER_T.name:
+        plt.plot(df['time'], df['I'])
+        plt.title(PlotType.I_OVER_T.value)
+    elif args.plotType == PlotType.D_OVER_T.name:
+        plt.plot(df['time'], df['D'])
+        plt.title(PlotType.D_OVER_T.value)
     elif args.plotType == PlotType.V_OVER_T.name:
         print("Warning: Controller can not plot velocity over time. Please use U_OVER_T or E_OVER_T as input argument.")
     elif args.plotType == PlotType.TRAJECTORY.name:
