@@ -36,8 +36,25 @@ interfaces
     
     writeData
     (
+      VelocityGradient
     );
   };
+  
+  //Interface2
+  //{
+    //mesh              Mesh-Fluid;
+    //locations         faceCenters;
+    //patches           (inlet);
+    
+    //readData
+    //(
+    //);
+    
+    //writeData
+    //(
+     // VelocityGradient
+    //);
+  //}; 
 };
 
 
