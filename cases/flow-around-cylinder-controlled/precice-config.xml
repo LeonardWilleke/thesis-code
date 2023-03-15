@@ -11,7 +11,7 @@
     <data:vector name="Velocity"  />
     <data:vector name="VelocityGradient"  />
 
-    <mesh name="Mesh-Dummy">
+    <mesh name="Mesh-Controller">
       <use-data name="Velocity" />
       <use-data name="VelocityGradient" />
     </mesh>
@@ -21,29 +21,29 @@
       <use-data name="VelocityGradient" />
     </mesh>
 
-    <participant name="Dummy">
-      <use-mesh name="Mesh-Dummy" provide="yes"/>
-      <write-data name="Velocity" mesh="Mesh-Dummy" />
-      <read-data name="VelocityGradient" mesh="Mesh-Dummy" />
+    <participant name="Controller">
+      <use-mesh name="Mesh-Controller" provide="yes"/>
+      <write-data name="Velocity" mesh="Mesh-Controller" />
+      <read-data name="VelocityGradient" mesh="Mesh-Controller" />
     </participant>
 
     <participant name="Fluid">
-      <use-mesh name="Mesh-Dummy" from="Dummy"/>
+      <use-mesh name="Mesh-Controller" from="Controller"/>
       <use-mesh name="Mesh-Fluid" provide="yes"/>
-      <mapping:nearest-neighbor direction="read"  from="Mesh-Dummy" to="Mesh-Fluid" constraint="consistent" />
-      <mapping:nearest-neighbor direction="write"  from="Mesh-Fluid" to="Mesh-Dummy" constraint="consistent" />
+      <mapping:nearest-neighbor direction="read"  from="Mesh-Controller" to="Mesh-Fluid" constraint="consistent" />
+      <mapping:nearest-neighbor direction="write"  from="Mesh-Fluid" to="Mesh-Controller" constraint="consistent" />
       <read-data  name="Velocity" mesh="Mesh-Fluid" />
       <write-data  name="VelocityGradient" mesh="Mesh-Fluid" />
     </participant>
 
-    <m2n:sockets from="Dummy" to="Fluid" exchange-directory="../"/>
+    <m2n:sockets from="Controller" to="Fluid" exchange-directory="../"/>
 
     <coupling-scheme:serial-explicit> 
-      <participants first="Dummy" second="Fluid" /> 
+      <participants first="Controller" second="Fluid" /> 
       <max-time value="2" />
       <time-window-size value="0.05" />
-      <exchange data="Velocity" mesh="Mesh-Dummy" from="Dummy" to="Fluid"/>
-      <exchange data="VelocityGradient" mesh="Mesh-Dummy" from="Fluid" to="Dummy"/>
+      <exchange data="Velocity" mesh="Mesh-Controller" from="Controller" to="Fluid"/>
+      <exchange data="VelocityGradient" mesh="Mesh-Controller" from="Fluid" to="Controller"/>
     </coupling-scheme:serial-explicit>                        
   </solver-interface>
 

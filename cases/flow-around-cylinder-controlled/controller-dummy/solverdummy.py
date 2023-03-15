@@ -17,10 +17,10 @@ except SystemExit:
 
 configuration_file_name = args.configurationFileName
 
-participant_name = "Dummy"
+participant_name = "Controller"
 write_data_name = "Velocity"
 read_data_name = "VelocityGradient"
-mesh_name = "Mesh-Dummy"
+mesh_name = "Mesh-Controller"
 
 num_vertices = 34  # Number of vertices
 
