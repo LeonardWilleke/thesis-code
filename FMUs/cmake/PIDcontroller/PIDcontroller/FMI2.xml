@@ -78,6 +78,17 @@
     <ScalarVariable name="kd" valueReference="8" causality="parameter" variability="tunable" initial="exact" description="Derivative gain">
       <Real start="0" declaredType="ControlParameter"/>
     </ScalarVariable>
+    <ScalarVariable name="P" valueReference="9" causality="local" variability="continuous" initial="exact" description="Proportional term">
+      <Real start="0" declaredType="ControlVariable"/>
+    </ScalarVariable>
+    <ScalarVariable name="I" valueReference="10" causality="local" variability="continuous" initial="exact" description="Integral term">
+      <Real start="0" declaredType="ControlVariable"/>
+    </ScalarVariable>
+    <ScalarVariable name="D" valueReference="11" causality="local" variability="continuous" initial="exact" description="Derivative term">
+      <Real start="0" declaredType="ControlVariable"/>
+    </ScalarVariable>
+    
+    
   </ModelVariables>
 
   <ModelStructure>

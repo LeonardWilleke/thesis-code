@@ -20,7 +20,7 @@
 #define DEFAULT_STOP_TIME 3
 
 typedef enum {
-    vr_time, vr_u, vr_y, vr_r, vr_e, vr_e_ls, vr_I_ls, vr_kp, vr_ki, vr_kd
+    vr_time, vr_u, vr_y, vr_r, vr_e, vr_e_ls, vr_kp, vr_ki, vr_kd, vr_P, vr_I, vr_D
 } ValueReference;
 
 typedef struct {
@@ -30,10 +30,12 @@ typedef struct {
     double r;
     double e;
     double e_ls;
-    double I_ls;
     double kp;
     double ki;
     double kd;
+    double P;
+    double I;
+    double D;
 
 } ModelData;
 
