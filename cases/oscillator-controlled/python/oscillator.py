@@ -143,6 +143,7 @@ u_write = [u]
 v_write = [v]
 t_write = [t]
 
+
 while interface.is_coupling_ongoing():
     if interface.is_action_required(precice.action_write_iteration_checkpoint()):
         u_cp = u
