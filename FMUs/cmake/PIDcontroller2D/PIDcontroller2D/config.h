@@ -25,8 +25,8 @@ typedef enum {
 
 typedef struct {
 
-    double u[17][2];      
-    double y[17][2]; 
+    double u[17][2];
+    double y[17][2];
     //double u;
     //double y;           		
     double r;
