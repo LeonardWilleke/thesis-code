@@ -37,7 +37,7 @@ paraFoam
 
 Now you can apply the data from the simulation and animate the results. In the picture below, the velocity of the air flow is visualized at `t=0.1s`. The jet streams are clearly visible on top and below the cylinder.
 
-![Results of a coupling of OpenFOAM with Dummy](images/flow-around-cylinder-controlled-result.eps)
+![Results of a coupling of OpenFOAM with Dummy](images/flow-around-cylinder-controlled-result.pdf)
 
 ## References
 
