@@ -6,4 +6,4 @@ FMUs/cmake/*/build/
 *event*.json
 
 # visualisations
-*.pdf
+#*.pdf
