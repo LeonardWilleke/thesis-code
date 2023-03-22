@@ -22,7 +22,7 @@ write_data_name = "Velocity"
 read_data_name = "VelocityGradient"
 mesh_name = "Mesh-Controller"
 
-num_vertices = 34  # Number of vertices
+num_vertices = 2  # Number of vertices
 
 solver_process_index = 0
 solver_process_size = 1
