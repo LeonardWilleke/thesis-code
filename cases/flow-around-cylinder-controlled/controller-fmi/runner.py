@@ -47,10 +47,19 @@ output_names		 		= precice_data["simulation_params"]["output"]
 signal_names				= fmi_data["input_signals"]["names"]
 signal_data					= fmi_data["input_signals"]["data"]
 
-fmu_read_data_name			= precice_data["simulation_params"]["fmu_read_data_name"]
-fmu_write_data_name 		= precice_data["simulation_params"]["fmu_write_data_name"]
-vr_read  	 				= [vrs[fmu_read_data_name]]
-vr_write 	 				= [vrs[fmu_write_data_name]]
+fmu_read_data_names			= precice_data["simulation_params"]["fmu_read_data_names"]
+fmu_write_data_names 		= precice_data["simulation_params"]["fmu_write_data_names"]
+
+vr_read = list()
+for read_name in fmu_read_data_names:
+	vr = vrs[read_name]
+	vr_read.append(vr)
+
+vr_write = list()
+for write_name in fmu_write_data_names:
+	vr = vrs[write_name]
+	vr_write.append(vr)
+
 
 can_get_and_set_fmu_state	= model_description.coSimulation.canGetAndSetFMUstate 
 
@@ -128,7 +137,7 @@ my_dt = precice_dt  # use my_dt < precice_dt for subcycling
 
 # write initial data
 if interface.is_action_required(precice.action_write_initial_data()):
-    interface.write_block_vector_data(write_data_id, vertex_ids, write_data)
+    interface.write_vector_data(write_data_id, vertex_ids, write_data)
     interface.mark_action_fulfilled(precice.action_write_initial_data())
 
 interface.initialize_data()
@@ -163,29 +172,28 @@ while interface.is_coupling_ongoing():
     dt = np.min([precice_dt, my_dt])
     
     # Read data from other participant
-    read_data = interface.read_block_vector_data(read_data_id, vertex_ids)
+    read_data = interface.read_vector_data(read_data_id, vertex_ids)
     
-    # TEMPORARY - Turn vector into scalar
-    read_data_scalar = np.mean(read_data)
-    
+    # Create list 
+    read_data = list(read_data)
+
     # Set input signals to FMU
     input.apply(t)
     
     # Compute next time step
     if is_fmi1 or is_fmi2: 
-    	fmu.setReal(vr_read, [read_data_scalar])
+    	fmu.setReal(vr_read, read_data)
     	fmu.doStep(t, dt)
     	result = fmu.getReal(vr_write)
     if is_fmi3:
-    	fmu.setFloat64(vr_read, [read_data_scalar])
+    	fmu.setFloat64(vr_read, read_data)
     	fmu.doStep(t, dt)
     	result = fmu.getFloat64(vr_write)
 
-    # TEMPORARY - Turn scalar into vector
-    write_data_scalar = result[0]
-    write_data = write_data_scalar * np.ones((num_vertices, dimensions))
 
-    interface.write_block_vector_data(write_data_id, vertex_ids, write_data)
+    write_data = np.array(result)
+    
+    interface.write_vector_data(write_data_id, vertex_ids, write_data)
 
     t = t + dt
     
