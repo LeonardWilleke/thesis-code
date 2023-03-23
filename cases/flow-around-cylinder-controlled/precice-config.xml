@@ -9,31 +9,36 @@
   <solver-interface dimensions="2" >
    
     <data:vector name="Velocity"  />
-    <data:vector name="VelocityGradient"  />
+    <data:vector name="Force"  />
 
     <mesh name="Mesh-Controller">
       <use-data name="Velocity" />
-      <use-data name="VelocityGradient" />
+      <use-data name="Force" />
     </mesh>
 
-    <mesh name="Mesh-Fluid">
+    <mesh name="Mesh-Fluid-Jet">
       <use-data name="Velocity" />
-      <use-data name="VelocityGradient" />
+    </mesh>
+    
+    <mesh name="Mesh-Fluid-Cylinder">
+      <use-data name="Force" />
     </mesh>
 
     <participant name="Controller">
       <use-mesh name="Mesh-Controller" provide="yes"/>
       <write-data name="Velocity" mesh="Mesh-Controller" />
-      <read-data name="VelocityGradient" mesh="Mesh-Controller" />
+      <read-data name="Force" mesh="Mesh-Controller" />
     </participant>
 
     <participant name="Fluid">
       <use-mesh name="Mesh-Controller" from="Controller"/>
-      <use-mesh name="Mesh-Fluid" provide="yes"/>
-      <mapping:nearest-neighbor direction="read"  from="Mesh-Controller" to="Mesh-Fluid" constraint="consistent" />
-      <mapping:nearest-neighbor direction="write"  from="Mesh-Fluid" to="Mesh-Controller" constraint="consistent" />
-      <read-data  name="Velocity" mesh="Mesh-Fluid" />
-      <write-data  name="VelocityGradient" mesh="Mesh-Fluid" />
+      <use-mesh name="Mesh-Fluid-Jet" provide="yes"/>
+      <use-mesh name="Mesh-Fluid-Cylinder" provide="yes"/>
+      <mapping:nearest-neighbor direction="read"  from="Mesh-Controller" to="Mesh-Fluid-Jet" constraint="consistent" />
+      <mapping:nearest-neighbor direction="write"  from="Mesh-Fluid-Cylinder" to="Mesh-Controller" constraint="conservative" />
+      <read-data  name="Velocity" mesh="Mesh-Fluid-Jet" />
+      <write-data  name="Force" mesh="Mesh-Fluid-Cylinder" />
+      <export:vtu directory="export" />
     </participant>
 
     <m2n:sockets from="Controller" to="Fluid" exchange-directory="../"/>
@@ -43,7 +48,7 @@
       <max-time value="2" />
       <time-window-size value="0.05" />
       <exchange data="Velocity" mesh="Mesh-Controller" from="Controller" to="Fluid"/>
-      <exchange data="VelocityGradient" mesh="Mesh-Controller" from="Fluid" to="Controller"/>
+      <exchange data="Force" mesh="Mesh-Controller" from="Fluid" to="Controller"/>
     </coupling-scheme:serial-explicit>                        
   </solver-interface>
 

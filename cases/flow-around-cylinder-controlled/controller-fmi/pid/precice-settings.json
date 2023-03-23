@@ -4,8 +4,8 @@
 		"config_file_name": "../precice-config.xml",
 		"mesh_name": "Mesh-Controller",
 		"write_data_name": "Velocity",
-		"read_data_name": "VelocityGradient",
-		"num_vertices": 17,
+		"read_data_name": "Force",
+		"num_vertices": 1,
 		"solver_process_index": 0,
 		"solver_process_size": 1
     },

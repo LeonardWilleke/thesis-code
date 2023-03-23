@@ -14,6 +14,8 @@ set -e
     cleanTimeDirectories
     rm -rf ./preCICE-output/
     rm -rf ./precice-*/
+    rm -rf ../precice-*/
+    rm -rf ./export/
     rm -rf ./postProcessing/*/*[1-9]*
     rm -f log.*
 )

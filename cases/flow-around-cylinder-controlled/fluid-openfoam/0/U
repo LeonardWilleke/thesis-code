@@ -16270,7 +16270,8 @@ boundaryField
     }
     cylinder
     {
-        type            noSlip;
+        type            fixedValue;
+        value           uniform ( 0 0 0 );
     }
     jet1
     {

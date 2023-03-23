@@ -3,12 +3,15 @@
     	"r":	0.0
     },
     "initial_conditions": {
+    	"kp":	-100,
+    	"ki":	0,
+    	"kd":	0
     
     },
     "input_signals": {
     	"names":	["time",	"kp",	"ki",	"kd"],
 		"data":		[
-					[0.0,		0.001,	0.0,	0.0]
+					[0.0,		100.0,	0.0,	0.0]
 					]
     }
 }

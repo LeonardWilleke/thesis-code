@@ -19,13 +19,13 @@ preciceConfig "../precice-config.xml";
 
 participant Fluid;
 
-modules (FF);
+modules (FSI FF);
 
 interfaces
 {
   Interface1
   {
-    mesh              Mesh-Fluid;
+    mesh              Mesh-Fluid-Jet;
     locations         faceCenters;
     patches           (jet1 jet2);
     
@@ -36,10 +36,28 @@ interfaces
     
     writeData
     (
-      VelocityGradient
+    );
+  }; 
+  Interface2
+  {
+    mesh              Mesh-Fluid-Cylinder;
+    locations         faceCenters;
+    patches           (cylinder);
+    
+    readData
+    (
+    );
+    
+    writeData
+    (
+      Force
     );
   }; 
 };
 
+FSI
+{
+  rho rho [1 -3 0 0 0 0 0] 1.225;
+}
 
 // ************************************************************************* //

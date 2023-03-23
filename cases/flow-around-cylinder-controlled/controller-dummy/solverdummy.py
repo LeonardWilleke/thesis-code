@@ -19,10 +19,10 @@ configuration_file_name = args.configurationFileName
 
 participant_name = "Controller"
 write_data_name = "Velocity"
-read_data_name = "VelocityGradient"
+read_data_name = "Force"
 mesh_name = "Mesh-Controller"
 
-num_vertices = 2  # Number of vertices
+num_vertices = 1  # Number of vertices
 
 solver_process_index = 0
 solver_process_size = 1
@@ -63,7 +63,8 @@ while interface.is_coupling_ongoing():
     read_data = interface.read_block_vector_data(read_data_id, vertex_ids)
     print(read_data)
 
-    write_data[:,:] = 0.5
+    write_data[0,0] = 0
+    write_data[0,1] = 100 * read_data[0,0]
 
     interface.write_block_vector_data(write_data_id, vertex_ids, write_data)
 
