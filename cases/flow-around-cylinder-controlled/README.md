@@ -45,4 +45,4 @@ Now you can apply the data from the simulation and animate the results. In the p
 
 ## Contribution
 
-Many thanks to Mosayeb Shams from Heriot-Watt University further adapted the test case for this use
+Many thanks to Mosayeb Shams from Heriot-Watt University who further adapted the test case for this use
