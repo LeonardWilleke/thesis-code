@@ -18,4 +18,6 @@ set -e
     rm -rf ./export/
     rm -rf ./postProcessing/*/*[1-9]*
     rm -f log.*
+    rm -f *.log
+    rm -rf ./*.json
 )

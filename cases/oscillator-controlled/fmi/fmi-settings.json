@@ -1,6 +1,6 @@
 {
     "model_params": {
-    	"r":	0.0
+    	"r":	0.5
     },
     "initial_conditions": {
     
@@ -8,7 +8,8 @@
     "input_signals": {
     	"names":	["time",	"kp",	"ki",	"kd"],
 		"data":		[
-					[0.0,		0.0,	0.0,	0.0]
+					[0.0,		0.0,	0.0,	0.0],
+					[2.0,		800.0,	1500.0,	20.0]
 					]
     }
 }

@@ -1,4 +1,7 @@
 #!/bin/sh
 set -e -u
 
-python3 runner.py ./pid/fmi-settings.json pid/precice-settings.json
+fmi_settings_path='../cases/flow-around-cylinder-controlled/controller-fmi/fmi-settings.json'
+precice_settings_path='../cases/flow-around-cylinder-controlled/controller-fmi/precice-settings.json'
+
+python3 ../../../runner/runner.py $fmi_settings_path $precice_settings_path

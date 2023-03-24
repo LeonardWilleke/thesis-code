@@ -12,11 +12,43 @@ import shutil
 import sys
 import json
 
+
+### Define functions
+
+def precice_read_data(data_type, read_data_id, vertex_id):
+	"""
+	Reads data from preCICE. The preCICE API call depends on the data type, scalar or vector.
+	"""
+	
+	if data_type == "scalar":
+		read_data = interface.read_scalar_data(read_data_id, vertex_id)
+	elif data_type == "vector":
+		read_data = interface.read_vector_data(read_data_id, vertex_id)
+	else:
+		raise Exception("Please choose data type from: scalar, vector.")
+		
+	return read_data
+
+
+def precice_write_data(data_type, write_data_id, vertex_id, write_data):
+	"""
+	Writes data to preCICE. The preCICE API call depends on the data type, scalar or vector.
+	"""
+	
+	if data_type == "scalar":
+		write_data = interface.write_scalar_data(write_data_id, vertex_id, write_data)
+	elif data_type == "vector":
+		write_data = interface.write_vector_data(write_data_id, vertex_id, write_data)
+	else:
+		raise Exception("Please choose data type from: scalar, vector.")
+
+
+
 ### Load settings from json files
 
 parser = argparse.ArgumentParser()
-parser.add_argument("fmi_setting_file", help="Path to the fmi setting file.", type=str)
-parser.add_argument("precice_setting_file", help="Path to the precice setting file for the FMU coupling.", type=str)
+parser.add_argument("fmi_setting_file", help="Path to the fmi setting file (*.json).", type=str)
+parser.add_argument("precice_setting_file", help="Path to the precice setting file (*.json).", type=str)
 args = parser.parse_args()
 
 fmi_setting_file 		= args.fmi_setting_file
@@ -43,9 +75,6 @@ for variable in model_description.modelVariables:
     vrs[variable.name] = variable.valueReference 
 
 output_names		 		= precice_data["simulation_params"]["output"]
-
-signal_names				= fmi_data["input_signals"]["names"]
-signal_data					= fmi_data["input_signals"]["data"]
 
 fmu_read_data_names			= precice_data["simulation_params"]["fmu_read_data_names"]
 fmu_write_data_names 		= precice_data["simulation_params"]["fmu_write_data_names"]
@@ -97,15 +126,22 @@ elif is_fmi3:
 	# Get initial write data
 	fmu_write_data_init = fmu.getFloat64(vr_write)
 
-# Create input signals
 
-dtype = []
-for i in range(len(signal_names)):
-	tpl = tuple([signal_names[i], type(signal_data[0][i])]) # not sure if the type() might cause problems
-	dtype.append(tpl)
+# Create input object
 
-signals = np.array([tuple(i) for i in signal_data],dtype=dtype) # this should work fine
+try:
+	signal_names	= fmi_data["input_signals"]["names"]
+	signal_data		= fmi_data["input_signals"]["data"]
+	dtype 			= []
+	for i in range(len(signal_names)):
+		tpl = tuple([signal_names[i], type(signal_data[0][i])]) # not sure if the type() might cause problems
+		dtype.append(tpl)
+	signals = np.array([tuple(i) for i in signal_data],dtype=dtype) # this should work fine
+except:
+	signals = None
+	
 input 	= Input(fmu, model_description, signals)
+
 
 ### preCICE setup
 
@@ -116,28 +152,32 @@ interface = precice.Interface(
 	precice_data["coupling_params"]["solver_process_size"]
 	)
 
-mesh_id 		= interface.get_mesh_id(precice_data["coupling_params"]["mesh_name"])
-dimensions 		= interface.get_dimensions()
-num_vertices 	= precice_data["coupling_params"]["num_vertices"]
+mesh_id 			= interface.get_mesh_id(precice_data["coupling_params"]["mesh_name"])
+dimensions 			= interface.get_dimensions()
+num_vertices 		= precice_data["coupling_params"]["num_vertices"]
 
-vertices 		= np.zeros((num_vertices, dimensions))
-read_data 		= np.zeros((num_vertices, dimensions))
-write_data 		= np.zeros((num_vertices, dimensions))
+vertices 			= np.zeros((num_vertices, dimensions))
+read_data 			= np.zeros((num_vertices, dimensions))
+write_data 			= np.zeros((num_vertices, dimensions))
+
+vertex_id 			= interface.set_mesh_vertices(mesh_id, vertices)
+read_data_id 		= interface.get_data_id(precice_data["coupling_params"]["read_data"]["name"], mesh_id)
+write_data_id 		= interface.get_data_id(precice_data["coupling_params"]["write_data"]["name"], mesh_id)
+read_data_type  	= precice_data["coupling_params"]["read_data"]["type"]
+write_data_type  	= precice_data["coupling_params"]["write_data"]["type"]
 
 # initial value for write data
-# Currently, the same value is used for all vector entries --> change later
-write_data 	= fmu_write_data_init * np.ones((num_vertices, dimensions))
-
-vertex_ids 		= interface.set_mesh_vertices(mesh_id, vertices)
-read_data_id 	= interface.get_data_id(precice_data["coupling_params"]["read_data_name"], mesh_id)
-write_data_id 	= interface.get_data_id(precice_data["coupling_params"]["write_data_name"], mesh_id)
+if write_data_type == "scalar":
+    write_data = fmu_write_data_init[0]
+elif write_data_type == "vector":
+    write_data = np.array(fmu_write_data_init)
 
 precice_dt = interface.initialize()
 my_dt = precice_dt  # use my_dt < precice_dt for subcycling
 
 # write initial data
 if interface.is_action_required(precice.action_write_initial_data()):
-    interface.write_vector_data(write_data_id, vertex_ids, write_data)
+    precice_write_data(write_data_type, write_data_id, vertex_id, write_data)
     interface.mark_action_fulfilled(precice.action_write_initial_data())
 
 interface.initialize_data()
@@ -172,12 +212,15 @@ while interface.is_coupling_ongoing():
     dt = np.min([precice_dt, my_dt])
     
     # Read data from other participant
-    read_data = interface.read_vector_data(read_data_id, vertex_ids)
+    read_data = precice_read_data(read_data_type, read_data_id, vertex_id)
     
-    # Create list 
-    read_data = list(read_data)
+    # Convert to list for FMU
+    if read_data_type == "scalar":
+    	read_data = [read_data]
+    elif read_data_type == "vector":
+    	read_data = list(read_data)
 
-    # Set input signals to FMU
+    # Set signals in FMU
     input.apply(t)
     
     # Compute next time step
@@ -191,9 +234,14 @@ while interface.is_coupling_ongoing():
     	result = fmu.getFloat64(vr_write)
 
 
-    write_data = np.array(result)
+	# Convert result to double or array for preCICE
+    if write_data_type == "scalar":
+    	write_data = result[0]
+    elif write_data_type == "vector":
+    	write_data = np.array(result)
     
-    interface.write_vector_data(write_data_id, vertex_ids, write_data)
+    # Write data to other participant
+    precice_write_data(write_data_type, write_data_id, vertex_id, write_data)
 
     t = t + dt
     
@@ -213,18 +261,25 @@ while interface.is_coupling_ongoing():
 
 interface.finalize()
 
-# create output directory
-output_dir = os.path.dirname(precice_data["simulation_params"]["output_file_name"])
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
+# store final results
+try:
+	# create output directory
+	output_dir = os.path.dirname(precice_data["simulation_params"]["output_file_name"])
+	if not os.path.exists(output_dir):
+		os.makedirs(output_dir)
 
-# store final result
-recorder.sample(t, force=False)
-results = recorder.result()
-write_csv(precice_data["simulation_params"]["output_file_name"], results)
+	# store data
+	recorder.sample(t, force=False)
+	results = recorder.result()
+	write_csv(precice_data["simulation_params"]["output_file_name"], results)
+	
+except:
+	
+	pass
 
 # terminate FMU
 fmu.terminate()
 fmu.freeInstance()              
 shutil.rmtree(unzipdir, ignore_errors=True)
+
 

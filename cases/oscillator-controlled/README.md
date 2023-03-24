@@ -69,19 +69,17 @@ However, suboptimal gains such as `k_p=0`, `k_i=10` and `k_d=-0.3` cause the sys
 
 For details about the original setup and the integration scheme, refer to [1].
 
-## Open problems
+## Good to know
 
-In some scenarios, the current setup has very different results for explicit and implicit coupling. For example, take the case with `k_p=-120.0`, `k_i=0` and `k_d=0`. The setpoint is set to `r=0`.
+In some scenarios, the results for explicit and implicit coupling are very different. For example, take the case with `k_p=-120.0`, `k_i=0` and `k_d=0`. The setpoint is set to `r=0`.
 
-Results of the explicit coupling look promising:
+Results for explicit coupling:
 
 ![Mass position for serial-explicit coupling](images/tutorials-oscillator-trajectory-control-explicit.png)
 
-Results of the implicit coupling look very different:
+Results for implicit coupling:
 
 ![Mass position for serial-implicit coupling](images/tutorials-oscillator-trajectory-control-implicit.png)
-
-The problem is clearly related to the checkpointing of the PID, especially the kp gain. It vanishes when not using checkpoints for the PID in implicit coupling.
 
 ## References
 
