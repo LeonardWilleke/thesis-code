@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+
+<precice-configuration>
+
+  <log>
+    <sink type="stream" output="stdout"  filter= "%Severity% > debug" format="preCICE:%ColorizedSeverity% %Message%" enabled="true" />	
+  </log>
+
+  <solver-interface dimensions="2" >
+   
+    <data:vector name="Displacement-Cylinder"  />
+    <data:vector name="Displacement-Spring"  />
+    <data:vector name="Force-Spring"  />
+
+    <mesh name="Mesh-Controller">
+      <use-data name="Displacement-Cylinder" />
+      <use-data name="Displacement-Spring" />
+    </mesh>
+    
+    <mesh name="Mesh-Fluid-Controller">
+      <use-data name="Displacement-Cylinder" />
+    </mesh>
+    
+    <mesh name="Mesh-Fluid-Spring">
+      <use-data name="Force-Spring" />
+    </mesh>
+    
+    <mesh name="Mesh-Spring">
+      <use-data name="Displacement-Spring" />
+      <use-data name="Force-Spring" />
+    </mesh>
+
+    <participant name="Controller">
+      <use-mesh name="Mesh-Controller" provide="yes"/>
+      <use-mesh name="Mesh-Fluid-Controller" from="Fluid"/>
+      <write-data name="Displacement-Spring" mesh="Mesh-Controller" />
+      <read-data name="Displacement-Cylinder" mesh="Mesh-Controller" />
+      <mapping:nearest-neighbor direction="read"  from="Mesh-Fluid-Controller" to="Mesh-Controller" constraint="consistent" />
+    </participant>
+
+    <participant name="Fluid">
+      <use-mesh name="Mesh-Spring" from="Spring"/>
+      <use-mesh name="Mesh-Fluid-Spring" provide="yes"/>
+      <use-mesh name="Mesh-Fluid-Controller" provide="yes"/>
+      <mapping:nearest-neighbor direction="read"  from="Mesh-Spring" to="Mesh-Fluid-Spring" constraint="consistent" />
+      <read-data  name="Force-Spring" mesh="Mesh-Fluid-Spring" />
+      <write-data  name="Displacement-Cylinder" mesh="Mesh-Fluid-Controller" />
+      <export:vtu directory="export" />
+    </participant>
+    
+    <participant name="Spring">
+      <use-mesh name="Mesh-Spring" provide="yes"/>
+      <use-mesh name="Mesh-Controller" from="Controller"/>
+      <write-data name="Force-Spring" mesh="Mesh-Spring" />
+      <read-data name="Displacement-Spring" mesh="Mesh-Spring" />
+      <mapping:nearest-neighbor direction="read"  from="Mesh-Controller" to="Mesh-Spring" constraint="consistent" />
+    </participant>
+
+    <m2n:sockets from="Fluid" to="Controller" exchange-directory="../" />
+    <m2n:sockets from="Controller" to="Spring" exchange-directory="../" />
+    <m2n:sockets from="Spring" to="Fluid" exchange-directory="../" />
+
+    <coupling-scheme:serial-explicit> 
+      <participants first="Fluid" second="Controller" /> 
+      <max-time value="2" />
+      <time-window-size value="0.05" />
+      <exchange data="Displacement-Cylinder" mesh="Mesh-Fluid-Controller" from="Fluid" to="Controller"/>
+    </coupling-scheme:serial-explicit>
+    
+    <coupling-scheme:serial-explicit> 
+      <participants first="Controller" second="Spring" /> 
+      <max-time value="2" />
+      <time-window-size value="0.05" />
+      <exchange data="Displacement-Spring" mesh="Mesh-Controller" from="Controller" to="Spring"/>
+    </coupling-scheme:serial-explicit>
+    
+    <coupling-scheme:serial-explicit> 
+      <participants first="Spring" second="Fluid" /> 
+      <max-time value="2" />
+      <time-window-size value="0.05" />
+      <exchange data="Force-Spring" mesh="Mesh-Spring" from="Spring" to="Fluid"/>
+    </coupling-scheme:serial-explicit>                    
+  </solver-interface>
+
+</precice-configuration>

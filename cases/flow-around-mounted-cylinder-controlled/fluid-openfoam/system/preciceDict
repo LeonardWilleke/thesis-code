@@ -1,0 +1,63 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Version:  v2112
+    \\  /    A nd           | Website:  www.openfoam.com
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      preciceDict;
+}
+
+preciceConfig "../precice-config.xml";
+
+participant Fluid;
+
+modules (FSI);
+
+interfaces
+{
+  Interface1
+  {
+    mesh              Mesh-Fluid-Spring;
+    locations         faceCenters;
+    patches           (cylinder);
+    
+    readData
+    (
+      Force-Spring
+    );
+    
+    writeData
+    (
+    );
+  }; 
+  Interface2
+  {
+    mesh              Mesh-Fluid-Controller;
+    locations         faceCenters;
+    patches           (cylinder);
+    
+    readData
+    (
+    );
+    
+    writeData
+    (
+      Displacement-Cylinder
+    );
+  }; 
+};
+
+FSI
+{
+  rho rho [1 -3 0 0 0 0 0] 1.225;
+}
+
+// ************************************************************************* //

@@ -1,0 +1,17 @@
+{
+    "model_params": {
+    	"r":	0.0
+    },
+    "initial_conditions": {
+    	"kp":	0,
+    	"ki":	0,
+    	"kd":	0
+    
+    },
+    "input_signals": {
+    	"names":	["time",	"kp",	"ki",	"kd"],
+		"data":		[
+					[0.0,		0.0,	0.0,	0.0]
+					]
+    }
+}
