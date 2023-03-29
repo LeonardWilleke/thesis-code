@@ -43,13 +43,16 @@
 
     <m2n:sockets from="Controller" to="Fluid" exchange-directory="../"/>
 
-    <coupling-scheme:serial-explicit> 
+    <coupling-scheme:serial-implicit> 
       <participants first="Controller" second="Fluid" /> 
       <max-time value="2" />
       <time-window-size value="0.05" />
+      <max-iterations value="200" />
+      <relative-convergence-measure data="Velocity" mesh="Mesh-Controller" limit="1e-10"/>
+      <relative-convergence-measure data="Force" mesh="Mesh-Controller" limit="1e-10"/>
       <exchange data="Velocity" mesh="Mesh-Controller" from="Controller" to="Fluid"/>
       <exchange data="Force" mesh="Mesh-Controller" from="Fluid" to="Controller"/>
-    </coupling-scheme:serial-explicit>                        
+    </coupling-scheme:serial-implicit>                        
   </solver-interface>
 
 </precice-configuration>
