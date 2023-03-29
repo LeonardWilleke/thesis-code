@@ -1,20 +1,8 @@
 ## Notes on the current progress
 
-- Case file is set up for coupling of 3 participants
-- Spring and Controller are ready for coupling
-- OpenFOAM exits because it cant find the pointDisplacement file. I added a respective file, but something else is still wrong.
-
-The error reads
-
-```bash
-Cannot find file "points" in directory "polyMesh" in times "0" down to constant
-```
-
-and is connected to the function call 
-
-```bash
-Selecting dynamicFvMesh dynamicMotionSolverFvMesh
-```
+- 3 way coupling works
+- simulation crashes after some time, probably because the mesh around the cylinder is too fine
+- another solution could be to use implicit coupling, this would help too
 
 ## Similar case from OpenFOAM tutorials
 
