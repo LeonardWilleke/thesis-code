@@ -27,7 +27,7 @@ split_filename = filename.split('/')
 solver = split_filename[0]
 
  
-if solver == 'controller-fmi':
+if solver == "controller-fmi":
     df = pd.read_csv(filename, delimiter=',')
     if args.plotType == PlotType.U_OVER_T.name:
         plt.plot(df['time'], df['u'])
@@ -58,5 +58,7 @@ if solver == 'controller-fmi':
         plt.title(PlotType.VY_OVER_T.value)
     else:
         print("Warning: Controller can not plot this value.") 
+else:
+    print("Warning: Could not find solver called", solver, ". Please check your filepath. Maybe you need to remove any ./ or ../ from the start.")
 
 plt.show()
