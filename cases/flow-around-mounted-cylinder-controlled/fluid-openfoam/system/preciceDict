@@ -25,32 +25,18 @@ interfaces
 {
   Interface1
   {
-    mesh              Mesh-Fluid-Spring;
+    mesh              Mesh-Fluid;
     locations         faceCenters;
-    patches           (cylinder);
+    patches           (cylinder jet1 jet2);
     
     readData
-    (
-      Force-Spring
-    );
-    
-    writeData
-    (
-    );
-  }; 
-  Interface2
-  {
-    mesh              Mesh-Fluid-Controller;
-    locations         faceCenters;
-    patches           (cylinder);
-    
-    readData
-    (
-    );
-    
-    writeData
     (
       Displacement-Cylinder
+    );
+    
+    writeData
+    (
+      Force
     );
   }; 
 };

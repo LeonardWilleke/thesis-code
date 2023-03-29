@@ -10,76 +10,72 @@
    
     <data:vector name="Displacement-Cylinder"  />
     <data:vector name="Displacement-Spring"  />
-    <data:vector name="Force-Spring"  />
+    <data:vector name="Force"  />
 
     <mesh name="Mesh-Controller">
       <use-data name="Displacement-Cylinder" />
       <use-data name="Displacement-Spring" />
     </mesh>
     
-    <mesh name="Mesh-Fluid-Controller">
+    <mesh name="Mesh-Fluid">
       <use-data name="Displacement-Cylinder" />
+      <use-data name="Force" />
     </mesh>
     
-    <mesh name="Mesh-Fluid-Spring">
-      <use-data name="Force-Spring" />
-    </mesh>
-    
-    <mesh name="Mesh-Spring">
+    <mesh name="Mesh-Solid">
       <use-data name="Displacement-Spring" />
-      <use-data name="Force-Spring" />
+      <use-data name="Displacement-Cylinder" />
+      <use-data name="Force" />
     </mesh>
 
     <participant name="Controller">
       <use-mesh name="Mesh-Controller" provide="yes"/>
-      <use-mesh name="Mesh-Fluid-Controller" from="Fluid"/>
+      <use-mesh name="Mesh-Solid" from="Solid"/>
       <write-data name="Displacement-Spring" mesh="Mesh-Controller" />
       <read-data name="Displacement-Cylinder" mesh="Mesh-Controller" />
-      <mapping:nearest-neighbor direction="read"  from="Mesh-Fluid-Controller" to="Mesh-Controller" constraint="consistent" />
+      <mapping:nearest-neighbor direction="read"  from="Mesh-Solid" to="Mesh-Controller" constraint="consistent" />
     </participant>
 
     <participant name="Fluid">
-      <use-mesh name="Mesh-Spring" from="Spring"/>
-      <use-mesh name="Mesh-Fluid-Spring" provide="yes"/>
-      <use-mesh name="Mesh-Fluid-Controller" provide="yes"/>
-      <mapping:nearest-neighbor direction="read"  from="Mesh-Spring" to="Mesh-Fluid-Spring" constraint="consistent" />
-      <read-data  name="Force-Spring" mesh="Mesh-Fluid-Spring" />
-      <write-data  name="Displacement-Cylinder" mesh="Mesh-Fluid-Controller" />
+      <use-mesh name="Mesh-Fluid" provide="yes"/>
+      <use-mesh name="Mesh-Solid" from="Solid"/>
+      <mapping:nearest-neighbor direction="read"  from="Mesh-Solid" to="Mesh-Fluid" constraint="consistent" />
+      <write-data  name="Force" mesh="Mesh-Fluid" />
+      <read-data  name="Displacement-Cylinder" mesh="Mesh-Fluid" />
       <export:vtu directory="export" />
     </participant>
     
-    <participant name="Spring">
-      <use-mesh name="Mesh-Spring" provide="yes"/>
+    <participant name="Solid">
+      <use-mesh name="Mesh-Solid" provide="yes"/>
       <use-mesh name="Mesh-Controller" from="Controller"/>
-      <write-data name="Force-Spring" mesh="Mesh-Spring" />
-      <read-data name="Displacement-Spring" mesh="Mesh-Spring" />
-      <mapping:nearest-neighbor direction="read"  from="Mesh-Controller" to="Mesh-Spring" constraint="consistent" />
+      <use-mesh name="Mesh-Fluid" from="Fluid"/>
+      <write-data name="Displacement-Cylinder" mesh="Mesh-Solid" />
+      <read-data name="Force" mesh="Mesh-Solid" />
+      <read-data name="Displacement-Spring" mesh="Mesh-Solid" />
+      <mapping:nearest-neighbor direction="read"  from="Mesh-Controller" to="Mesh-Solid" constraint="consistent" />
+      <mapping:nearest-neighbor direction="read"  from="Mesh-Fluid" to="Mesh-Solid" constraint="conservative" />
     </participant>
 
-    <m2n:sockets from="Fluid" to="Controller" exchange-directory="../" />
-    <m2n:sockets from="Controller" to="Spring" exchange-directory="../" />
-    <m2n:sockets from="Spring" to="Fluid" exchange-directory="../" />
-
-    <coupling-scheme:serial-explicit> 
-      <participants first="Fluid" second="Controller" /> 
-      <max-time value="2" />
-      <time-window-size value="0.05" />
-      <exchange data="Displacement-Cylinder" mesh="Mesh-Fluid-Controller" from="Fluid" to="Controller"/>
-    </coupling-scheme:serial-explicit>
+    <m2n:sockets from="Controller" to="Solid" exchange-directory="../" />
+    <m2n:sockets from="Fluid" to="Solid" exchange-directory="../" />
     
     <coupling-scheme:serial-explicit> 
-      <participants first="Controller" second="Spring" /> 
+      <participants first="Fluid" second="Solid" /> 
       <max-time value="2" />
       <time-window-size value="0.05" />
-      <exchange data="Displacement-Spring" mesh="Mesh-Controller" from="Controller" to="Spring"/>
-    </coupling-scheme:serial-explicit>
+      <exchange data="Force" mesh="Mesh-Fluid" from="Fluid" to="Solid"/>
+      <exchange data="Displacement-Cylinder" mesh="Mesh-Solid" from="Solid" to="Fluid"/>
+    </coupling-scheme:serial-explicit> 
     
     <coupling-scheme:serial-explicit> 
-      <participants first="Spring" second="Fluid" /> 
+      <participants first="Solid" second="Controller" /> 
       <max-time value="2" />
       <time-window-size value="0.05" />
-      <exchange data="Force-Spring" mesh="Mesh-Spring" from="Spring" to="Fluid"/>
-    </coupling-scheme:serial-explicit>                    
+      <exchange data="Displacement-Spring" mesh="Mesh-Controller" from="Controller" to="Solid"/>
+      <exchange data="Displacement-Cylinder" mesh="Mesh-Solid" from="Solid" to="Controller"/>
+    </coupling-scheme:serial-explicit>
+    
+                   
   </solver-interface>
 
 </precice-configuration>

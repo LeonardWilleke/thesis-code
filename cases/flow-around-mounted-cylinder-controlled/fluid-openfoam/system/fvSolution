@@ -35,6 +35,17 @@ solvers
         $p;
         relTol 0;    
     }
+    
+    pcorr
+    {
+        $p;
+    }
+
+    pcorrFinal
+    {
+        $pcorr;
+        relTol          0;
+    }
 
     "(U|k|omega|epsilon).*"
     {
@@ -43,6 +54,21 @@ solvers
         tolerance 1e-8;
         relTol 0;      
         minIter 3;
+    }
+    
+    "(cellDisplacement)"
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-6;
+        relTol          1e-4;
+        minIter         2;
+    }
+
+    "(cellDisplacement)Final"
+    {
+        $cellDisplacement;
+        relTol          0;
     }
 }
 
