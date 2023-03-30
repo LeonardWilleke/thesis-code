@@ -1,6 +1,7 @@
 {
     "model_params": {
-    	"r":	0.0
+    	"r":	0.0,
+    	"use_implicit_method":	true
     },
     "initial_conditions": {
     	"kp":	0,

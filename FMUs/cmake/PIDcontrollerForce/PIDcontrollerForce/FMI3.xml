@@ -56,6 +56,7 @@
     <Float64 name="force_y" valueReference="13" causality="input" variability="continuous" declaredType="ControlVariable" start="0" description="Force y direction"/>
     <Float64 name="velocity_x" valueReference="14" causality="output" variability="continuous" initial="exact" declaredType="ControlVariable" start="0" description="Velocity x direction"/>
     <Float64 name="velocity_y" valueReference="15" causality="output" variability="continuous" initial="exact" declaredType="ControlVariable" start="0" description="Velocity y direction"/>
+    <Boolean name="use_implicit_method" valueReference="16" causality="parameter" variability="fixed" start="false" description="Boolean flag to choose the integration method: false = explicit-euler, true = implicit-trapezoid"/>
     
   </ModelVariables>
 

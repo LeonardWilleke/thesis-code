@@ -526,12 +526,6 @@ void doFixedStep(ModelInstance *comp, bool* stateEvent, bool* timeEvent) {
 }
 
 void doAdaptiveStep(ModelInstance *comp, bool* stateEvent, bool* timeEvent) {
-
-    // choose integration scheme
-    char integrationScheme[] = "explicit";
-    // options
-    char integrationExplicit[] = "explicit";
-    char integrationImplicit[] = "implicit";
     
     // create local variables
     double t 	= comp->time;
@@ -544,19 +538,19 @@ void doAdaptiveStep(ModelInstance *comp, bool* stateEvent, bool* timeEvent) {
     M(e) = M(r) - M(y);
     
     // compute control output u
-    if (strcmp(integrationScheme, integrationExplicit) == 0) {
+    if (M(use_implicit_method)) {
+        // implicit trapezoid
+        M(P) = M(kp) * M(e);
+        M(I) = M(ki) * (M(I) + (M(e) + M(e_ls)) * dt / 2);
+        M(D) = M(kd) * (M(e)-M(e_ls))/dt;
+        M(u) = M(P) + M(I) + M(D);
+        }
+    else {
         // explicit euler
         M(P) = M(kp) * M(e);
         M(I) = M(ki) * (M(I) + M(e)*dt);
         M(D) = M(kd) * (M(e)-M(e_ls))/dt;
         M(u) = M(P) + M(I) + M(D); 
-        }
-    else if (strcmp(integrationScheme, integrationImplicit) == 0) {
-        // trapezoid
-        M(P) = M(kp) * M(e);
-        M(I) = M(ki) * (M(I) + (M(e) + M(e_ls)) * dt / 2);
-        M(D) = M(kd) * (M(e)-M(e_ls))/dt;
-        M(u) = M(P) + M(I) + M(D);
     }
     
     // save error for next timestep

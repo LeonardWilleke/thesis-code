@@ -23,6 +23,8 @@ void setStartValues(ModelInstance *comp) {
     M(velocity_x)   = 0;
     M(velocity_y)	= 0;
     
+    M(use_implicit_method) = false;
+    
 }
 
 Status calculateValues(ModelInstance *comp) {
@@ -88,6 +90,21 @@ Status getFloat64(ModelInstance* comp, ValueReference vr, double *value, size_t 
     }
 }
 
+Status getBoolean(ModelInstance* comp, ValueReference vr, bool *value, size_t *index) {
+
+    switch (vr) {
+        case vr_use_implicit_method:
+            value[(*index)++] = M(use_implicit_method);
+            break;
+        default:
+            logError(comp, "Get Boolean is not allowed for value reference %u.", vr);
+            return Error;
+    }
+
+    return OK;
+}
+
+
 Status setFloat64(ModelInstance* comp, ValueReference vr, const double *value, size_t *index) {
     switch (vr) {
 
@@ -119,6 +136,22 @@ Status setFloat64(ModelInstance* comp, ValueReference vr, const double *value, s
             logError(comp, "Unexpected value reference: %u.", vr);
             return Error;
     }
+}
+
+Status setBoolean(ModelInstance* comp, ValueReference vr, const bool *value, size_t *index) {
+
+    switch (vr) {
+        case vr_use_implicit_method:
+            M(use_implicit_method) = value[(*index)++];
+            break;
+        default:
+            logError(comp, "Set Boolean is not allowed for value reference %u.", vr);
+            return Error;
+    }
+
+    comp->isDirtyValues = true;
+
+    return OK;
 }
 
 Status getOutputDerivative(ModelInstance *comp, ValueReference valueReference, int order, double *value) {
