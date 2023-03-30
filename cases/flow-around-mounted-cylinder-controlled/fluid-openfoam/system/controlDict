@@ -23,13 +23,13 @@ startTime       0;
 
 stopAt          endTime;
 
-endTime    2.0;
+endTime    1;
 
-deltaT          0.05;
+deltaT          0.0001;
 
 writeControl   runTime;
 
-writeInterval   0.1;
+writeInterval   0.001;
 
 purgeWrite      0;
 
@@ -53,8 +53,6 @@ functions
 {
     #includeFunc forceCoeffs
     #includeFunc probes
-    #includeFunc flowRateJet1
-    #includeFunc flowRateJet2
     #includeFunc preCICE_Adapter 
 }
 

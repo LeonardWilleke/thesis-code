@@ -44,17 +44,16 @@ boundaryField
         type            movingWallVelocity;
         value           uniform ( 0 0 0 );
     }
-    jet1
-    {
-        type            movingWallVelocity;
-        value           uniform ( 0 0 0 );
-    }
-    jet2
+    jet
     {
         type            movingWallVelocity;
         value           uniform ( 0 0 0 );
     }
     frontAndBack
+    {
+        type            empty;
+    }
+    defaultFaces
     {
         type            empty;
     }

@@ -38,39 +38,50 @@
 
     <participant name="Fluid">
       <use-mesh name="Mesh-Fluid" provide="yes"/>
-      <use-mesh name="Mesh-Solid" from="Solid"/>
+      <use-mesh name="Mesh-Solid" from="Solid" geometric-filter="no-filter"/>
       <mapping:nearest-neighbor direction="read"  from="Mesh-Solid" to="Mesh-Fluid" constraint="consistent" />
+      <mapping:nearest-neighbor direction="write"  from="Mesh-Fluid" to="Mesh-Solid" constraint="conservative" />
       <write-data  name="Force" mesh="Mesh-Fluid" />
       <read-data  name="Displacement-Cylinder" mesh="Mesh-Fluid" />
+      <watch-point mesh="Mesh-Fluid" name="all-data" coordinate="0.0; 0.0"/>
       <export:vtu directory="export" />
     </participant>
     
     <participant name="Solid">
       <use-mesh name="Mesh-Solid" provide="yes"/>
       <use-mesh name="Mesh-Controller" from="Controller"/>
-      <use-mesh name="Mesh-Fluid" from="Fluid"/>
       <write-data name="Displacement-Cylinder" mesh="Mesh-Solid" />
       <read-data name="Force" mesh="Mesh-Solid" />
       <read-data name="Displacement-Spring" mesh="Mesh-Solid" />
       <mapping:nearest-neighbor direction="read"  from="Mesh-Controller" to="Mesh-Solid" constraint="consistent" />
-      <mapping:nearest-neighbor direction="read"  from="Mesh-Fluid" to="Mesh-Solid" constraint="conservative" />
     </participant>
 
     <m2n:sockets from="Controller" to="Solid" exchange-directory="../" />
     <m2n:sockets from="Fluid" to="Solid" exchange-directory="../" />
     
-    <coupling-scheme:serial-explicit> 
+    <coupling-scheme:serial-implicit> 
       <participants first="Fluid" second="Solid" /> 
-      <max-time value="2" />
-      <time-window-size value="0.05" />
-      <exchange data="Force" mesh="Mesh-Fluid" from="Fluid" to="Solid"/>
+      <max-time value="1" />
+      <time-window-size value="0.0001" />
+      <max-iterations value="100" />
+      <exchange data="Force" mesh="Mesh-Solid" from="Fluid" to="Solid"/>
       <exchange data="Displacement-Cylinder" mesh="Mesh-Solid" from="Solid" to="Fluid"/>
-    </coupling-scheme:serial-explicit> 
+      <relative-convergence-measure data="Force" mesh="Mesh-Solid" limit="1e-3"/>
+      <relative-convergence-measure data="Displacement-Cylinder" mesh="Mesh-Solid" limit="1e-3"/>
+      <acceleration:IQN-ILS>
+        <data name="Displacement-Cylinder" mesh="Mesh-Solid" />
+        <preconditioner type="residual-sum" />
+        <filter type="QR2" limit="1e-2" />
+        <initial-relaxation value="0.5" />
+        <max-used-iterations value="10" />
+        <time-windows-reused value="15" />
+      </acceleration:IQN-ILS>
+    </coupling-scheme:serial-implicit> 
     
     <coupling-scheme:serial-explicit> 
       <participants first="Solid" second="Controller" /> 
-      <max-time value="2" />
-      <time-window-size value="0.05" />
+      <max-time value="1" />
+      <time-window-size value="0.0001" />
       <exchange data="Displacement-Spring" mesh="Mesh-Controller" from="Controller" to="Solid"/>
       <exchange data="Displacement-Cylinder" mesh="Mesh-Solid" from="Solid" to="Controller"/>
     </coupling-scheme:serial-explicit>

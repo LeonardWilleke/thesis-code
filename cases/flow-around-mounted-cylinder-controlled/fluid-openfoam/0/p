@@ -43,15 +43,15 @@ boundaryField
     {
         type            zeroGradient;
     }
-    jet1
-    {
-        type            zeroGradient;
-    }
-    jet2
+    jet
     {
         type            zeroGradient;
     }
     frontAndBack
+    {
+        type            empty;
+    }
+    defaultFaces
     {
         type            empty;
     }

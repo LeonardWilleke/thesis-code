@@ -1,7 +1,7 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  2112                                  |
+|  \\    /   O peration     | Version:  2206                                  |
 |   \\  /    A nd           | Website:  www.openfoam.com                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
@@ -18,59 +18,59 @@ FoamFile
 
 8
 (
+    frontAndBack
+    {
+        type            empty;
+        inGroups        1(empty);
+        nFaces          15954;
+        startFace       15772;
+    }
     inlet
     {
         type            patch;
-        nFaces          21;
-        startFace       23855;
+        nFaces          50;
+        startFace       31726;
     }
     outlet
     {
         type            patch;
-        nFaces          21;
-        startFace       23876;
+        nFaces          50;
+        startFace       31776;
     }
     top
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          110;
-        startFace       23897;
+        nFaces          158;
+        startFace       31826;
     }
     bottom
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          110;
-        startFace       24007;
+        nFaces          158;
+        startFace       31984;
+    }
+    jet
+    {
+        type            wall;
+        inGroups        1(wall);
+        nFaces          1;
+        startFace       32142;
     }
     cylinder
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          594;
-        startFace       24117;
+        nFaces          19;
+        startFace       32143;
     }
-    jet1
-    {
-        type            wall;
-        inGroups        1(wall);
-        nFaces          17;
-        startFace       24711;
-    }
-    jet2
-    {
-        type            wall;
-        inGroups        1(wall);
-        nFaces          17;
-        startFace       24728;
-    }
-    frontAndBack
+    defaultFaces
     {
         type            empty;
         inGroups        1(empty);
-        nFaces          32400;
-        startFace       24745;
+        nFaces          36;
+        startFace       32162;
     }
 )
 

@@ -16,6 +16,7 @@ set -e
     rm -rf ./precice-*/
     rm -rf ../precice-*/
     rm -rf ./export/
+    rm -rf ./processor*
     rm -rf ./postProcessing/*/*[1-9]*
     rm -f log.*
     rm -f *.log

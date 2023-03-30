@@ -14,5 +14,5 @@ solver      displacementLaplacian;
 // OpenFOAM9 or newer: rename "solver" to "motionSolver"
 
 displacementLaplacianCoeffs {
-    diffusivity quadratic inverseDistance (cylinder jet1 jet2);
+    diffusivity inverseDistance (cylinder jet);
 }

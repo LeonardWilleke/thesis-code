@@ -31,13 +31,7 @@ boundaryField
         value           $internalField;
     }
     
-    jet1
-    {
-        type            fixedValue;
-        value           $internalField;
-    }
-    
-    jet2
+    jet
     {
         type            fixedValue;
         value           $internalField;
@@ -54,6 +48,10 @@ boundaryField
     }
 
     frontAndBack
+    {
+        type            empty;
+    }
+    defaultFaces
     {
         type            empty;
     }
