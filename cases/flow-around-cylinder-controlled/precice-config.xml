@@ -47,11 +47,11 @@
       <participants first="Controller" second="Fluid" /> 
       <max-time value="2" />
       <time-window-size value="0.05" />
-      <max-iterations value="200" />
-      <relative-convergence-measure data="Velocity" mesh="Mesh-Controller" limit="1e-10"/>
-      <relative-convergence-measure data="Force" mesh="Mesh-Controller" limit="1e-10"/>
+      <max-iterations value="100" />
       <exchange data="Velocity" mesh="Mesh-Controller" from="Controller" to="Fluid"/>
       <exchange data="Force" mesh="Mesh-Controller" from="Fluid" to="Controller"/>
+      <relative-convergence-measure data="Velocity" mesh="Mesh-Controller" limit="1e-10"/>
+      <relative-convergence-measure data="Force" mesh="Mesh-Controller" limit="1e-10"/>
     </coupling-scheme:serial-implicit>                        
   </solver-interface>
 
