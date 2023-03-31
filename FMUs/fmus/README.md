@@ -16,9 +16,11 @@ Generate the build files with the following commands:
 mkdir build
 cd build
 cmake -DFMI_TYPE=CS -DFMI_VERSION=3 ..
+make
+mv ./{FallingBall|Oscillator|PIDcontroller}.fmu ../../..
 
 ```
-Then run `make` or your preferred build tool to create the FMUs. They will be in the `FMUs` folder. 
+Instead of `make`, you can also use your preferred build tool to create the FMU.
 
 ### Repository structure
 

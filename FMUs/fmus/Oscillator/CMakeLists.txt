@@ -81,7 +81,7 @@ if (${FMI_VERSION} LESS 3)
 ")
 endif ()
 
-set (MODEL_NAMES FallingBall)
+set (MODEL_NAMES Oscillator)
 
 foreach (MODEL_NAME ${MODEL_NAMES})
 
@@ -121,7 +121,7 @@ add_library(${TARGET_NAME} SHARED
   ${MODEL_NAME}/FMI${FMI_VERSION}${FMI_TYPE}.xml
 )
 
-#file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/../fmus)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/../../..)
 
 target_compile_definitions(${TARGET_NAME} PRIVATE
   DISABLE_PREFIX
@@ -204,7 +204,7 @@ endif()
 
 # license
 add_custom_command(TARGET ${TARGET_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
-  "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt"
+  "${CMAKE_CURRENT_SOURCE_DIR}/../LICENSE.txt"
   "${FMU_BUILD_DIR}/documentation/LICENSE.txt"
 )
 
@@ -259,12 +259,12 @@ endif()
 
 # create ZIP archive
 add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E tar "cfv" ${CMAKE_CURRENT_BINARY_DIR}/../../${MODEL_NAME}.fmu --format=zip
+  COMMAND ${CMAKE_COMMAND} -E tar "cfv" ${CMAKE_CURRENT_BINARY_DIR}/${MODEL_NAME}.fmu --format=zip
   ${ARCHIVE_FILES}
   WORKING_DIRECTORY ${FMU_BUILD_DIR} COMMENT "Creating ZIP archive"
 )
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/../../${MODEL_NAME}.fmu DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODEL_NAME}.fmu DESTINATION ${CMAKE_INSTALL_PREFIX})
 
 endforeach(MODEL_NAME)
 
