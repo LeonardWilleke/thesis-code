@@ -1,57 +1,89 @@
-## Parallel execution
+## Setup
 
-To run OpenFOAM in parallel, run the following commands for the Fluid participant:
+We simulate a 2D flow around a cylinder. The cylinder is not fixated, but mounted on a spring-damper system which allows it to move in the y-direction. The vortex shedding of the flow brings the cylinder to oscillate. This setup has received attention as a test case for numerical simulations [1] in the past and is backed up with experimental data [2]. 
+
+The up-and-down oscillation can be counteracted by moving the root point of the spring [3]. To adjust the root point accordingly, a PID controller is implemented. The full setup is shown below:
+
+![Setup of the flow around a mounted cylinder](images/test-case-setup.png)
+
+## Multi coupling
+
+We want to use three participants for the simulation: `Fluid`, `Solid` and `Controller`. For this we need to use a multi-coupling scheme. Read more about the concept [here](https://precice.org/configuration-coupling-multi.html)
+
+We are using a composition of bi-coupling schemes with one implicit coupling between `Fluid` and `Solid` and one explicit coupling between `Solid` and `Controller`. The participants `Fluid` and `Controller` are not coupled, as they don't exchange any data with each other.
+
+The configuration of this case looks like this:
+
+```xml
+<coupling-scheme:serial-implicit> 
+  <participants first="Fluid" second="Solid" /> 
+  ...
+</coupling-scheme:serial-implicit> 
+
+<coupling-scheme:serial-explicit> 
+  <participants first="Solid" second="Controller" /> 
+  ...
+</coupling-scheme:serial-explicit>
+
+```
+
+## About the solvers
+
+OpenFOAM is used for the `Fluid` participant. The spring-damper system is solved in a separate Python `solid` participant. Finally, the PID algorithm is calculated in a FMU as participant `Controller`.
+
+- *OpenFOAM*: Calculates the flow
+- *FMI*: A FMU model run by [runner.py](../../runner). The parameters of the model can be changed in the setting files.
+- *Python*: A python script solving the spring damper system.
+
+## Running the simulation
+
+**Please check the settings first. With the current settings, this case can take up to 45h on a normal laptop.**
+
+Open three seperate terminals. The commands for the `Solid` and the `Controller` are:
 
 ```bash
+cd solid-python
+./run.sh
+```
+
+and
+
+```bash
+cd controller-fmi
+./run.sh
+```
+
+For the `Fluid` participant, it's a good idea to run the case with `pimpleFoam` instead of the `run.sh` script to see the terminal output. You have the option to run OpenFOAM either serial or parallel. The serial simulation can be started by running
+
+```bash
+cd fluid-openfoam
+pimpleFoam
+```
+while for the parallel computaion you need to use
+
+```bash
+cd fluid-openfoam
 decomposePar
 mpirun -np 2 pimpleFoam -parallel
 ```
 
-This should reduce the runtime by ca 50%. However, I currently can't properly plot the results with ParaView.
-But the watchpoint is still created as usual!
+**These instructions need updating, they just refer to the use on a Laptop with 2 physical and 2 virtual cores (4 total).**
 
-You can still run the case in serial with the usual
+## Post-processing
 
-```bash
-pimpleFoam
-```
+Options for post-processing
+- Plot the watchpoint (plot script pending)
+- Plot the outputs of the controller with `plot-timeseries.py`
+- Animate the OpenFOAM results by running `paraFoam`. When OpenFOAM is run in parallel, pre-processing of the outputs is necessary (eg by running `decomposePar`).
 
+## References
 
-## Notes on the current progress
+[1] Placzek, A. and Sigrist, J.F. and Hamdouni, A. [Numerical Simulation of an oscillating cylinder in a cross-flow at low Reynolds number: Forced and free oscillations](https://dx.doi.org/10.1016/j.compfluid.2008.01.007), Computers and Fluids, 2009, 38 (1), pp.80-100
 
-Current status:
-- 3 way coupling works
-- parameters fit with the case in Sicklinge
-- implicit coupling with acceleration
-- parallel execution of OpenFOAM is possible
+[2] Anagnostopoulus, P. and Bearman, P.W. Response Characteristics of a vortex-excited cylinder at low Reynolds numbers, Journal of Fluids and Structures, January 1992, DOI: 10.1016/0889-9746(92)90054-7
 
-Problem: Runtime
-- A simulated time of 45s with delta_t = 1e-4 is necessary to recreate Sicklinger
-- The simulation needs to run so long to get a locked-in cylinder movement, before then the controller is started at t=40s to counter this oscillation
-- My computer is way to slow for this: to simulate 1s takes ca. 1h!
+[3] Sicklinger, S. [Stabilized Co-Simulation of Coupled Problems including Fields and Signals](https://www.researchgate.net/publication/269705153_Stabilized_Co-Simulation_of_Coupled_Problems_Including_Fields_and_Signals), Technical University of Munich, Dissertation
 
+## Contributions
 
-## Similar case from OpenFOAM tutorials
-
-Have a look into this OpenFOAM tutorial. It seems to implement the Sicklinger case already. 
-
-It has two major benefits over my current approach:
-- the spring is internal to OpenFOAM, which means I can avoid multi-coupling
-- instead of a cylinder, a wing is used. Maybe I can implement some case related to wind energy
-
-I already have the case files locally. To go there, run:
-
-```bash
-cd ~/Thesis/openfoam/tutorials/incompressible/pimpleFoam/RAS/wingMotion/wingMotion2D_pimpleFoam
-```
-
-You need to use the Allrun script to run it, because some meshes need to be created before pimpleFoam can run. For future use
-
-- Create a script to only run pimpleFoam with the necessary mesh build commands
-- Find out how to run OF in parallel
-- Never run for 5 seconds simulated time
-- Always check stepsize before you run
-
-! I currently dont know how the stepsize is set. Have a look at this.
-
-You can also find the case online in the [OF tutorial repo](https://github.com/OpenFOAM/OpenFOAM-6/tree/master/tutorials/incompressible/pimpleFoam/RAS/wingMotion)
+Many thanks to David Schneider for his help with OpenFOAM
