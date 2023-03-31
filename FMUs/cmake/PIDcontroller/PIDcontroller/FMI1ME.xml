@@ -3,7 +3,7 @@
   fmiVersion="1.0"
   modelName="PIDcontroller"
   modelIdentifier="PIDcontroller"
-  description="This model implements a simple PID controller."
+  description="This model is implemented as CO-SIMULATION FMU ONLY! This file is only given to simplify the process of creating a Model Exchange FMU."
   generationTool="Reference FMUs (development build)"
   guid="{1AE5E10D-9521-4DE3-80B9-D0EAAA7D5AF1}"
   numberOfContinuousStates="5"
@@ -29,6 +29,20 @@
     <ScalarVariable name="ki" valueReference="7" causality="internal" variability="parameter" description="Integral gain">
       <Real start="0"/></ScalarVariable>
     <ScalarVariable name="kd" valueReference="8" causality="internal" variability="parameter" description="Derivative gain">
+      <Real start="0"/></ScalarVariable>
+    <ScalarVariable name="P" valueReference="9" causality="internal" variability="parameter" description="Proportional term">
+      <Real start="0"/></ScalarVariable>
+    <ScalarVariable name="I" valueReference="10" causality="internal" variability="parameter" description="Integral term">
+      <Real start="0"/></ScalarVariable>
+    <ScalarVariable name="D" valueReference="11" causality="internal" variability="parameter" description="Derivative term">
+      <Real start="0"/></ScalarVariable>
+    <ScalarVariable name="force_x" valueReference="12" causality="input" variability="continuous" description="Force x direction">
+      <Real start="0"/></ScalarVariable>
+    <ScalarVariable name="force_y" valueReference="13" causality="input" variability="continuous" description="Force y direction">
+      <Real start="0"/></ScalarVariable>
+    <ScalarVariable name="velocity_x" valueReference="14" causality="output" variability="continuous" description="Velocity x direction">
+      <Real start="0"/></ScalarVariable>
+    <ScalarVariable name="velocity_y" valueReference="15" causality="output" variability="continuous" description="Velocity y direction">
       <Real start="0"/></ScalarVariable>
 </ModelVariables>
 

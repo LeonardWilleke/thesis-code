@@ -52,9 +52,6 @@
       <relative-convergence-measure data="Force-Controller" mesh="Controller-Mesh" limit="1e-10"/>
       <relative-convergence-measure data="Displacement-Mass" mesh="Controller-Mesh" limit="1e-10"/>
       <exchange data="Force-Controller" mesh="Controller-Mesh" from="Controller" to="Mass" />
-      <!-- Use this for higher accuracy with waveforms and preCICE v3
-      <exchange data="Force-Left" mesh="Mass-Left-Mesh" from="Mass-Left" to="Mass-Right" initialize="true" />
-      -->
       <exchange data="Displacement-Mass" mesh="Controller-Mesh" from="Mass" to="Controller" initialize="true"/>
     </coupling-scheme:serial-implicit>
   </solver-interface>

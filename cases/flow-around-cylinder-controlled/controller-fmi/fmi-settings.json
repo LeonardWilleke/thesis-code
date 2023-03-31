@@ -1,7 +1,9 @@
 {
     "model_params": {
     	"r":	0.0,
-    	"use_implicit_method":	true
+    	"use_implicit_method":	true,
+    	"compute_u_1": false,
+    	"I_max": 100
     },
     "initial_conditions": {
     	"kp":	0,

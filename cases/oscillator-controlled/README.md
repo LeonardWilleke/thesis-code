@@ -40,7 +40,21 @@ cd fmi
 ./run.sh
 ```
 
-## Post-processing
+## Simulation parameters
+
+!!! WARNING: The pictures and gains given below are out of date. The calculation of the integration method of the PID controller were changed. Use the following parameters as starting point:
+
+```bash
+kp = 800.0
+ki = 2.0
+kd = 20.0
+I_max = 100
+./run.sh
+```
+The new parameter `I_max` was necessary to avoid integrator windup.
+
+## Post-processing (NEEDS UPDATE)
+
 
 Each simulation run creates two files. The file of the oscillator, called `trajectory-Mass.csv`, contains the position and velocity of the mass over time. The file of the controller, called `controller-output.csv`, contains the control output and the error used in the control algorithm. You can use the script `plot-trajectory.py` for post-processing. Type `python3 plot-trajectory --help` to see available options. You can, for example, plot the position of the mass by running
 
