@@ -526,25 +526,83 @@ void doFixedStep(ModelInstance *comp, bool* stateEvent, bool* timeEvent) {
 }
 
 void doAdaptiveStep(ModelInstance *comp, bool* stateEvent, bool* timeEvent) {
-
+    
     // create local variables
     double t 	= comp->time;
     double dt 	= comp->solverStepSize;
     
-    // compute error
-    M(e) = M(r) - M(y);
     
-    // compute control output u
-    M(P) = M(kp)*M(e);
-    M(I) = M(I) + M(ki)*M(e)*dt;
-    M(D) = M(kd)*(M(e)-M(e_ls))/dt;
-    M(u) = M(P) + M(I) + M(D);
+    // compute control output according to flags "compute_u_1" and "use_implicit_method"
+    
+    if (M(compute_u_1)) {
+        
+        // compute error
+        M(e) = M(r) - M(y_1);
+        
+        // calculate u_1
+        if (M(use_implicit_method)) {
+            // implicit trapezoid
+            M(P) = M(kp) * M(e);
+            M(I) = M(ki) * (M(I) + (M(e) + M(e_ls)) * dt / 2);
+            M(D) = M(kd) * (M(e)-M(e_ls))/dt;
+            
+            }
+        else {
+            // explicit euler
+            M(P) = M(kp) * M(e);
+            M(I) = M(ki) * (M(I) + M(e)*dt);
+            M(D) = M(kd) * (M(e)-M(e_ls))/dt;
+        }
+        
+        // limit I to avoid integrator windup
+        if (M(I) > M(I_max)) {
+            M(I) = M(I_max);
+        }
+        
+        // compute u_1
+        M(u_1) = M(P) + M(I) + M(D);
+        
+        // set u_2 to default value
+        M(u_2) = 0;
+    }
+    
+    else {
+    
+        // compute error
+        M(e) = M(r) - M(y_2);
+        
+        // calculate u_2
+        if (M(use_implicit_method)) {
+            // implicit trapezoid
+            M(P) = M(kp) * M(e);
+            M(I) = M(ki) * (M(I) + (M(e) + M(e_ls)) * dt / 2);
+            M(D) = M(kd) * (M(e)-M(e_ls))/dt;
+            
+            }
+        else {
+            // explicit euler
+            M(P) = M(kp) * M(e);
+            M(I) = M(ki) * (M(I) + M(e)*dt);
+            M(D) = M(kd) * (M(e)-M(e_ls))/dt; 
+        }
+        
+        // limit I to avoid integrator windup
+        if (M(I) > M(I_max)) {
+            M(I) = M(I_max);
+        }
+        
+        // compute u_2
+        M(u_2) = M(P) + M(I) + M(D);
+        
+        // set u_1 to default value
+        M(u_1) = 0;   
+    }
     
     // save error for next timestep
     M(e_ls) = M(e);
 
+    // advance nSteps and time
     comp->nSteps++;
-
     comp->time = t + dt;
 
     // state event

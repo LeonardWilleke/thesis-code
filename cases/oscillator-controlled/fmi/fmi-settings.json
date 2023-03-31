@@ -1,6 +1,9 @@
 {
     "model_params": {
-    	"r":	0.5
+    	"r":    0.5,
+    	"use_implicit_method":  true,
+    	"compute_u_1":  true,
+    	"I_max":    100
     },
     "initial_conditions": {
     
@@ -9,7 +12,7 @@
     	"names":	["time",	"kp",	"ki",	"kd"],
 		"data":		[
 					[0.0,		0.0,	0.0,	0.0],
-					[2.0,		800.0,	1500.0,	20.0]
+					[2.0,		800.0,	2.0,	20.0]
 					]
     }
 }
