@@ -10,11 +10,11 @@
 		"solver_process_size": 1
     },
     "simulation_params": {
-		"fmu_file_name": "../../../FMUs/PIDcontrollerForce.fmu",
+		"fmu_file_name": "../../../FMUs/PIDcontroller.fmu",
     	"output_file_name": "./output/controller-output.csv",
-    	"output": ["u", "e", "P", "I", "D", "force_x", "force_y", "velocity_x", "velocity_y"],
-    	"fmu_read_data_names": ["force_x", "force_y"],
-    	"fmu_write_data_names":["velocity_x", "velocity_y"],
-    	"fmu_instance_name": "pid_controller_force"
+    	"output": ["u", "e", "P", "I", "D", "y_1", "y_2", "u_1", "u_2"],
+    	"fmu_read_data_names": ["y_1", "y_2"],
+    	"fmu_write_data_names":["u_1", "u_2"],
+    	"fmu_instance_name": "pid_controller"
     }
 }
