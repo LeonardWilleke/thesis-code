@@ -70,13 +70,13 @@ A, B = eigenvectors
 c = np.linalg.solve(eigenvectors, [u0_1, u0_2])
 
 if participant_name == Participant.MASS_LEFT.value:
-	filename 	= precice_data_left["simulation_params"]["output_file_name"]
+	filename 	= fmi_data_left["simulation_params"]["output_file_name"]
 	df 			= pd.read_csv(filename, delimiter=',')	
 	
 	def u_analytical(t): return c[0] * A[0] * np.cos(omega[0] * t) + c[1] * A[1] * np.cos(omega[1] * t)
 	
 elif participant_name == Participant.MASS_RIGHT.value:
-	filename 	= precice_data_right["simulation_params"]["output_file_name"]
+	filename 	= fmi_data_right["simulation_params"]["output_file_name"]
 	df 			= pd.read_csv(filename, delimiter=',')
 	
 	def u_analytical(t): return c[0] * B[0] * np.cos(omega[0] * t) + c[1] * B[1] * np.cos(omega[1] * t)
