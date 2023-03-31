@@ -16,31 +16,31 @@ import json
 ### Define functions
 
 def precice_read_data(data_type, read_data_id, vertex_id):
-	"""
-	Reads data from preCICE. The preCICE API call depends on the data type, scalar or vector.
-	"""
-	
-	if data_type == "scalar":
-		read_data = interface.read_scalar_data(read_data_id, vertex_id)
-	elif data_type == "vector":
-		read_data = interface.read_vector_data(read_data_id, vertex_id)
-	else:
-		raise Exception("Please choose data type from: scalar, vector.")
-		
-	return read_data
+    """
+    Reads data from preCICE. The preCICE API call depends on the data type, scalar or vector.
+    """
+    
+    if data_type == "scalar":
+        read_data = interface.read_scalar_data(read_data_id, vertex_id)
+    elif data_type == "vector":
+        read_data = interface.read_vector_data(read_data_id, vertex_id)
+    else:
+        raise Exception("Please choose data type from: scalar, vector.")
+        
+    return read_data
 
 
 def precice_write_data(data_type, write_data_id, vertex_id, write_data):
-	"""
-	Writes data to preCICE. The preCICE API call depends on the data type, scalar or vector.
-	"""
-	
-	if data_type == "scalar":
-		write_data = interface.write_scalar_data(write_data_id, vertex_id, write_data)
-	elif data_type == "vector":
-		write_data = interface.write_vector_data(write_data_id, vertex_id, write_data)
-	else:
-		raise Exception("Please choose data type from: scalar, vector.")
+    """
+    Writes data to preCICE. The preCICE API call depends on the data type, scalar or vector.
+    """
+    
+    if data_type == "scalar":
+        write_data = interface.write_scalar_data(write_data_id, vertex_id, write_data)
+    elif data_type == "vector":
+        write_data = interface.write_vector_data(write_data_id, vertex_id, write_data)
+    else:
+        raise Exception("Please choose data type from: scalar, vector.")
 
 
 
@@ -51,8 +51,8 @@ parser.add_argument("fmi_setting_file", help="Path to the fmi setting file (*.js
 parser.add_argument("precice_setting_file", help="Path to the precice setting file (*.json).", type=str)
 args = parser.parse_args()
 
-fmi_setting_file 		= args.fmi_setting_file
-precice_setting_file 	= args.precice_setting_file
+fmi_setting_file        = args.fmi_setting_file
+precice_setting_file    = args.precice_setting_file
 
 folder = os.path.dirname(os.path.join(os.getcwd(), os.path.dirname(sys.argv[0]), fmi_setting_file))
 path = os.path.join(folder, os.path.basename(fmi_setting_file))
@@ -66,35 +66,35 @@ precice_data = json.load(read_file)
 
 ### FMU setup
 
-fmu_file_name 				= precice_data["simulation_params"]["fmu_file_name"]
-fmu_instance 				= precice_data["simulation_params"]["fmu_instance_name"]
-model_description 			= read_model_description(fmu_file_name)
+fmu_file_name           = fmi_data["simulation_params"]["fmu_file_name"]
+fmu_instance            = fmi_data["simulation_params"]["fmu_instance_name"]
+model_description       = read_model_description(fmu_file_name)
 
 vrs = {}
 for variable in model_description.modelVariables:
     vrs[variable.name] = variable.valueReference 
 
-output_names		 		= precice_data["simulation_params"]["output"]
+output_names            = fmi_data["simulation_params"]["output"]
 
-fmu_read_data_names			= precice_data["simulation_params"]["fmu_read_data_names"]
-fmu_write_data_names 		= precice_data["simulation_params"]["fmu_write_data_names"]
+fmu_read_data_names     = fmi_data["simulation_params"]["fmu_read_data_names"]
+fmu_write_data_names    = fmi_data["simulation_params"]["fmu_write_data_names"]
 
 vr_read = list()
 for read_name in fmu_read_data_names:
-	vr = vrs[read_name]
-	vr_read.append(vr)
+    vr = vrs[read_name]
+    vr_read.append(vr)
 
 vr_write = list()
 for write_name in fmu_write_data_names:
-	vr = vrs[write_name]
-	vr_write.append(vr)
+    vr = vrs[write_name]
+    vr_write.append(vr)
 
 
-can_get_and_set_fmu_state	= model_description.coSimulation.canGetAndSetFMUstate 
+can_get_and_set_fmu_state = model_description.coSimulation.canGetAndSetFMUstate 
 
-is_fmi1 					= (model_description.fmiVersion == '1.0')
-is_fmi2 					= (model_description.fmiVersion == '2.0')
-is_fmi3 					= (model_description.fmiVersion == '3.0')
+is_fmi1 = (model_description.fmiVersion == '1.0')
+is_fmi2 = (model_description.fmiVersion == '2.0')
+is_fmi3 = (model_description.fmiVersion == '3.0')
 
 unzipdir = extract(fmu_file_name)
 
@@ -104,67 +104,71 @@ fmu = instantiate_fmu(unzipdir=unzipdir, model_description=model_description, fm
 
 
 if is_fmi1:
-	# Set initial parameters
-	apply_start_values(fmu, model_description, fmi_data["initial_conditions"])
-	apply_start_values(fmu, model_description, fmi_data["model_params"])
-	# Get initial write data
-	fmu_write_data_init = fmu.getReal(vr_write)
+    # Set initial parameters
+    apply_start_values(fmu, model_description, fmi_data["initial_conditions"])
+    apply_start_values(fmu, model_description, fmi_data["model_params"])
+    # Get initial write data
+    fmu_write_data_init = fmu.getReal(vr_write)
 elif is_fmi2:
-	# Set initial parameters
-	fmu.enterInitializationMode()
-	apply_start_values(fmu, model_description, fmi_data["initial_conditions"])
-	apply_start_values(fmu, model_description, fmi_data["model_params"])
-	fmu.exitInitializationMode()
-	# Get initial write data
-	fmu_write_data_init = fmu.getReal(vr_write)
+    # Set initial parameters
+    fmu.enterInitializationMode()
+    apply_start_values(fmu, model_description, fmi_data["initial_conditions"])
+    apply_start_values(fmu, model_description, fmi_data["model_params"])
+    fmu.exitInitializationMode()    
+    # Get initial write data
+    fmu_write_data_init = fmu.getReal(vr_write)
 elif is_fmi3:
-	# Set initial parameters
-	fmu.enterInitializationMode()
-	apply_start_values(fmu, model_description, fmi_data["initial_conditions"])
-	apply_start_values(fmu, model_description, fmi_data["model_params"])
-	fmu.exitInitializationMode()
-	# Get initial write data
-	fmu_write_data_init = fmu.getFloat64(vr_write)
+    # Set initial parameters
+    fmu.enterInitializationMode()
+    apply_start_values(fmu, model_description, fmi_data["initial_conditions"])
+    apply_start_values(fmu, model_description, fmi_data["model_params"])
+    fmu.exitInitializationMode()
+    # Get initial write data
+    fmu_write_data_init = fmu.getFloat64(vr_write)
 
 
 # Create input object
 
 try:
-	signal_names	= fmi_data["input_signals"]["names"]
-	signal_data		= fmi_data["input_signals"]["data"]
-	dtype 			= []
-	for i in range(len(signal_names)):
-		tpl = tuple([signal_names[i], type(signal_data[0][i])]) # not sure if the type() might cause problems
-		dtype.append(tpl)
-	signals = np.array([tuple(i) for i in signal_data],dtype=dtype) # this should work fine
+    signal_names    = fmi_data["input_signals"]["names"]
+    signal_data	    = fmi_data["input_signals"]["data"]
+    dtype           = []
+    for i in range(len(signal_names)):
+        tpl = tuple([signal_names[i], type(signal_data[0][i])]) # not sure if the type() might cause problems
+        dtype.append(tpl)
+    signals = np.array([tuple(i) for i in signal_data],dtype=dtype) # this should work fine
 except:
-	signals = None
-	
-input 	= Input(fmu, model_description, signals)
+    signals = None
+
+input = Input(fmu, model_description, signals)
 
 
 ### preCICE setup
 
+# Current limitations of the Runner
+solver_process_index 	= 0
+solver_process_size 	= 1
+num_vertices 			= 1
+
 interface = precice.Interface(
-	precice_data["coupling_params"]["participant_name"],
-	precice_data["coupling_params"]["config_file_name"], 
-	precice_data["coupling_params"]["solver_process_index"], 
-	precice_data["coupling_params"]["solver_process_size"]
-	)
+    precice_data["coupling_params"]["participant_name"],
+    precice_data["coupling_params"]["config_file_name"], 
+    solver_process_index, 
+    solver_process_size
+    )
 
-mesh_id 			= interface.get_mesh_id(precice_data["coupling_params"]["mesh_name"])
-dimensions 			= interface.get_dimensions()
-num_vertices 		= precice_data["coupling_params"]["num_vertices"]
+mesh_id             = interface.get_mesh_id(precice_data["coupling_params"]["mesh_name"])
+dimensions          = interface.get_dimensions()
 
-vertices 			= np.zeros((num_vertices, dimensions))
-read_data 			= np.zeros((num_vertices, dimensions))
-write_data 			= np.zeros((num_vertices, dimensions))
+vertices            = np.zeros((num_vertices, dimensions))
+read_data           = np.zeros((num_vertices, dimensions))
+write_data          = np.zeros((num_vertices, dimensions))
 
-vertex_id 			= interface.set_mesh_vertices(mesh_id, vertices)
-read_data_id 		= interface.get_data_id(precice_data["coupling_params"]["read_data"]["name"], mesh_id)
-write_data_id 		= interface.get_data_id(precice_data["coupling_params"]["write_data"]["name"], mesh_id)
-read_data_type  	= precice_data["coupling_params"]["read_data"]["type"]
-write_data_type  	= precice_data["coupling_params"]["write_data"]["type"]
+vertex_id           = interface.set_mesh_vertices(mesh_id, vertices)
+read_data_id        = interface.get_data_id(precice_data["coupling_params"]["read_data"]["name"], mesh_id)
+write_data_id       = interface.get_data_id(precice_data["coupling_params"]["write_data"]["name"], mesh_id)
+read_data_type      = precice_data["coupling_params"]["read_data"]["type"]
+write_data_type     = precice_data["coupling_params"]["write_data"]["type"]
 
 # initial value for write data
 if write_data_type == "scalar":
@@ -193,18 +197,18 @@ while interface.is_coupling_ongoing():
         
         # Check if model has the appropiate functionalities
         if is_fmi1:
-        	raise Exception("Implicit coupling not possible because FMU model with FMI1 can't reset state. "\
-        					"Please update model to FMI2 or FMI3. "\
-        					"Alternatively, choose an explicit coupling scheme.")
+            raise Exception("Implicit coupling not possible because FMU model with FMI1 can't reset state. "\
+                            "Please update model to FMI2 or FMI3. "\
+                            "Alternatively, choose an explicit coupling scheme.")
         if not can_get_and_set_fmu_state:
-        	raise Exception("Implicit coupling not possible because FMU model can't reset state. "\
-        					"Please implement getFMUstate() and setFMUstate() in FMU "\
-        					"and set the according flag in ModelDescription.xml. "\
-        					"Alternatively, choose an explicit coupling scheme.")
+            raise Exception("Implicit coupling not possible because FMU model can't reset state. "\
+                            "Please implement getFMUstate() and setFMUstate() in FMU "\
+                            "and set the according flag in ModelDescription.xml. "\
+                            "Alternatively, choose an explicit coupling scheme.")
         
         # Save checkpoint
-        state_cp 	= fmu.getFMUState()
-        t_cp 		= t
+        state_cp    = fmu.getFMUState()
+        t_cp        = t
         
         interface.mark_action_fulfilled(precice.action_write_iteration_checkpoint())
 	
@@ -234,7 +238,7 @@ while interface.is_coupling_ongoing():
     	result = fmu.getFloat64(vr_write)
 
 
-	# Convert result to double or array for preCICE
+    # Convert result to double or array for preCICE
     if write_data_type == "scalar":
     	write_data = result[0]
     elif write_data_type == "vector":
@@ -263,19 +267,19 @@ interface.finalize()
 
 # store final results
 try:
-	# create output directory
-	output_dir = os.path.dirname(precice_data["simulation_params"]["output_file_name"])
-	if not os.path.exists(output_dir):
-		os.makedirs(output_dir)
+    # create output directory
+    output_dir = os.path.dirname(fmi_data["simulation_params"]["output_file_name"])
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
 
-	# store data
-	recorder.sample(t, force=False)
-	results = recorder.result()
-	write_csv(precice_data["simulation_params"]["output_file_name"], results)
+    # store data
+    recorder.sample(t, force=False)
+    results = recorder.result()
+    write_csv(fmi_data["simulation_params"]["output_file_name"], results)
 	
 except:
-	
-	pass
+    
+    pass
 
 # terminate FMU
 fmu.terminate()

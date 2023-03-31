@@ -1,20 +1,9 @@
 {
-    "coupling_params": {
+	"coupling_params": {
 		"participant_name": "Controller",
 		"config_file_name": "../precice-config.xml",
 		"mesh_name": "Mesh-Controller",
 		"write_data": {"name": "Velocity", "type": "vector"}, 
-		"read_data": {"name": "Force", "type": "vector"},
-		"num_vertices": 1,
-		"solver_process_index": 0,
-		"solver_process_size": 1
-    },
-    "simulation_params": {
-		"fmu_file_name": "../../../FMUs/PIDcontroller.fmu",
-    	"output_file_name": "./output/controller-output.csv",
-    	"output": ["u", "e", "P", "I", "D", "y_1", "y_2", "u_1", "u_2"],
-    	"fmu_read_data_names": ["y_1", "y_2"],
-    	"fmu_write_data_names":["u_1", "u_2"],
-    	"fmu_instance_name": "pid_controller"
-    }
+		"read_data": {"name": "Force", "type": "vector"}
+	}
 }
