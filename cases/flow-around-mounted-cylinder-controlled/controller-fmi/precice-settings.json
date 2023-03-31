@@ -1,20 +1,9 @@
 {
     "coupling_params": {
-		"participant_name": "Controller",
-		"config_file_name": "../precice-config.xml",
-		"mesh_name": "Mesh-Controller",
-		"write_data": {"name": "Displacement-Spring", "type": "vector"}, 
-		"read_data": {"name": "Displacement-Cylinder", "type": "vector"},
-		"num_vertices": 1,
-		"solver_process_index": 0,
-		"solver_process_size": 1
-    },
-    "simulation_params": {
-		"fmu_file_name": "../../../FMUs/PIDcontrollerForce.fmu",
-    	"output_file_name": "./output/controller-output.csv",
-    	"output": ["u", "e", "P", "I", "D", "force_x", "force_y", "velocity_x", "velocity_y"],
-    	"fmu_read_data_names": ["force_x", "force_y"],
-    	"fmu_write_data_names":["velocity_x", "velocity_y"],
-    	"fmu_instance_name": "pid_controller_force"
+        "participant_name": "Controller",
+        "config_file_name": "../precice-config.xml",
+        "mesh_name": "Mesh-Controller",
+        "write_data": {"name": "Displacement-Spring", "type": "vector"}, 
+        "read_data": {"name": "Displacement-Cylinder", "type": "vector"}
     }
 }
