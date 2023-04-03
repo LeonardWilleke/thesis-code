@@ -43,7 +43,7 @@
       <mapping:nearest-neighbor direction="write"  from="Mesh-Fluid" to="Mesh-Solid" constraint="conservative" />
       <write-data  name="Force" mesh="Mesh-Fluid" />
       <read-data  name="Displacement-Cylinder" mesh="Mesh-Fluid" />
-      <watch-point mesh="Mesh-Fluid" name="all-data" coordinate="0.0; 0.0"/>
+      <watch-point mesh="Mesh-Fluid" name="Cylinder" coordinate="0.0;0.0"/>
       <export:vtu directory="export" />
     </participant>
     
@@ -53,6 +53,7 @@
       <write-data name="Displacement-Cylinder" mesh="Mesh-Solid" />
       <read-data name="Force" mesh="Mesh-Solid" />
       <read-data name="Displacement-Spring" mesh="Mesh-Solid" />
+      <watch-point mesh="Mesh-Solid" name="Spring" coordinate="0.0;0.0"/>
       <mapping:nearest-neighbor direction="read"  from="Mesh-Controller" to="Mesh-Solid" constraint="consistent" />
     </participant>
 
@@ -61,7 +62,7 @@
     
     <coupling-scheme:serial-implicit> 
       <participants first="Fluid" second="Solid" /> 
-      <max-time value="1" />
+      <max-time value="6" />
       <time-window-size value="0.0001" />
       <max-iterations value="100" />
       <exchange data="Force" mesh="Mesh-Solid" from="Fluid" to="Solid"/>
@@ -80,7 +81,7 @@
     
     <coupling-scheme:serial-explicit> 
       <participants first="Solid" second="Controller" /> 
-      <max-time value="1" />
+      <max-time value="6" />
       <time-window-size value="0.0001" />
       <exchange data="Displacement-Spring" mesh="Mesh-Controller" from="Controller" to="Solid"/>
       <exchange data="Displacement-Cylinder" mesh="Mesh-Solid" from="Solid" to="Controller"/>

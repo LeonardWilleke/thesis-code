@@ -74,7 +74,7 @@ mpirun -np 2 pimpleFoam -parallel
 Options for post-processing
 - Plot the watchpoint (plot script pending)
 - Plot the outputs of the controller with `plot-timeseries.py`
-- Animate the OpenFOAM results by running `paraFoam`. When OpenFOAM is run in parallel, pre-processing of the outputs is necessary (eg by running `decomposePar`).
+- Animate the OpenFOAM results by running `paraFoam`. When OpenFOAM is run in parallel, pre-processing of the outputs is necessary (eg by running `decomposePar` again).
 
 ## References
 

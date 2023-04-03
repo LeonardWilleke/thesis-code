@@ -3,6 +3,7 @@ from __future__ import division
 import argparse
 import numpy as np
 import precice
+import datetime
 
 parser = argparse.ArgumentParser()
 parser.add_argument("configurationFileName",
@@ -15,6 +16,8 @@ except SystemExit:
     print("Usage: python3 ./solverdummy.py precice-config")
     quit()
 
+# time keeping
+start_time = datetime.datetime.now()
 
 # system parameters
 
@@ -126,4 +129,10 @@ while interface.is_coupling_ongoing():
     	state_vector_old = state_vector
 
 interface.finalize()
-print("Solid: Closing python solver dummy...")
+
+end_time = datetime.datetime.now()
+print("Solid: Closing python solver Solid...")
+print("Simulation finished successfully at: ")
+print(datetime.datetime.now())
+print("The simulation of 6s simulated time took:")
+print(end_time - start_time)

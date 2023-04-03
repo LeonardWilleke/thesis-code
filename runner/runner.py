@@ -218,7 +218,7 @@ while interface.is_coupling_ongoing():
     # Read data from other participant
     read_data = precice_read_data(read_data_type, read_data_id, vertex_id)
     
-    # Convert to list for FMU
+    # Convert data to list for FMU
     if read_data_type == "scalar":
     	read_data = [read_data]
     elif read_data_type == "vector":
