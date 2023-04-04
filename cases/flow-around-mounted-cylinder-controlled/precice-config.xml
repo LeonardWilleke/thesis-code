@@ -69,6 +69,11 @@
       <exchange data="Displacement-Cylinder" mesh="Mesh-Solid" from="Solid" to="Fluid"/>
       <relative-convergence-measure data="Force" mesh="Mesh-Solid" limit="1e-3"/>
       <relative-convergence-measure data="Displacement-Cylinder" mesh="Mesh-Solid" limit="1e-3"/>
+      <acceleration:aitken>
+        <data name="Displacement-Cylinder" mesh="Mesh-Solid" />
+        <initial-relaxation value="0.1"/>
+      </acceleration:aitken>
+      <!--
       <acceleration:IQN-ILS>
         <data name="Displacement-Cylinder" mesh="Mesh-Solid" />
         <preconditioner type="residual-sum" />
@@ -77,6 +82,7 @@
         <max-used-iterations value="10" />
         <time-windows-reused value="15" />
       </acceleration:IQN-ILS>
+      -->
     </coupling-scheme:serial-implicit> 
     
     <coupling-scheme:serial-explicit> 

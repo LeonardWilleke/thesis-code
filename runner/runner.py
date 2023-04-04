@@ -105,23 +105,31 @@ fmu = instantiate_fmu(unzipdir=unzipdir, model_description=model_description, fm
 
 if is_fmi1:
     # Set initial parameters
-    apply_start_values(fmu, model_description, fmi_data["initial_conditions"])
-    apply_start_values(fmu, model_description, fmi_data["model_params"])
+    if "initial_conditions" in fmi_data:
+        apply_start_values(fmu, model_description, fmi_data["initial_conditions"])
+    if "model_params" in fmi_data:
+        apply_start_values(fmu, model_description, fmi_data["model_params"])
     # Get initial write data
     fmu_write_data_init = fmu.getReal(vr_write)
+
 elif is_fmi2:
     # Set initial parameters
     fmu.enterInitializationMode()
-    apply_start_values(fmu, model_description, fmi_data["initial_conditions"])
-    apply_start_values(fmu, model_description, fmi_data["model_params"])
+    if "initial_conditions" in fmi_data:
+        apply_start_values(fmu, model_description, fmi_data["initial_conditions"])
+    if "model_params" in fmi_data:
+        apply_start_values(fmu, model_description, fmi_data["model_params"])
     fmu.exitInitializationMode()    
     # Get initial write data
     fmu_write_data_init = fmu.getReal(vr_write)
+
 elif is_fmi3:
     # Set initial parameters
     fmu.enterInitializationMode()
-    apply_start_values(fmu, model_description, fmi_data["initial_conditions"])
-    apply_start_values(fmu, model_description, fmi_data["model_params"])
+    if "initial_conditions" in fmi_data:
+        apply_start_values(fmu, model_description, fmi_data["initial_conditions"])
+    if "model_params" in fmi_data:
+        apply_start_values(fmu, model_description, fmi_data["model_params"])
     fmu.exitInitializationMode()
     # Get initial write data
     fmu_write_data_init = fmu.getFloat64(vr_write)
@@ -148,7 +156,7 @@ input = Input(fmu, model_description, signals)
 # Current limitations of the Runner
 solver_process_index 	= 0
 solver_process_size 	= 1
-num_vertices 			= 1
+num_vertices            = 1
 
 interface = precice.Interface(
     precice_data["coupling_params"]["participant_name"],

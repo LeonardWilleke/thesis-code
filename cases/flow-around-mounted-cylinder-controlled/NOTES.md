@@ -7,8 +7,19 @@ decomposePar
 mpirun -np 2 pimpleFoam -parallel
 ```
 
-This should reduce the runtime by ca 50%. However, I currently can't properly plot the results with ParaView.
-But the watchpoint is still created as usual!
+This should reduce the runtime by ca 50%. To visualize the case in ParaView, type in:
+
+```bash
+reconstructPar
+openfoam_remove_empty_dirs .
+paraFoam
+```
+If the second command doesnt work you may need to add the function `openfoam_remove_empty_dirs` to source by running:
+
+```bash
+source ~/Thesis/precice/precice-tutorials/tools/openfoam-remove-empty-dirs.sh
+```
+This is necessary because `openfoam_remove_empty_dirs` is a function from the precice tutorials and not present in my current fmi-runner repo.
 
 You can still run the case in serial with the usual
 
