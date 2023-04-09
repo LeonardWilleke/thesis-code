@@ -1,0 +1,121 @@
+preCICE: Time window completed
+preCICE: iteration: 1 of 100, time-window: 48199, time: 4.8198 of 6, time-window-size: 0.0001, max-timestep-length: 0.0001, ongoing: yes, time-window-complete: yes, write-iteration-checkpoint 
+preCICE: Time window completed
+preCICE: iteration: 1 of 100, time-window: 48199, time: 4.8198 of 6, time-window-size: 0.0001, max-timestep-length: 0.0001, ongoing: yes, time-window-complete: yes, write-iteration-checkpoint 
+Courant Number mean: 0.0026162679 max: 0.0098977644
+Time = 4.8199
+
+PIMPLE: iteration 1
+smoothSolver:  Solving for cellDisplacementx, Initial residual = 0, Final residual = 0, No Iterations 2
+smoothSolver:  Solving for cellDisplacementy, Initial residual = 2.0253412e-13, Final residual = 5.077879e-17, No Iterations 2
+GAMG:  Solving for pcorr, Initial residual = 1, Final residual = 0.0045277836, No Iterations 7
+GAMG:  Solving for pcorr, Initial residual = 0.26997099, Final residual = 9.7738884e-07, No Iterations 17
+time step continuity errors : sum local = 4.4239329e-15, global = 3.477473e-18, cumulative = -9.0069011e-10
+DILUPBiCGStab:  Solving for Ux, Initial residual = 1.5110073e-05, Final residual = 1.3053897e-28, No Iterations 3
+DILUPBiCGStab:  Solving for Uy, Initial residual = 0.00011032701, Final residual = 7.8791502e-28, No Iterations 3
+GAMG:  Solving for p, Initial residual = 0.11876275, Final residual = 0.00053744486, No Iterations 7
+GAMG:  Solving for p, Initial residual = 0.080681308, Final residual = 0.00051461098, No Iterations 4
+time step continuity errors : sum local = 7.798138e-12, global = 4.2361827e-14, cumulative = -9.0064775e-10
+GAMG:  Solving for p, Initial residual = 0.0091805464, Final residual = 4.3511482e-05, No Iterations 5
+GAMG:  Solving for p, Initial residual = 0.00076924332, Final residual = 8.5257557e-07, No Iterations 8
+time step continuity errors : sum local = 1.3242767e-14, global = -1.0716337e-17, cumulative = -9.0064776e-10
+ExecutionTime = 23119.38 s  ClockTime = 23835 s
+
+preCICE: iteration: 2 of 100, time-window: 48199, time: 4.8198 of 6, time-window-size: 0.0001, max-timestep-length: 0.0001, ongoing: yes, time-window-complete: no, read-iteration-checkpoint 
+preCICE: iteration: 2 of 100, time-window: 48199, time: 4.8198 of 6, time-window-size: 0.0001, max-timestep-length: 0.0001, ongoing: yes, time-window-complete: no, read-iteration-checkpoint 
+Courant Number mean: 0.0026162679 max: 0.0098977644
+Time = 4.8199
+
+PIMPLE: iteration 1
+smoothSolver:  Solving for cellDisplacementx, Initial residual = 0, Final residual = 0, No Iterations 2
+smoothSolver:  Solving for cellDisplacementy, Initial residual = 5.9985181e-06, Final residual = 5.1235432e-17, No Iterations 2
+GAMG:  Solving for pcorr, Initial residual = 1, Final residual = 0.0046967883, No Iterations 6
+GAMG:  Solving for pcorr, Initial residual = 0.089033135, Final residual = 9.5939849e-07, No Iterations 17
+time step continuity errors : sum local = 2.1632965e-18, global = -2.0118663e-21, cumulative = -9.0064776e-10
+DILUPBiCGStab:  Solving for Ux, Initial residual = 1.5109344e-05, Final residual = 1.3053718e-28, No Iterations 3
+DILUPBiCGStab:  Solving for Uy, Initial residual = 0.00011030511, Final residual = 7.8784323e-28, No Iterations 3
+GAMG:  Solving for p, Initial residual = 0.00018841191, Final residual = 8.7246339e-07, No Iterations 4
+GAMG:  Solving for p, Initial residual = 1.9433513e-06, Final residual = 4.4997911e-07, No Iterations 1
+time step continuity errors : sum local = 5.960945e-15, global = 2.7112852e-17, cumulative = -9.0064773e-10
+GAMG:  Solving for p, Initial residual = 5.0490227e-07, Final residual = 5.0490227e-07, No Iterations 0
+GAMG:  Solving for p, Initial residual = 5.0490227e-07, Final residual = 5.0490227e-07, No Iterations 0
+time step continuity errors : sum local = 6.688527e-15, global = 2.6934758e-17, cumulative = -9.006477e-10
+ExecutionTime = 23119.55 s  ClockTime = 23835 s
+
+preCICE: iteration: 3 of 100, time-window: 48199, time: 4.8198 of 6, time-window-size: 0.0001, max-timestep-length: 0.0001, ongoing: yes, time-window-complete: no, read-iteration-checkpoint 
+preCICE: iteration: 3 of 100, time-window: 48199, time: 4.8198 of 6, time-window-size: 0.0001, max-timestep-length: 0.0001, ongoing: yes, time-window-complete: no, read-iteration-checkpoint 
+Courant Number mean: 0.0026162679 max: 0.0098977644
+Time = 4.8199
+
+PIMPLE: iteration 1
+smoothSolver:  Solving for cellDisplacementx, Initial residual = 0, Final residual = 0, No Iterations 2
+smoothSolver:  Solving for cellDisplacementy, Initial residual = 5.9985188e-06, Final residual = 5.8296253e-17, No Iterations 2
+GAMG:  Solving for pcorr, Initial residual = 1, Final residual = 0.0046972267, No Iterations 6
+GAMG:  Solving for pcorr, Initial residual = 0.089076027, Final residual = 9.5892605e-07, No Iterations 17
+time step continuity errors : sum local = 2.1623272e-18, global = -2.6891495e-21, cumulative = -9.006477e-10
+DILUPBiCGStab:  Solving for Ux, Initial residual = 1.5109344e-05, Final residual = 1.3053718e-28, No Iterations 3
+DILUPBiCGStab:  Solving for Uy, Initial residual = 0.00011030511, Final residual = 7.8784323e-28, No Iterations 3
+GAMG:  Solving for p, Initial residual = 0.00018841286, Final residual = 8.7194757e-07, No Iterations 4
+GAMG:  Solving for p, Initial residual = 1.9382679e-06, Final residual = 4.4944012e-07, No Iterations 1
+time step continuity errors : sum local = 5.9538059e-15, global = 2.7167529e-17, cumulative = -9.0064768e-10
+GAMG:  Solving for p, Initial residual = 5.0413896e-07, Final residual = 5.0413896e-07, No Iterations 0
+GAMG:  Solving for p, Initial residual = 5.0413896e-07, Final residual = 5.0413896e-07, No Iterations 0
+time step continuity errors : sum local = 6.678415e-15, global = 2.6993931e-17, cumulative = -9.0064765e-10
+ExecutionTime = 23119.71 s  ClockTime = 23835 s
+
+preCICE: Time window completed
+preCICE: iteration: 1 of 100, time-window: 48200, time: 4.8199 of 6, time-window-size: 0.0001, max-timestep-length: 0.0001, ongoing: yes, time-window-complete: yes, write-iteration-checkpoint 
+preCICE: Time window completed
+preCICE: iteration: 1 of 100, time-window: 48200, time: 4.8199 of 6, time-window-size: 0.0001, max-timestep-length: 0.0001, ongoing: yes, time-window-complete: yes, write-iteration-checkpoint 
+Courant Number mean: 0.0026162685 max: 0.0098977675
+Time = 4.82
+
+PIMPLE: iteration 1
+smoothSolver:  Solving for cellDisplacementx, Initial residual = 0, Final residual = 0, No Iterations 2
+smoothSolver:  Solving for cellDisplacementy, Initial residual = 3.9270239e-12, Final residual = 5.1207566e-17, No Iterations 2
+GAMG:  Solving for pcorr, Initial residual = 1, Final residual = 0.004527756, No Iterations 7
+GAMG:  Solving for pcorr, Initial residual = 0.26997082, Final residual = 9.7738086e-07, No Iterations 17
+time step continuity errors : sum local = 4.425249e-15, global = 3.47942e-18, cumulative = -9.0064765e-10
+DILUPBiCGStab:  Solving for Ux, Initial residual = 1.5110518e-05, Final residual = 1.3054761e-28, No Iterations 3
+DILUPBiCGStab:  Solving for Uy, Initial residual = 0.00011033604, Final residual = 7.8705716e-28, No Iterations 3
+GAMG:  Solving for p, Initial residual = 0.11884962, Final residual = 0.00053734938, No Iterations 7
+GAMG:  Solving for p, Initial residual = 0.080696426, Final residual = 0.00051465276, No Iterations 4
+time step continuity errors : sum local = 7.7997008e-12, global = 4.2272162e-14, cumulative = -9.0060537e-10
+GAMG:  Solving for p, Initial residual = 0.0091821284, Final residual = 4.3517651e-05, No Iterations 5
+GAMG:  Solving for p, Initial residual = 0.00076938594, Final residual = 8.5268452e-07, No Iterations 8
+time step continuity errors : sum local = 1.3246143e-14, global = -1.074192e-17, cumulative = -9.0060538e-10
+[0] 
+[0] 
+[0] --> FOAM FATAL IO ERROR: (openfoam-2206 patch=221104)
+[0] error in IOstream "processor0/4.82/Uf" for operation Foam::Ostream& Foam::operator<<(Foam::Ostream&, Foam::doubleScalar)
+[0] 
+[0] file: processor0/4.82/Uf at line 7983.
+[0] 
+[0]     From bool Foam::IOstream::fatalCheck(const char*) const
+[0] [1] 
+[1] 
+[1] --> FOAM FATAL IO ERROR: (openfoam-2206 patch=221104)
+[1] error in IOstream "processor1/4.82/phi" for operation Foam::Ostream& Foam::operator<<(Foam::Ostream&, Foam::doubleScalar)
+[1] 
+[1] file: processor1/4.82/phi at line 582.
+[1] 
+[1]     From bool Foam::IOstream::fatalCheck(const char*) const
+[1]     in file db/IOstreams/IOstreams/IOstream.C at line 70.
+[1] 
+FOAM parallel run exiting
+    in file db/IOstreams/IOstreams/IOstream.C at line 70.
+[0] 
+FOAM parallel run exiting
+[0] 
+[1] 
+--------------------------------------------------------------------------
+MPI_ABORT was invoked on rank 1 in communicator MPI_COMM_WORLD
+with errorcode 1.
+
+NOTE: invoking MPI_ABORT causes Open MPI to kill all MPI processes.
+You may or may not see output from other processes, depending on
+exactly when Open MPI kills them.
+--------------------------------------------------------------------------
+[leonard-MacBookPro:34471] 1 more process has sent help message help-mpi-api.txt / mpi-abort
+[leonard-MacBookPro:34471] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+

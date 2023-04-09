@@ -49,5 +49,7 @@ elif solver == 'fmi':
                     label=f"(u,v) at t={df['time'].iloc[-1]}", marker="*")
         plt.title(PlotType.TRAJECTORY.value)
         plt.legend()
+else:
+    print("Error: Solver ", solver, " not found") 
 
 plt.show()

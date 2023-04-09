@@ -139,7 +139,7 @@ elif is_fmi3:
 
 try:
     signal_names    = fmi_data["input_signals"]["names"]
-    signal_data	    = fmi_data["input_signals"]["data"]
+    signal_data     = fmi_data["input_signals"]["data"]
     dtype           = []
     for i in range(len(signal_names)):
         tpl = tuple([signal_names[i], type(signal_data[0][i])]) # not sure if the type() might cause problems
@@ -154,8 +154,8 @@ input = Input(fmu, model_description, signals)
 ### preCICE setup
 
 # Current limitations of the Runner
-solver_process_index 	= 0
-solver_process_size 	= 1
+solver_process_index    = 0
+solver_process_size     = 1
 num_vertices            = 1
 
 interface = precice.Interface(

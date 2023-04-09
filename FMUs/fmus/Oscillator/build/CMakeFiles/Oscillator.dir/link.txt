@@ -1,1 +1,0 @@
-/usr/bin/cc -fPIC  -static-libgcc -shared -Wl,-soname,Oscillator.so -o temp/Oscillator/binaries/linux64/Oscillator.so CMakeFiles/Oscillator.dir/Oscillator/model.c.o CMakeFiles/Oscillator.dir/src/fmi2Functions.c.o CMakeFiles/Oscillator.dir/src/cosimulation.c.o 
