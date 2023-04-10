@@ -18,7 +18,7 @@ FoamFile
 
 dimensions      [ 0 1 -1 0 0 0 0 ];
 
-internalField   uniform (1.0883 0 0); 
+internalField   uniform (0.068018 0 0); // Re = 108.83 --> u_0 = 0.068018 for D=0.0016 and water (rho, nu)
 
 boundaryField
 {

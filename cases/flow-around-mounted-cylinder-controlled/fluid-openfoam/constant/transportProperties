@@ -16,6 +16,6 @@ FoamFile
 
 transportModel  Newtonian;
 
-nu              [0 2 -1 0 0 0 0] 0.001;
+nu              [0 2 -1 0 0 0 0] 1e-6; // nu: dynamic viscosity of the fluid, nu = 1e-3 for air?, nu = 1e-6 for water?
 
 // ************************************************************************* //

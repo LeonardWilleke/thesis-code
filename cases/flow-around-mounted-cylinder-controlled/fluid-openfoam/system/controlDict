@@ -52,7 +52,7 @@ maxCo           1;
 functions
 {
     #includeFunc forceCoeffs
-    #includeFunc probes
+    //#includeFunc probes
     #includeFunc preCICE_Adapter 
 }
 
