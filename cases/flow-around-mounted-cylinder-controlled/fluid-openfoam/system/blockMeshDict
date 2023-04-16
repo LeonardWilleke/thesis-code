@@ -7,70 +7,30 @@ FoamFile
 }
 
 // center of the cylinder: x = 0.0 y = 0.0
-f 0;   // z-front
-b 0.01;    // z-back
-x_min -0.0264;
-x_max 0.08;
+f 0;            // z-front
+b 1;            // z-back
+x_min -0.0264;  
+x_max 0.08;     
 y_min -0.0264;
 y_max 0.0264;
 
 
 // Grid refinement parameters
-H1 21;      // Nx first block
-H2 5;      // Nx second block
-H3 12;      // Nx third block flap in x
+H1 40;      // Nx first block
+H2 15;       // Nx second block
+H3 18;      // Nx third block flap in x
 H4 120;     // Nx last block
-H5 2;      // amount of cells above/below flap
+H5 8;       // amount of cells above/below flap
 
-V1 22;      // Ny first inlet/outlet block: Bottom wall to flap block
-V2 5;      // Ny second inlet block
-V3 6;      // Amount of cells in radius
-V4 2;      // Ny above/blow flap to back
-V5 23;      // Ny top inlet/outlet block: Top wall to flap block
-V6 1;       // Ny after flap
+V1 40;      // Ny first inlet/outlet block: Bottom wall to flap block
+V2 15;       // Ny second inlet block
+V3 18;       // Amount of cells in radius
+V4 8;       // Ny above/blow flap to back
+V5 32;      // Ny top inlet/outlet block: Top wall to flap block
+V6 2;       // Ny after flap
 
 GR 1.0;     // Circular mesh gradient
-GO 2.5;    // Outlet grading
-
-
-// TEMPORARY
-
-// x shifting: x_new = x_old - 0.2
-// 0.119526 --> -0.080474
-// 0.280474 --> 0.080474
-// 0.6 --> 0.4
-// 0.164645 --> -0.035355
-// 0.231623 --> 0.031623
-
-// y shifting: y_new = y_old - 0.2
-// 0.119526 --> -0.080474
-// 0.164645 --> -0.035355
-// 0.16127 -->  -0.038730
-// 0.156475 --> -0.043525
-// 0.175117 --> -0.024883
-
-// scaling: scale all point coordinates by D_new / D_old
-
-// x scaling: x_new = x_old * (0.0016 / 0.1)
-// 0.080474 --> 0.001287
-// 0.4      --> 0.0064
-// 0.035355 --> 0.000565
-// 0.031623 --> 0.000505
-// 0.099528 --> 0.001592
-// 0.048990 --> 0.000783
-// 0.093144 --> 0.001490
-// 0.043369 --> 0.000693
-// 0.040920 --> 0.000654
-// 0.091756 --> 0.001468
-
-// y scaling: y_new = y_old * (0.0016 / 0.1)
-// 0.080474 --> 0.001287
-// 0.035355 --> 0.000565
-// 0.038730 --> 0.000619
-// 0.043525 --> 0.000696
-// 0.024883 --> 0.000398
-// 0.028733 --> 0.000459
-// 0.048208 --> 0.000771
+GO 2.5;     // Outlet grading
 
 
 vertices

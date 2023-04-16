@@ -60,39 +60,52 @@
     <m2n:sockets from="Controller" to="Solid" exchange-directory="../" />
     <m2n:sockets from="Fluid" to="Solid" exchange-directory="../" />
     
-    <coupling-scheme:serial-implicit> 
-      <participants first="Fluid" second="Solid" /> 
-      <max-time value="45" />
-      <time-window-size value="0.01" />
+    <!-- MULTI
+    <coupling-scheme:multi>
+      <participant name="Fluid" control="yes"/>
+      <participant name="Solid" />
+      <participant name="Controller" />
+      <max-time value="10" />
+      <time-window-size value="0.001" />
       <max-iterations value="100" />
       <exchange data="Force" mesh="Mesh-Solid" from="Fluid" to="Solid"/>
       <exchange data="Displacement-Cylinder" mesh="Mesh-Solid" from="Solid" to="Fluid"/>
       <relative-convergence-measure data="Force" mesh="Mesh-Solid" limit="1e-3"/>
       <relative-convergence-measure data="Displacement-Cylinder" mesh="Mesh-Solid" limit="1e-3"/>
+      <exchange data="Displacement-Spring" mesh="Mesh-Controller" from="Controller" to="Solid"/>
+      <exchange data="Displacement-Cylinder" mesh="Mesh-Solid" from="Solid" to="Controller"/>
+      <relative-convergence-measure data="Displacement-Spring" mesh="Mesh-Controller" limit="1e-3"/>
+    </coupling-scheme:multi>
+    -->
+    
+    
+    
+    <coupling-scheme:serial-implicit> 
+      <participants first="Fluid" second="Solid" /> 
+      <max-time value="3" />
+      <time-window-size value="0.005" />
+      <exchange data="Force" mesh="Mesh-Solid" from="Fluid" to="Solid"/>
+      <exchange data="Displacement-Cylinder" mesh="Mesh-Solid" from="Solid" to="Fluid" initialize="true"/>
+       <!-- IMPLICIT -->
+      <max-iterations value="20" />
+      <relative-convergence-measure data="Force" mesh="Mesh-Solid" limit="1e-3"/>
+      <relative-convergence-measure data="Displacement-Cylinder" mesh="Mesh-Solid" limit="1e-3"/> 
+      <!--
       <acceleration:aitken>
         <data name="Displacement-Cylinder" mesh="Mesh-Solid" />
         <initial-relaxation value="0.1"/>
-      </acceleration:aitken>
-      <!--
-      <acceleration:IQN-ILS>
-        <data name="Displacement-Cylinder" mesh="Mesh-Solid" />
-        <preconditioner type="residual-sum" />
-        <filter type="QR2" limit="1e-2" />
-        <initial-relaxation value="0.5" />
-        <max-used-iterations value="10" />
-        <time-windows-reused value="15" />
-      </acceleration:IQN-ILS>
+      </acceleration:aitken> 
       -->
     </coupling-scheme:serial-implicit> 
     
     <coupling-scheme:serial-explicit> 
       <participants first="Solid" second="Controller" /> 
-      <max-time value="45" />
-      <time-window-size value="0.01" />
-      <exchange data="Displacement-Spring" mesh="Mesh-Controller" from="Controller" to="Solid"/>
+      <max-time value="3" />
+      <time-window-size value="0.005" />
+      <exchange data="Displacement-Spring" mesh="Mesh-Controller" from="Controller" to="Solid" initialize="true"/>
       <exchange data="Displacement-Cylinder" mesh="Mesh-Solid" from="Solid" to="Controller"/>
     </coupling-scheme:serial-explicit>
-    
+   
                    
   </solver-interface>
 

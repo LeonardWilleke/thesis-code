@@ -22,55 +22,55 @@ FoamFile
     {
         type            empty;
         inGroups        1(empty);
-        nFaces          15954;
-        startFace       15772;
+        nFaces          36084;
+        startFace       35915;
     }
     inlet
     {
         type            patch;
-        nFaces          50;
-        startFace       31726;
+        nFaces          87;
+        startFace       71999;
     }
     outlet
     {
         type            patch;
-        nFaces          50;
-        startFace       31776;
+        nFaces          90;
+        startFace       72086;
     }
     top
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          158;
-        startFace       31826;
+        nFaces          193;
+        startFace       72176;
     }
     bottom
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          158;
-        startFace       31984;
+        nFaces          193;
+        startFace       72369;
     }
     jet
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          1;
-        startFace       32142;
+        nFaces          2;
+        startFace       72562;
     }
     cylinder
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          19;
-        startFace       32143;
+        nFaces          61;
+        startFace       72564;
     }
     defaultFaces
     {
         type            empty;
         inGroups        1(empty);
-        nFaces          36;
-        startFace       32162;
+        nFaces          144;
+        startFace       72625;
     }
 )
 

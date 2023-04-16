@@ -24,6 +24,9 @@ d_damper 	= 0.0043 # N/s
 state_vector_old 	= np.zeros((3,1))
 state_vector 		= np.zeros((3,1))
 
+# testing parameters
+ratio_force = 1
+
 def update(mass, k_spring, d_damper, state_vector_old, dt, force, displacement_spring):
 	
     # create system matrix for left hand side
@@ -89,10 +92,18 @@ read_data_id_displacement = interface.get_data_id(read_data_name_displacement, m
 write_data_id = interface.get_data_id(write_data_name, mesh_id)
 
 dt = interface.initialize()
+t = 0
+
+# initialize data
+if interface.is_action_required(precice.action_write_initial_data()):
+    interface.write_block_vector_data(write_data_id, vertex_ids, write_data)
+    interface.mark_action_fulfilled(precice.action_write_initial_data())
+interface.initialize_data()
 
 while interface.is_coupling_ongoing():
     if interface.is_action_required(precice.action_write_iteration_checkpoint()):
         
+        print("Writing checkpoint")
         state_vector_old_cp = state_vector_old
         state_vector_cp = state_vector
         
@@ -100,15 +111,28 @@ while interface.is_coupling_ongoing():
 
     read_data_force = interface.read_block_vector_data(read_data_id_force, vertex_ids)
     force = read_data_force[0,1]
+    print("Force read by solid:", force)
     read_data_displacement = interface.read_block_vector_data(read_data_id_displacement, vertex_ids)
     displacement_spring = read_data_displacement[0,1]
+    
+    print("Force is scaled by: ", ratio_force)
+    force = force * ratio_force
 	
     # compute next time step
     state_vector = update(mass, k_spring, d_damper, state_vector_old, dt, force, displacement_spring)
 	
 	
     write_data[0,0] = 0
+    
+    print("Cylinder is mounted on spring")
     write_data[0,1] = state_vector[0,0]
+    
+    #print("Cylinder is fixed")
+    #write_data[0,1] = 0
+    
+    #print("Cylinder does a prescribed oscillation")
+    #write_data[0,1] = 0.0004*np.sin(44.2930*t)
+
 
     interface.write_block_vector_data(write_data_id, vertex_ids, write_data)
 
@@ -117,11 +141,13 @@ while interface.is_coupling_ongoing():
 
     if interface.is_action_required(precice.action_read_iteration_checkpoint()):
         
+        print("Reading checkpoint")
         state_vector_old = state_vector_old_cp
         state_vector = state_vector_cp
         
         interface.mark_action_fulfilled(precice.action_read_iteration_checkpoint())
     else:
     	state_vector_old = state_vector
+    	t = t + dt
 
 interface.finalize()

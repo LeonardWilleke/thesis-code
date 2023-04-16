@@ -30,7 +30,15 @@ EOF
 
 gnuplot -p <<EOF                                                             
 	set grid                                                                        
-	set title 'Force from Spring acting on cylinder'                                        
+	set title 'Drag Force'                                        
+	set xlabel 'time [s]'                                                           
+	set ylabel 'force y [N]'                                                 
+	plot "$1/precice-Solid-watchpoint-Spring.log" using 1:8 with lines title "$1"
+EOF
+
+gnuplot -p <<EOF                                                             
+	set grid                                                                        
+	set title 'Lift Force'                                        
 	set xlabel 'time [s]'                                                           
 	set ylabel 'force y [N]'                                                 
 	plot "$1/precice-Solid-watchpoint-Spring.log" using 1:9 with lines title "$1"

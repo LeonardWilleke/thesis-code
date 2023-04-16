@@ -4,14 +4,15 @@
 
 patches (cylinder jet);
 
-magUInf     1; // old: 1; relative velocity of cylinder to flow --> I guess this should be 0, but it doesnt work?
+magUInf     0.068018; // old: 1; relative velocity of cylinder to flow --> I guess this should be 0, but it doesnt work?
 lRef        0.0016;	// old: 0.1; length of the cylinder --> diameter
-Aref        0.000016; //old: 4.475757e-3; now: Aref = diameter * z_depth; is this Aref of the cylinder?
+Aref        0.0016; //old: 4.475757e-3; now: Aref = diameter * z_depth; is this Aref of the cylinder?
 
 liftDir     (0 1 0);
 dragDir     (1 0 0);
 CofR        (0 0 0);
 pitchAxis   (0 0 1);
+rhoInf      1000;
 
 
 // ************************************************************************* //
