@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ "${1:-}" = "" ]; then
-    echo "No target directory specified. Please specify the directory of the participant solid containing the watchpoint, e.g. ./plot-displacement.sh solid-python."
+    echo "No target directory specified. Please specify the directory of the participant solid containing the watchpoint, e.g. ./plot-watchpoint.sh solid-python."
     exit 1
 fi
 

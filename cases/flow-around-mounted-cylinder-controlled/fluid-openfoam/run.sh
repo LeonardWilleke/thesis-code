@@ -1,13 +1,8 @@
-#!/bin/bash
-cd "${0%/*}" || exit
-set -e
-. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions
+#!/bin/sh
+set -e -u
 
-#------------------------------------------------------------------------------
+blockMesh
+touch fluid-openfoam.foam
 
-(
-    runApplication setExprBoundaryFields
-    runApplication $(getApplication)
-)
-
-
+../../tools/run-openfoam.sh "$@"
+. ../../tools/openfoam-remove-empty-dirs.sh && openfoam_remove_empty_dirs

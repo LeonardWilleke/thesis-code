@@ -111,27 +111,17 @@ while interface.is_coupling_ongoing():
 
     read_data_force = interface.read_block_vector_data(read_data_id_force, vertex_ids)
     force = read_data_force[0,1]
-    print("Force read by solid:", force)
     read_data_displacement = interface.read_block_vector_data(read_data_id_displacement, vertex_ids)
     displacement_spring = read_data_displacement[0,1]
     
-    print("Force is scaled by: ", ratio_force)
-    force = force * ratio_force
-	
     # compute next time step
     state_vector = update(mass, k_spring, d_damper, state_vector_old, dt, force, displacement_spring)
 	
-	
+	# cylinder is fixed in x-direction
     write_data[0,0] = 0
     
-    print("Cylinder is mounted on spring")
+    # cylinder moves in y-direction according to spring-damper-mass-equation
     write_data[0,1] = state_vector[0,0]
-    
-    #print("Cylinder is fixed")
-    #write_data[0,1] = 0
-    
-    #print("Cylinder does a prescribed oscillation")
-    #write_data[0,1] = 0.0004*np.sin(44.2930*t)
 
 
     interface.write_block_vector_data(write_data_id, vertex_ids, write_data)
