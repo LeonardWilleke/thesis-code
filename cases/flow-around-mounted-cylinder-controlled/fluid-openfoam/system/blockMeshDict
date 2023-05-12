@@ -1,0 +1,334 @@
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+    class           dictionary;
+    object          blockMeshDict;
+}
+
+// center of the cylinder: x = 0.0 y = 0.0
+f 0;            // z-front
+b 1;            // z-back
+x_min -0.0264;  
+x_max 0.08;     
+y_min -0.0264;
+y_max 0.0264;
+
+
+// Grid refinement parameters
+H1 40;      // Nx first block
+H2 15;       // Nx second block
+H3 18;      // Nx third block flap in x
+H4 120;     // Nx last block
+H5 8;       // amount of cells above/below flap
+
+V1 40;      // Ny first inlet/outlet block: Bottom wall to flap block
+V2 15;       // Ny second inlet block
+V3 18;       // Amount of cells in radius
+V4 8;       // Ny above/blow flap to back
+V5 32;      // Ny top inlet/outlet block: Top wall to flap block
+V6 2;       // Ny after flap
+
+GR 1.0;     // Circular mesh gradient
+GO 2.5;     // Outlet grading
+
+
+vertices
+(
+    // Block 0
+    ($x_min $y_min $f)                // vertex 0
+    (-0.001287 $y_min $f)
+    (-0.001287 -0.001287 $f)
+    ($x_min -0.001287 $f)         // vertex 3
+
+    ($x_min $y_min $b)                // vertex 4
+    (-0.001287 $y_min $b)
+    (-0.001287 -0.001287 $b)
+    ($x_min -0.001287 $b)         // vertex 7
+
+    // Block 1
+    (0.001287 $y_min $f)         // vertex 8
+    (0.001287 -0.001287 $f)
+
+    (0.001287 $y_min $b)         // vertex 10
+    (0.001287 -0.001287 $b)
+
+    // Block 2
+    (0.0064 $y_min $f)              // vertex 12
+    (0.0064 -0.001287 $f)
+
+    (0.0064 $y_min $b)              // vertex 14
+    (0.0064 -0.001287 $b)
+
+    // Block 3
+    ($x_max $y_min $f)              // vertex 16
+    ($x_max -0.001287 $f)
+
+    ($x_max $y_min $b)              // vertex 18
+    ($x_max -0.001287 $b)
+
+    // Block 4
+    (-0.001287 0.001287 $f)  // vertex 20
+    ($x_min 0.001287 $f)
+
+    (-0.001287 0.001287 $b)  // vertex 22
+    ($x_min 0.001287 $b)
+
+    // Block 5
+    (-0.000565 -0.000565 $f)  // vertex 24
+    (-0.000565 0.000565 $f)
+
+    (-0.000565 -0.000565 $b)  // vertex 26
+    (-0.000565 0.000565 $b)
+
+    // Block 6
+    (0.000505 -0.000619 $f)   // vertex 28
+    (0.000505 -0.000619 $b)
+
+    // Block 7
+    (0.001592 -0.00016 $f)      // vertex 30
+    (0.000783 -0.00016 $f)
+
+    (0.001592 -0.00016 $b)      // vertex 32
+    (0.000783 -0.00016 $b)
+
+     // Block 8
+    (0.0064 -0.00016 $f)           // vertex 34
+    (0.0064 -0.00016 $b)
+
+    // Block 9
+    ($x_max -0.00016 $f)           // vertex 36
+    ($x_max -0.00016 $b)
+
+    // Block 10
+    (0.001287 0.001287 $f)  // vertex 38
+    (0.000505 0.000619 $f)
+
+    (0.001287 0.001287 $b)  // vertex 40
+    (0.000505 0.000619 $b)
+
+    // Block 11
+    (0.001592 0.00016 $f)      // vertex 42
+    (0.000783 0.00016 $f)
+
+    (0.001592 0.00016 $b)      // vertex 44
+    (0.000783 0.00016 $b)
+
+    // Block 12
+    (0.0064 0.00016 $f)           // vertex 46
+    (0.0064 0.001287 $f) 
+
+    (0.0064 0.00016 $b)           // vertex 48
+    (0.0064 0.001287 $b)
+
+    // Block 14
+    ($x_max 0.00016 $f)           // vertex 50
+    ($x_max 0.001287 $f)
+
+    ($x_max 0.00016 $b)           // vertex 52
+    ($x_max 0.001287 $b)
+
+    // Block 15
+    (-0.001287 $y_max $f)      // vertex 54
+    ($x_min $y_max $f)
+
+    (-0.001287 $y_max $b)      // vertex 56
+    ($x_min $y_max $b)
+
+    // Block 16
+    (0.001287 $y_max $f)      // vertex 58
+    (0.001287 $y_max $b)
+
+    // Block 17
+    (0.0064 $y_max $f)           // vertex 60
+    (0.0064 $y_max $b)
+
+    // Block 18
+    ($x_max $y_max $f)           // vertex 62
+    ($x_max $y_max $b)
+);
+
+
+blocks
+(
+    // Block 0 - 4
+    hex ( 0  1  2  3  4  5  6  7) ($H1 $V1 1) simpleGrading (1 1 1)
+    hex ( 1  8  9  2  5 10 11  6) ($H2 $V1 1) simpleGrading (1 1 1)
+    hex ( 8 12 13  9 10 14 15 11) ($H3 $V1 1) simpleGrading (1 1 1)
+    hex (12 16 17 13 14 18 19 15) ($H4 $V1 1) simpleGrading ($GO 1 1)
+    hex ( 3  2 20 21  7  6 22 23) ($H1 $V2 1) simpleGrading (1 1 1)
+    
+    // Block 5 - 9
+    hex (24 25 20  2 26 27 22  6) ($H2 $V3 1) simpleGrading (1 $GR 1)
+    hex (28 24  2  9 29 26  6 11) ($H2 $V3 1) simpleGrading (1 $GR 1)
+    hex (31 28  9 30 33 29 11 32) ($H5 $V3 1) simpleGrading (1 $GR 1)
+    hex ( 9 13 34 30 11 15 35 32) ($H3 $V4 1) simpleGrading (1 1 1)
+    hex (13 17 36 34 15 19 37 35) ($H4 $V4 1) simpleGrading ($GO 1 1)
+    
+    // Block 10 - 14
+    hex (25 39 38 20 27 41 40 22) ($H2 $V3 1) simpleGrading (1 $GR 1)
+    hex (39 43 42 38 41 45 44 40) ($H5 $V3 1) simpleGrading (1 $GR 1)
+    hex (42 46 47 38 44 48 49 40) ($H3 $V4 1) simpleGrading (1 1 1)
+    hex (30 34 46 42 32 35 48 44) ($H3 $V6 1) simpleGrading (1 1 1)
+    hex (31 30 42 43 33 32 44 45) ($V3 $V6 1) simpleGrading ($GR 1 1)
+    
+    hex (34 36 50 46 35 37 52 48) ($H4 $V6 1) simpleGrading ($GO 1 1)
+    hex (46 50 51 47 48 52 53 49) ($H4 $V4 1) simpleGrading ($GO 1 1)
+    
+    // Block 15 - 18
+    hex (21 20 54 55 23 22 56 57) ($H1 $V5 1) simpleGrading (1 1 1)
+    hex (20 38 58 54 22 40 59 56) ($H2 $V5 1) simpleGrading (1 1 1)
+    hex (38 47 60 58 40 49 61 59) ($H3 $V5 1) simpleGrading (1 1 1)
+    hex (47 51 62 60 49 53 63 61) ($H4 $V5 1) simpleGrading ($GO 1 1)    
+);
+
+edges
+(
+    arc 9 2 (0.0 -0.0016 $f)                // Block 1
+    arc 11 6 (0.0 -0.0016 $b)
+    
+    arc 2 20 (-0.0016 0.0 $f)               // Block 4
+    arc 6 22 (-0.0016 0.0 $b)
+    
+    arc 24 25 (-0.0008 0.0 $f)             // Block 5
+    arc 26 27 (-0.0008 0.0 $b)
+    
+    arc 24 28 (0.0 -0.0008 $f)             // Block 6
+    arc 26 29 (0.0 -0.0008 $b)
+    
+    arc 9 30 (0.001490 -0.000696 $f)     // Block 7
+    arc 28 31 (0.000693 -0.000398 $f)
+    arc 11 32 (0.001490 -0.000696 $b)    // Block 7
+    arc 29 33 (0.000693 -0.000398 $b)
+    
+    arc 31 43 (0.0008 0.0 $f)
+    arc 33 45 (0.0008 0.0 $b)
+    arc 20 38 (0.0 0.0016 $f)              // Block 10
+    arc 25 39 (0.0 0.0008 $f)
+    arc 22 40 (0.0 0.0016 $b)              // Block 10
+    arc 27 41 (0.0 0.0008 $b)
+    
+    arc 39 43 (0.000654 0.000459 $f)     // Block 11
+    arc 41 45 (0.000654 0.000459 $b)
+    arc 38 42 (0.001468 0.000771 $f)    // Block 11
+    arc 40 44 (0.001468 0.000771 $b)
+);
+
+boundary
+(
+    frontAndBack
+    {
+        type empty;
+        faces
+        (
+            (0 1 2 3)
+            (3 2 20 21)
+            (21 20 55 54)
+            (1 8 9 2)
+            (2 9 28 24)
+            (2 24 25 20)
+            (25 39 38 20)
+            (20 38 58 54)
+            (9 30 31 28)
+            (43 42 38 39)
+            (8 12 13 9)
+            (9 13 34 30)
+            (42 46 47 38)
+            (38 47 60 58)
+            (12 16 17 13)
+            (13 17 36 34)
+            (34 36 50 46)
+            (46 50 51 47)
+            (47 51 62 60)
+            (4 5 6 7)
+            (7 6 22 23)
+            (23 22 56 57)
+            (5 10 11 6)
+            (6 11 29 26)
+            (6 26 27 22)
+            (27 41 40 22)
+            (22 40 59 56)
+            (11 32 33 29)
+            (45 44 40 41)
+            (10 14 15 11)
+            (11 15 35 32)
+            (44 48 49 40)
+            (40 49 61 59)
+            (14 18 19 15)
+            (15 19 37 35)
+            (35 37 52 48)
+            (48 52 53 49)
+            (49 53 63 61)
+        );
+    }
+
+    inlet
+    {
+        type patch;
+        faces
+        (
+            ( 0  4  7  3)
+            ( 3  7 23 21)
+            (21 23 57 55)
+        );
+    }
+    
+    outlet
+    {
+        type patch;
+        faces
+        (
+            (16 18 19 17)
+            (17 19 37 36)
+            (36 37 52 50)
+            (50 52 53 51)
+            (51 53 63 62)
+        );
+    }
+
+    top
+    {
+        type wall;
+        faces
+        (
+            (55 54 56 57)
+            (54 58 59 56)
+            (58 60 61 59)
+            (60 62 63 61)
+        );
+    }
+    
+    bottom
+    {
+        type wall;
+        faces
+        (
+            (0 1 5 4)
+            (1 8 10 5)
+            (8 12 14 10)
+            (12 16 18 14)
+        );
+    }
+
+    jet
+    {
+        type wall;
+        faces
+        (
+            (31 43 33 45)
+        );
+    }
+
+    cylinder
+    {
+        type wall;
+        faces
+        (
+            (24 28 29 26)
+            (28 31 33 29)
+            (43 39 41 45)
+            (39 25 27 41)
+            (25 24 26 27)
+        );
+    }
+);

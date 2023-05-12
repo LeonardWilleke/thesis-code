@@ -19,13 +19,15 @@ while getopts ":lr" opt; do
   case ${opt} in
   l)
     
-    python3 ../../../runner/runner.py $fmi_settings_path_left $precice_settings_path_left
+    #python3 ../../../runner/runner.py $fmi_settings_path_left $precice_settings_path_left
+    fmiprecice ./MassLeft/fmi-settings.json ./MassLeft/precice-settings.json
     python3 calculate-error.py ./MassLeft/fmi-settings.json ./MassLeft/precice-settings.json ./MassRight/fmi-settings.json ./MassRight/precice-settings.json Mass-Left
 
     ;;
   r)
   	
-    python3 ../../../runner/runner.py $fmi_settings_path_right $precice_settings_path_right
+    #python3 ../../../runner/runner.py $fmi_settings_path_right $precice_settings_path_right
+    fmiprecice ./MassRight/fmi-settings.json ./MassRight/precice-settings.json
     python3 calculate-error.py ./MassLeft/fmi-settings.json ./MassLeft/precice-settings.json ./MassRight/fmi-settings.json ./MassRight/precice-settings.json Mass-Right
 
     ;;

@@ -42,14 +42,13 @@ cd fmi
 
 ## Simulation parameters
 
-!!! WARNING: The pictures and gains given below are out of date. The calculation of the integration method of the PID controller were changed. Use the following parameters as starting point:
+!!! WARNING: The pictures and gains given below are out of date. The calculation of the integration method of the PID controller changed. Use the following parameters as starting point:
 
 ```bash
 kp = 800.0
 ki = 2.0
 kd = 20.0
 I_max = 100
-./run.sh
 ```
 The new parameter `I_max` was necessary to avoid integrator windup.
 

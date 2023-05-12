@@ -1,5 +1,5 @@
 # build files
-FMUs/cmake/*/build/
+FMUs/fmus/*/build/
 
 # simulation logs
 *.log

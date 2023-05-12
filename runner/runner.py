@@ -105,23 +105,31 @@ fmu = instantiate_fmu(unzipdir=unzipdir, model_description=model_description, fm
 
 if is_fmi1:
     # Set initial parameters
-    apply_start_values(fmu, model_description, fmi_data["initial_conditions"])
-    apply_start_values(fmu, model_description, fmi_data["model_params"])
+    if "initial_conditions" in fmi_data:
+        apply_start_values(fmu, model_description, fmi_data["initial_conditions"])
+    if "model_params" in fmi_data:
+        apply_start_values(fmu, model_description, fmi_data["model_params"])
     # Get initial write data
     fmu_write_data_init = fmu.getReal(vr_write)
+
 elif is_fmi2:
     # Set initial parameters
     fmu.enterInitializationMode()
-    apply_start_values(fmu, model_description, fmi_data["initial_conditions"])
-    apply_start_values(fmu, model_description, fmi_data["model_params"])
+    if "initial_conditions" in fmi_data:
+        apply_start_values(fmu, model_description, fmi_data["initial_conditions"])
+    if "model_params" in fmi_data:
+        apply_start_values(fmu, model_description, fmi_data["model_params"])
     fmu.exitInitializationMode()    
     # Get initial write data
     fmu_write_data_init = fmu.getReal(vr_write)
+
 elif is_fmi3:
     # Set initial parameters
     fmu.enterInitializationMode()
-    apply_start_values(fmu, model_description, fmi_data["initial_conditions"])
-    apply_start_values(fmu, model_description, fmi_data["model_params"])
+    if "initial_conditions" in fmi_data:
+        apply_start_values(fmu, model_description, fmi_data["initial_conditions"])
+    if "model_params" in fmi_data:
+        apply_start_values(fmu, model_description, fmi_data["model_params"])
     fmu.exitInitializationMode()
     # Get initial write data
     fmu_write_data_init = fmu.getFloat64(vr_write)
@@ -131,7 +139,7 @@ elif is_fmi3:
 
 try:
     signal_names    = fmi_data["input_signals"]["names"]
-    signal_data	    = fmi_data["input_signals"]["data"]
+    signal_data     = fmi_data["input_signals"]["data"]
     dtype           = []
     for i in range(len(signal_names)):
         tpl = tuple([signal_names[i], type(signal_data[0][i])]) # not sure if the type() might cause problems
@@ -146,9 +154,9 @@ input = Input(fmu, model_description, signals)
 ### preCICE setup
 
 # Current limitations of the Runner
-solver_process_index 	= 0
-solver_process_size 	= 1
-num_vertices 			= 1
+solver_process_index    = 0
+solver_process_size     = 1
+num_vertices            = 1
 
 interface = precice.Interface(
     precice_data["coupling_params"]["participant_name"],
@@ -218,7 +226,7 @@ while interface.is_coupling_ongoing():
     # Read data from other participant
     read_data = precice_read_data(read_data_type, read_data_id, vertex_id)
     
-    # Convert to list for FMU
+    # Convert data to list for FMU
     if read_data_type == "scalar":
     	read_data = [read_data]
     elif read_data_type == "vector":

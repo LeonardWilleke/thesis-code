@@ -12,7 +12,7 @@ This tutorial is only available in Python and OpenFOAM. You need to have preCICE
 
 ## Running the simulation
 
-Currently, the OpenFOAM case can only be coupled with the dummy controller. To do so, open two seperate terminals and run the following commands:
+Open two seperate terminals and run the following commands:
 
 ```bash
 cd fluid-openfoam
@@ -22,7 +22,7 @@ cd fluid-openfoam
 and
 
 ```bash
-cd controller-dummy
+cd controller-fmi
 ./run.sh
 ```
 
@@ -45,4 +45,4 @@ Now you can apply the data from the simulation and animate the results. In the p
 
 ## Contribution
 
-Many thanks to Mosayeb Shams from Heriot-Watt University who further adapted the test case for this use
+Many thanks to Mosayeb Shams from Heriot-Watt University who further adapted the test case for the use with preCICE
