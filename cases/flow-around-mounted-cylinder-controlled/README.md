@@ -95,6 +95,10 @@ cd fluid-openfoam
 paraFoam
 ```
 
+## Important note
+
+This case is set up to reproduce the results in the cited literature. Unfortunately, this has currently not been achieved. An error remains in the force calculation in OpenFOAM. We hope to fix this error in the near future.
+
 ## References
 
 [1] Placzek, A. and Sigrist, J.F. and Hamdouni, A. [Numerical Simulation of an oscillating cylinder in a cross-flow at low Reynolds number: Forced and free oscillations](https://dx.doi.org/10.1016/j.compfluid.2008.01.007), Computers and Fluids, 2009, 38 (1), pp.80-100

@@ -7,7 +7,7 @@ This case solves the airflow around a cylinder and combines it with a control ca
 This tutorial is only available in Python and OpenFOAM. You need to have preCICE, OpenFOAM and the [Python bindings](https://www.precice.org/installation-bindings-python.html) installed on your system.
 
 - *OpenFOAM*: 
-- *Dummy*: A Python dummy used to test the coupling between OpenFOAM and the controller
+- *Dummy*: A Python dummy used to test the coupling to OpenFOAM. You can use it instead of the controller if you want to tweak the setup.
 - *FMI*: An example PID controller using FMU models for computation. This solver depends on the Python libraries `numpy` and `FMPy` which you can install with conda or pip, for example `pip3 install --user fmpy`. You also need the compiled FMU model `PIDcontroller.fmu`. The model for Linux is part of this repository in the folder [FMUs](../../FMUs). For other systems, please recompile the model from the provided [C-files](../../FMUs/cmake). If you want to change the model parameters, have a look inside the [setting files](controller-fmi/pid).
 
 ## Running the simulation
