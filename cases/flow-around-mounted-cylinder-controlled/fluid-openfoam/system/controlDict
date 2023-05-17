@@ -23,9 +23,9 @@ startTime       0;
 
 stopAt          endTime;
 
-endTime    20;
+endTime    5;
 
-deltaT          0.01;
+deltaT          0.0005;
 
 writeControl   runTime;
 
@@ -35,7 +35,7 @@ purgeWrite      0;
 
 writeFormat     ascii;
 
-writePrecision  8;
+writePrecision  16;
 
 writeCompression off;
 
@@ -51,7 +51,16 @@ maxCo           1;
 
 functions
 {
-    #includeFunc forceCoeffs
+
+forces{
+type forces;
+libs ( "libforces.so" );
+patches (cylinder jet);
+rho  rhoInf;
+log         true;
+rhoInf      1000;
+CofR (0 0 0);
+}
     #includeFunc preCICE_Adapter 
 }
 

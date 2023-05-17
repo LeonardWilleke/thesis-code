@@ -28,14 +28,6 @@
       <use-data name="Force" />
     </mesh>
 
-    <participant name="Controller">
-      <use-mesh name="Mesh-Controller" provide="yes"/>
-      <use-mesh name="Mesh-Solid" from="Solid"/>
-      <write-data name="Displacement-Spring" mesh="Mesh-Controller" />
-      <read-data name="Displacement-Cylinder" mesh="Mesh-Controller" />
-      <mapping:nearest-neighbor direction="read"  from="Mesh-Solid" to="Mesh-Controller" constraint="consistent" />
-    </participant>
-
     <participant name="Fluid">
       <use-mesh name="Mesh-Fluid" provide="yes"/>
       <use-mesh name="Mesh-Solid" from="Solid" geometric-filter="no-filter"/>
@@ -49,21 +41,19 @@
     
     <participant name="Solid">
       <use-mesh name="Mesh-Solid" provide="yes"/>
-      <use-mesh name="Mesh-Controller" from="Controller"/>
       <write-data name="Displacement-Cylinder" mesh="Mesh-Solid" />
       <read-data name="Force" mesh="Mesh-Solid" />
       <read-data name="Displacement-Spring" mesh="Mesh-Solid" />
       <watch-point mesh="Mesh-Solid" name="Spring" coordinate="0.0;0.0"/>
-      <mapping:nearest-neighbor direction="read"  from="Mesh-Controller" to="Mesh-Solid" constraint="consistent" />
+     <export:vtu directory="export" />
     </participant>
 
-    <m2n:sockets from="Controller" to="Solid" exchange-directory="../" />
     <m2n:sockets from="Fluid" to="Solid" exchange-directory="../" />
     
     <coupling-scheme:serial-implicit> 
       <participants first="Fluid" second="Solid" /> 
       <max-time value="10" />
-      <time-window-size value="0.005" />
+      <time-window-size value="0.0005" />
       <exchange data="Force" mesh="Mesh-Solid" from="Fluid" to="Solid"/>
       <exchange data="Displacement-Cylinder" mesh="Mesh-Solid" from="Solid" to="Fluid" initialize="true"/>
       <max-iterations value="20" />
@@ -71,13 +61,6 @@
       <relative-convergence-measure data="Displacement-Cylinder" mesh="Mesh-Solid" limit="1e-3"/> 
     </coupling-scheme:serial-implicit> 
     
-    <coupling-scheme:serial-explicit> 
-      <participants first="Solid" second="Controller" /> 
-      <max-time value="10" />
-      <time-window-size value="0.005" />
-      <exchange data="Displacement-Spring" mesh="Mesh-Controller" from="Controller" to="Solid" initialize="true"/>
-      <exchange data="Displacement-Cylinder" mesh="Mesh-Solid" from="Solid" to="Controller"/>
-    </coupling-scheme:serial-explicit>
    
                    
   </solver-interface>

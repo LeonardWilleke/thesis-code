@@ -6,98 +6,43 @@ The up-and-down oscillation can be counteracted by moving the root point of the 
 
 ![Setup of the flow around a mounted cylinder](images/test-case-setup.png)
 
-## Multi coupling
+## Current status
 
-We want to use three participants for the simulation: `Fluid`, `Solid` and `Controller`. For this we need to use a multi-coupling scheme. Read more about the concept [here](https://precice.org/configuration-coupling-multi.html).
+### Running OpenFOAM as standalone
 
-We are using a composition of bi-coupling schemes with one implicit coupling between `Fluid` and `Solid` and one explicit coupling between `Solid` and `Controller`. The participants `Fluid` and `Controller` are not coupled, as they don't exchange any data with each other.
+In this setup, the cylinder is fixed. The simulation results for drag and lift coefficients match the cited literature. 
+Conclusion: The OpenFOAM calculation and setup are correct.
 
-The configuration of this case looks like this:
+### Running OpenFOAM coupled to the solid participant (bicoupling)
 
-```xml
-<coupling-scheme:serial-implicit> 
-  <participants first="Fluid" second="Solid" /> 
-  ...
-</coupling-scheme:serial-implicit> 
+#### Fixed cylinder
 
-<coupling-scheme:serial-explicit> 
-  <participants first="Solid" second="Controller" /> 
-  ...
-</coupling-scheme:serial-explicit>
+A bidirectional explicit coupling between Fluid and Solid. The cylinder is fixed by defining a constant displacement value in the solid participant. Again, the drag and lift coefficients match the cited literature. However, there is a difference between the drag and lift forces **exported directly from OpenFOAM** and the forces **exported from the solid participant**. The difference is very small for the drag force, but more concerning for lift force. Still, both force values are in the range of the cited literature.
+Conclusion: 
+- The force values from OpenFOAM are not transferred to Solid identically
+- The transfer error is not very big and should not lead to the displacement error of 2 magnitudes reported in the thesis
 
-```
+#### Moving cylinder
 
-## About the solvers
+A bidirectional implicit coupling between Fluid and Solid. The cylinder moves according to the calculation in Solid.
 
-OpenFOAM is used for the `Fluid` participant. The spring-damper system is solved in a separate Python `solid` participant. Finally, the PID algorithm is calculated in a FMU as participant `Controller`.
+The drag coefficient matches the cited literature, but the difference between force values from OpenFOAm and Solid remains:
 
-- *OpenFOAM*: To run this case, you need the preCICE [OpenFOAM Adapter](https://precice.org/adapter-openfoam-get.html). OpenFOAM is used to simulate the laminar flow around the cylinder with the solver `pimpleFoam`.
-- *FMI*: A solver using the [preCICE-FMI Runner](https://github.com/precice/fmi-runner). The Runner executes the FMU model `PIDcontroller.fmu` for computation. The compiled FMU model for Linux is part of this repository. For other systems, please recompile the model from the provided C-files (see folder "controller-fmi/fmu"). If you want to change the model parameters or simulation setup, have a look inside `fmi-settings.json` and `precice-settings.json` (see folder "controller-fmi").
-- *Python*: A python script solving the spring damper system. It uses the preCICE [Python bindings](https://www.precice.org/installation-bindings-python.html) and depends on the Python library `numpy`. You can install `numpy` from your system package manager or with `pip3 install --user <package>`.
+![Drag force](images/force-drag.pdf)
 
+The lift coefficient matches the cited literature, but the difference between force values from OpenFOAm and Solid remains:
 
-## Running the simulation
+![Lift force](images/force-lift.pdf)
 
-Open three seperate terminals. The commands for the `Solid` and the `Controller` are:
+The displacement of the cylinder looks very different than reported in the thesis. There, the oscillation already reached a stable state at T=3s with a maximum of y_max = 6*e⁻6. Now the displacement develops slower, but continues to grow:
 
-```bash
-cd solid-python
-bash ./run.sh
-```
+![Displacement](images/displacement.pdf)
 
-and
+The simulation was stopped due to the long runtime on a normal laptop.
 
-```bash
-cd controller-fmi
-bash ./run.sh
-```
-
-For the `Fluid` participant, you can run OpenFOAM either serial or in parallel. To run the case in serial, you can use the same command as before
-
-```bash
-cd fluid-openfoam
-bash ./run.sh
-```
-while for the parallel computaion you need to set an additional flag
-
-```bash
-cd fluid-openfoam
-bash ./run.sh -parallel
-```
-
-## Post-processing
-There are multiple options for post-processing, depending on what you want to visualize. 
-
-**Plot displacement and forces**
-
-The `Solid` participant writes a `watchpoint` during the simulation. To plot this data, run the command
-
-```bash
-bash plot-watchpoint.sh solid-python
-```
-
-**Plot controller variables**
-
-The preCICE-FMI Runner stores some of the internal controller variables like output values and the terms of the different gains. To plot for example the error between measured and wanted state, run the command
-
-```bash
-python3 plot-timeseries.py ./controller-fmi/output/controller-output.csv E_OVER_T
-```
-
-To get a full list of the plot options, run `python3 plot-timeseries.py -h`.
-
-**View the simulation results in ParaView**
-
-OpenFOAM creates `.vtk` files during the simulation which you can visualize and animate in [ParaView](https://www.paraview.org/download/). To do so, run
-
-```bash
-cd fluid-openfoam
-paraFoam
-```
-
-## Important note
-
-This case is set up to reproduce the results in the cited literature. Unfortunately, this has currently not been achieved. An error remains in the force calculation in OpenFOAM. We hope to fix this error in the near future.
+Conclusion:
+- The bicoupling should be repeated for a longer simulation time to get the steady state value of the displacement
+- The threeway coupling seems to be introduce some change for the displacement, maybe the coupling to the FMI Runner is not correct
 
 ## References
 
@@ -106,7 +51,3 @@ This case is set up to reproduce the results in the cited literature. Unfortunat
 [2] Anagnostopoulus, P. and Bearman, P.W. Response Characteristics of a vortex-excited cylinder at low Reynolds numbers, Journal of Fluids and Structures, January 1992, DOI: 10.1016/0889-9746(92)90054-7
 
 [3] Sicklinger, S. [Stabilized Co-Simulation of Coupled Problems including Fields and Signals](https://www.researchgate.net/publication/269705153_Stabilized_Co-Simulation_of_Coupled_Problems_Including_Fields_and_Signals), Technical University of Munich, Dissertation
-
-## Contributions
-
-Many thanks to David Schneider for his help with OpenFOAM

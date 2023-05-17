@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<VTKFile type="UnstructuredGrid" version="0.1" byte_order="LittleEndian">
+   <UnstructuredGrid>
+      <Piece NumberOfPoints="1" NumberOfCells="0" > 
+         <Points> 
+            <DataArray type="Float64" Name="Position" NumberOfComponents="3" format="ascii"> 
+               0  0  0  
+            </DataArray>
+         </Points> 
+
+         <Cells>
+            <DataArray type="Int32" Name="connectivity" NumberOfComponents="1" format="ascii">
+               
+            </DataArray> 
+            <DataArray type="Int32" Name="offsets" NumberOfComponents="1" format="ascii">
+               
+            </DataArray>
+            <DataArray type="UInt8"  Name="types" NumberOfComponents="1" format="ascii">
+               
+            </DataArray>
+         </Cells>
+         <PointData Scalars="Rank " Vectors="Displacement-Spring Displacement-Cylinder Force ">
+            <DataArray type="UInt32" Name="Rank" NumberOfComponents="1" format="ascii">
+               0 
+            </DataArray>
+            <DataArray type="Float64" Name="Displacement-Spring" NumberOfComponents="3" format="ascii">
+               0 0 0.0  
+            </DataArray>
+            <DataArray type="Float64" Name="Displacement-Cylinder" NumberOfComponents="3" format="ascii">
+               0 9.1054e-07 0.0  
+            </DataArray>
+            <DataArray type="Float64" Name="Force" NumberOfComponents="3" format="ascii">
+               0.00486066 0.000767811 0.0  
+            </DataArray>
+         </PointData> 
+      </Piece>
+   </UnstructuredGrid> 
+</VTKFile>

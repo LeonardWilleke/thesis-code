@@ -120,9 +120,11 @@ while interface.is_coupling_ongoing():
 	# cylinder is fixed in x-direction
     write_data[0,0] = 0
     
+    # cylinder is fixed in y-direction
+    #write_data[0,1] = 0
+    
     # cylinder moves in y-direction according to spring-damper-mass-equation
     write_data[0,1] = state_vector[0,0]
-
 
     interface.write_block_vector_data(write_data_id, vertex_ids, write_data)
 

@@ -1,0 +1,110 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2206                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    arch        "LSB;label=32;scalar=64";
+    class       dictionary;
+    location    "1/uniform/functionObjects";
+    object      functionObjectProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+cdf7e925f5746741c316f5fbcf39ad0dfca90775
+{
+    forceCoeffs
+    {
+        scalar
+        {
+            Cd              35828.61382377146;
+            CdPressure      35785.34722194729;
+            CdViscous       43.26660182417091;
+            CdInternal      0;
+            Cd(f)           17922.58192579295;
+            Cd(f)Pressure   17900.94314965717;
+            Cd(f)Viscous    21.63877613577178;
+            Cd(f)Internal   0;
+            Cd(r)           17906.03189797852;
+            Cd(r)Pressure   17884.40407229012;
+            Cd(r)Viscous    21.62782568839913;
+            Cd(r)Internal   0;
+            Cl              -1.655002781446954;
+            ClPressure      -1.653907736712007;
+            ClViscous       -0.001095044734946688;
+            ClInternal      0;
+            Cl(f)           71659.31343844255;
+            Cl(f)Pressure   71572.77761332081;
+            Cl(f)Viscous    86.53582512173446;
+            Cl(f)Internal   0;
+            Cl(r)           -71660.96844122399;
+            Cl(r)Pressure   -71574.43152105752;
+            Cl(r)Viscous    -86.5369201664694;
+            Cl(r)Internal   0;
+            CmPitch         71660.14093983326;
+            CmPitchPressure 71573.60456718916;
+            CmPitchViscous  86.53637264410193;
+            CmPitchInternal 0;
+            CmRoll          8.275013907215092;
+            CmRollPressure  8.269538683528765;
+            CmRollViscous   0.005475223686326286;
+            CmRollInternal  0;
+            CmYaw           179143.0691181369;
+            CmYawPressure   178926.7361090169;
+            CmYawViscous    216.3330091199716;
+            CmYawInternal   0;
+            Cs              -5.994479032772797e-12;
+            CsPressure      -7.77474431237241e-17;
+            CsViscous       -5.994401285329673e-12;
+            CsInternal      0;
+            Cs(f)           179143.0691181369;
+            Cs(f)Pressure   178926.7361090169;
+            Cs(f)Viscous    216.3330091199687;
+            Cs(f)Internal   0;
+            Cs(r)           -179143.0691181369;
+            Cs(r)Pressure   -178926.7361090169;
+            Cs(r)Viscous    -216.3330091199746;
+            Cs(r)Internal   0;
+        }
+    }
+    probes
+    {
+        scalar
+        {
+            average(p)      100.7117910138204;
+            min(p)          100.7117910138204;
+            max(p)          100.7117910138204;
+        }
+        label
+        {
+            size(p)         1;
+            size(U)         1;
+        }
+        vector
+        {
+            average(U)      ( 1.0902702 -0.036737674 0 );
+            min(U)          ( 1.0902702 -0.036737674 0 );
+            max(U)          ( 1.0902702 -0.036737674 0 );
+        }
+    }
+    forces
+    {
+        vector
+        {
+            pressureForce   ( 0.003471338918886729 0.000397642118831505 -2.01332576169718e-25 );
+            viscousForce    ( 0.001176565698382364 4.138069713451266e-05 1.266337412792968e-14 );
+            internalForce   ( 0 0 0 );
+            pressureMoment  ( -0.0001988210594157527 0.001735669459443365 -2.01869085256331e-09 );
+            viscousMoment   ( -2.069034856725885e-05 0.00058828284919118 -8.752735315290755e-09 );
+            internalMoment  ( 0 0 0 );
+        }
+    }
+}
+
+
+// ************************************************************************* //
