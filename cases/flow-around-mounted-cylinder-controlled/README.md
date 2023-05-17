@@ -28,15 +28,15 @@ A bidirectional implicit coupling between Fluid and Solid. The cylinder moves ac
 
 The drag coefficient matches the cited literature, but the difference between force values from OpenFOAm and Solid remains:
 
-![Drag force](images/force-drag.pdf)
+![Drag force](images/force-drag-1.png)
 
 The lift coefficient matches the cited literature, but the difference between force values from OpenFOAm and Solid remains:
 
-![Lift force](images/force-lift.pdf)
+![Lift force](images/force-lift-1.png)
 
 The displacement of the cylinder looks very different than reported in the thesis. There, the oscillation already reached a stable state at T=3s with a maximum of y_max = 6*e⁻6. Now the displacement develops slower, but continues to grow:
 
-![Displacement](images/displacement.pdf)
+![Displacement](images/displacement-1.png)
 
 The simulation was stopped due to the long runtime on a normal laptop.
 
