@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<precice-configuration>
+
+  <log>
+    <sink type="stream" output="stdout"  filter= "%Severity% > debug" format="preCICE:%ColorizedSeverity% %Message%" enabled="true" />	
+  </log>
+
+  <solver-interface dimensions="2" >
+   
+    <data:vector name="Displacement-Cylinder"  />
+    <data:vector name="Force"  />
+    
+    <mesh name="Mesh-Fluid">
+      <use-data name="Displacement-Cylinder" />
+      <use-data name="Force" />
+    </mesh>
+    
+    <mesh name="Mesh-Solid">
+      <use-data name="Displacement-Cylinder" />
+      <use-data name="Force" />
+    </mesh>
+
+    <participant name="Fluid">
+      <use-mesh name="Mesh-Fluid" provide="yes"/>
+      <use-mesh name="Mesh-Solid" from="Solid" />
+      <mapping:nearest-neighbor direction="read"  from="Mesh-Solid" to="Mesh-Fluid" constraint="consistent" />
+      <mapping:nearest-neighbor direction="write"  from="Mesh-Fluid" to="Mesh-Solid" constraint="conservative" />
+      <write-data  name="Force" mesh="Mesh-Fluid" />
+      <read-data  name="Displacement-Cylinder" mesh="Mesh-Fluid" />
+      <watch-point mesh="Mesh-Fluid" name="Cylinder" coordinate="0.0;0.0"/>
+    </participant>
+    
+    <participant name="Solid">
+      <use-mesh name="Mesh-Solid" provide="yes"/>
+      <write-data name="Displacement-Cylinder" mesh="Mesh-Solid" />
+      <read-data name="Force" mesh="Mesh-Solid" />
+    </participant>
+
+    <m2n:sockets from="Fluid" to="Solid" exchange-directory="../" />
+    
+    <coupling-scheme:serial-explicit> 
+      <participants first="Fluid" second="Solid" /> 
+      <max-time value="50" />
+      <time-window-size value="0.0001" />
+      <exchange data="Force" mesh="Mesh-Solid" from="Fluid" to="Solid"/>
+      <exchange data="Displacement-Cylinder" mesh="Mesh-Solid" from="Solid" to="Fluid" initialize="true"/>
+    </coupling-scheme:serial-explicit> 
+                   
+  </solver-interface>
+
+</precice-configuration>
