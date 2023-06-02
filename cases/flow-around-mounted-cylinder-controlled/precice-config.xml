@@ -61,7 +61,7 @@
     
     <coupling-scheme:serial-explicit> 
       <participants first="Fluid" second="Solid" /> 
-      <max-time value="50" />
+      <max-time value="45" />
       <time-window-size value="0.0001" />
       <exchange data="Force" mesh="Mesh-Solid" from="Fluid" to="Solid"/>
       <exchange data="Displacement-Cylinder" mesh="Mesh-Solid" from="Solid" to="Fluid" initialize="true"/>
@@ -74,7 +74,7 @@
     
     <coupling-scheme:serial-explicit> 
       <participants first="Solid" second="Controller" /> 
-      <max-time value="50" />
+      <max-time value="45" />
       <time-window-size value="0.0001" />
       <exchange data="Displacement-Spring" mesh="Mesh-Controller" from="Controller" to="Solid" initialize="true"/>
       <exchange data="Displacement-Cylinder" mesh="Mesh-Solid" from="Solid" to="Controller"/>
