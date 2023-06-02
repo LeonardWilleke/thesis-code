@@ -1,8 +1,8 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  4.x                                   |
-|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|  \\    /   O peration     | Version:  plus                                  |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
 FoamFile
@@ -16,6 +16,7 @@ FoamFile
 
 transportModel  Newtonian;
 
-nu              nu  [0 2 -1 0 0 0 0] 1e-6; // nu: kinematic viscosity of the fluid, water: nu = 1e-6, air: 1.6188e-5
+nu              nu [ 0 2 -1 0 0 0 0 ] 1.0e-06;
+
 
 // ************************************************************************* //

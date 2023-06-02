@@ -44,7 +44,6 @@
       <write-data  name="Force" mesh="Mesh-Fluid" />
       <read-data  name="Displacement-Cylinder" mesh="Mesh-Fluid" />
       <watch-point mesh="Mesh-Fluid" name="Cylinder" coordinate="0.0;0.0"/>
-      <export:vtu directory="export" />
     </participant>
     
     <participant name="Solid">
@@ -60,21 +59,23 @@
     <m2n:sockets from="Controller" to="Solid" exchange-directory="../" />
     <m2n:sockets from="Fluid" to="Solid" exchange-directory="../" />
     
-    <coupling-scheme:serial-implicit> 
+    <coupling-scheme:serial-explicit> 
       <participants first="Fluid" second="Solid" /> 
-      <max-time value="10" />
-      <time-window-size value="0.005" />
+      <max-time value="50" />
+      <time-window-size value="0.0001" />
       <exchange data="Force" mesh="Mesh-Solid" from="Fluid" to="Solid"/>
       <exchange data="Displacement-Cylinder" mesh="Mesh-Solid" from="Solid" to="Fluid" initialize="true"/>
+      <!-- settings for implicit coupling
       <max-iterations value="20" />
       <relative-convergence-measure data="Force" mesh="Mesh-Solid" limit="1e-3"/>
-      <relative-convergence-measure data="Displacement-Cylinder" mesh="Mesh-Solid" limit="1e-3"/> 
-    </coupling-scheme:serial-implicit> 
+      <relative-convergence-measure data="Displacement-Cylinder" mesh="Mesh-Solid" limit="1e-3"/>
+      -->
+    </coupling-scheme:serial-explicit> 
     
     <coupling-scheme:serial-explicit> 
       <participants first="Solid" second="Controller" /> 
-      <max-time value="10" />
-      <time-window-size value="0.005" />
+      <max-time value="50" />
+      <time-window-size value="0.0001" />
       <exchange data="Displacement-Spring" mesh="Mesh-Controller" from="Controller" to="Solid" initialize="true"/>
       <exchange data="Displacement-Cylinder" mesh="Mesh-Solid" from="Solid" to="Controller"/>
     </coupling-scheme:serial-explicit>
