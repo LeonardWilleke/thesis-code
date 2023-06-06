@@ -3,7 +3,6 @@ from __future__ import division
 import argparse
 import numpy as np
 import precice
-from scipy.integrate import odeint
 
 parser = argparse.ArgumentParser()
 parser.add_argument("configurationFileName", default="../precice-config.xml",
@@ -25,7 +24,7 @@ d_damper 	= 0.0043 # N s/m
 state_old 	= np.zeros(3)
 state 		= np.zeros(3)
 
-def update(m, k, d, state, dt, force, controlled_spring_displacement=0.0):
+def update(m, k, d, state, dt, force, controlled_spring_displacement):
         x_old, v_old, a_old = state
         x = x_old + v_old * dt + 0.5 * a_old * dt**2
         a = (force - d * v_old - k * x + k * controlled_spring_displacement) / m
@@ -37,11 +36,10 @@ configuration_file_name = args.configurationFileName
 participant_name = "Solid"
 write_data_name = "Displacement-Cylinder"
 read_data_name_force = "Force"
-# read_data_name_displacement = "Displacement-Spring"
+read_data_name_displacement = "Displacement-Spring"
 mesh_name = "Mesh-Solid"
 
 num_vertices = 1  # Number of vertices
-
 solver_process_index = 0
 solver_process_size = 1
 
@@ -55,12 +53,13 @@ assert (interface.is_mesh_connectivity_required(mesh_id) is False)
 dimensions = interface.get_dimensions()
 
 vertices = np.zeros((num_vertices, dimensions))
-read_data = np.zeros((num_vertices, dimensions))
+read_data_force = np.zeros((num_vertices, dimensions))
+read_data_displacement = np.zeros((num_vertices, dimensions))
 write_data = np.zeros((num_vertices, dimensions))
 
 vertex_ids = interface.set_mesh_vertices(mesh_id, vertices)
 read_data_id_force = interface.get_data_id(read_data_name_force, mesh_id)
-# read_data_id_displacement = interface.get_data_id(read_data_name_displacement, mesh_id)
+read_data_id_displacement = interface.get_data_id(read_data_name_displacement, mesh_id)
 write_data_id = interface.get_data_id(write_data_name, mesh_id)
 
 dt = interface.initialize()
@@ -83,9 +82,7 @@ while interface.is_coupling_ongoing():
 
     read_data_force = interface.read_block_vector_data(read_data_id_force, vertex_ids)
     force = read_data_force[0,1]
-    # read_data_displacement = interface.read_block_vector_data(read_data_id_displacement, vertex_ids)
-    read_data_displacement = np.array([[0.0,0.0]])
-    
+    read_data_displacement = interface.read_block_vector_data(read_data_id_displacement, vertex_ids)
     displacement_spring = read_data_displacement[0,1]
     
     # compute next time step   
