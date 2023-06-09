@@ -1,5 +1,7 @@
 # preCICE-FMI Runner
 
+**Please note: The development of the preCICE-FMI runner has been shifted to the [preCICE organization](https://github.com/precice/fmi-runner). This repository is no longer up to date and will soon be deprecated.**
+
 The [Functional Mock-Up Interface](https://fmi-standard.org/) (FMI) is a standard for the exchange of dynamic simulation models. Currently, it is the de-facto industry standard for co-simulation. The models implementing the FMI standard are called Functional Mock-Up Units (FMU).
 
 This project aims to couple FMU models with other simulation tools with the coupling library [preCICE](https://precice.org/). To this end, a preCICE-FMI Runner is being developed (see image). The Runner serves as an importer for the FMU to steer the simulation. Additionally, it calls the preCICE library to communicate and coordinate with other solvers. 
